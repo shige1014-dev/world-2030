@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>世界 · 2030</title>
+<style>
+/* ============================================
+   WORLD · 2030 — 第一人称未来生活
+   暖米色 + 暖金棕 (反 sci-fi cyan)
+   AAA 主菜单 + 8 独立场景 + 诗歌+肌肉猫内心声部
+   ============================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* 借鉴纪念册: 深蓝黑 + 蓝灰 accent + 奶油文字 */
+  --bg:            #101017;
+  --bg-soft:       #15151E;
+  --bg-deep:       #090A0F;
+
+  --surface:       rgba(255, 255, 255, 0.045);
+  --surface-strong:rgba(255, 255, 255, 0.08);
+
+  --text-deep:     #F5EFE3;     /* 奶油主文 */
+  --text-mid:      #C7CED8;
+  --text-soft:     #AEB5C0;
+  --text-mute:     #7E8794;
+
+  --gold:          #8EA6C4;     /* 蓝灰 accent (替代暖金) */
+  --gold-soft:     #A7BBD3;
+  --gold-glow:     rgba(146, 170, 196, 0.32);
+  --bronze:        #8EA6C4;     /* 别名兼容 */
+
+  --sage:          #7AA88A;
+  --rust:          #C09180;
+  --line:          rgba(255, 255, 255, 0.09);
+  --line-2:        rgba(142, 166, 196, 0.42);
+
+  --shige:         #8EA6C4;     /* 诗歌 — 蓝灰 (一致) */
+  --cat:           #C09180;     /* 肌肉猫 — 暖砖红, 与 shige 形成温度对比 */
+}
+
+html, body {
+  background:
+    linear-gradient(180deg, rgba(245,239,227,0.04), transparent 320px),
+    radial-gradient(circle at 12% 0%, rgba(146,170,196,0.14), transparent 34%),
+    radial-gradient(circle at 88% 100%, rgba(192,145,128,0.08), transparent 42%),
+    var(--bg);
+  background-attachment: fixed;
+  color: var(--text-deep);
+  font-family: "Iowan Old Style", "Noto Sans SC", "PingFang SC", Georgia, serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 极细网格 + 双向 (memorials 单向 → 加横向补科技感) */
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,0.012) 1px, transparent 1px);
+  background-size: 44px 44px, 44px 44px;
+  opacity: 0.7;
+}
+
+/* (扫光、光标已删 — 杂志封面应安静) */
+
+/* ───── HUD bars (克制) ───── */
+.hud-top, .hud-bot {
+  position: fixed; left: 0; right: 0;
+  height: 36px; padding: 0 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: "IBM Plex Mono", "SF Mono", monospace;
+  font-size: 10px; letter-spacing: 0.3em;
+  color: var(--text-soft); text-transform: uppercase;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(16, 16, 23, 0.92), rgba(16, 16, 23, 0));
+}
+.hud-bot {
+  bottom: 0; top: auto;
+  background: linear-gradient(0deg, rgba(16, 16, 23, 0.92), rgba(16, 16, 23, 0));
+  border-top: 1px solid var(--line);
+}
+.hud-top { border-bottom: 1px solid var(--line); }
+.hud-pulse {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--gold);
+  margin-right: 8px; vertical-align: middle;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 0.4; box-shadow: 0 0 0 transparent; }
+  50%     { opacity: 1; box-shadow: 0 0 8px var(--gold); }
+}
+
+/* 4 角 HUD 切角 */
+.corner-frame {
+  position: fixed; pointer-events: none; z-index: 40;
+  width: 32px; height: 32px;
+  border-color: var(--gold); border-style: solid; border-width: 0;
+}
+.corner-frame.tl { top: 60px; left: 16px; border-top-width: 1.5px; border-left-width: 1.5px; }
+.corner-frame.tr { top: 60px; right: 16px; border-top-width: 1.5px; border-right-width: 1.5px; }
+.corner-frame.bl { bottom: 44px; left: 16px; border-bottom-width: 1.5px; border-left-width: 1.5px; }
+.corner-frame.br { bottom: 44px; right: 16px; border-bottom-width: 1.5px; border-right-width: 1.5px; }
+
+/* ───── Page 系统 ───── */
+.app { position: relative; z-index: 1; min-height: 100vh; }
+.page { display: none; opacity: 0; transition: opacity 0.4s ease, transform 0.4s ease; transform: scale(0.96); }
+.page.active { display: block; opacity: 1; transform: scale(1); }
+
+/* ============================================
+   首页 — 2030 杂志封面 + 醒来站玻璃窗
+   全屏 hero image dominant + 极克制叠字 + 底排 8 chip
+   ============================================ */
+.home {
+  min-height: 100vh;
+  position: relative;
+  padding: 0;
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+.home-stage {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 36px);   /* 减去顶 hud */
+  margin: 0;
+  overflow: hidden;
+}
+
+/* 全屏 hero — 玻璃窗醒来视角 */
+.wallpaper {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  border-radius: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(146,170,196,0.22), transparent 70%),
+    radial-gradient(ellipse at 75% 85%, rgba(192,145,128,0.12), transparent 60%),
+    linear-gradient(180deg, rgba(16,16,23,0.3) 0%, rgba(16,16,23,0.85) 100%),
+    var(--bg-deep);
+  border: 0;
+  box-shadow: none;
+}
+.wallpaper::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(16,16,23,0.55) 0%, transparent 25%),
+    linear-gradient(0deg, rgba(16,16,23,0.92) 0%, transparent 50%);
+}
+.wallpaper::after { display: none; }
+/* 文字层 — 杂志封面排版 (overlay 在 hero 之上) */
+.wallpaper-overlay {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto;
+  padding: 60px 56px 48px;
+  z-index: 2;
+}
+.wallpaper-tag {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px; letter-spacing: 0.5em;
+  color: var(--gold); text-transform: uppercase;
+  align-self: start;
+}
+.wallpaper-glyph { display: none; }
+.wallpaper-h {
+  font-family: "Iowan Old Style", "Noto Sans SC", Georgia, serif;
+  font-size: clamp(64px, 9vw, 128px);
+  font-weight: 700;
+  letter-spacing: 0.015em;
+  line-height: 0.95;
+  color: var(--text-deep);
+  align-self: end;
+  margin: 0;
+  max-width: 900px;
+  text-shadow: 0 4px 40px rgba(0,0,0,0.4);
+}
+.wallpaper-h em { font-style: italic; color: var(--gold); }
+.wallpaper-cap {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-size: 16px; color: var(--text-mid);
+  letter-spacing: 0.02em;
+  text-align: left; max-width: 540px;
+  margin-top: 22px;
+  font-style: italic;
+  line-height: 1.85;
+}
+.wallpaper-cap b { color: var(--gold); font-weight: 600; font-style: normal; }
+.wallpaper-meta {
+  display: flex; justify-content: space-between; align-items: end;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; letter-spacing: 0.32em;
+  color: var(--text-mute); text-transform: uppercase;
+  margin-top: 36px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+.wallpaper-meta b { color: var(--text-deep); font-weight: 500; }
+.wp-corner { display: none; }
+
+/* 场景 chip — 杂志页脚一排, 极克制 */
+.scenes {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border-top: 1px solid var(--line);
+  padding: 0;
+}
+.scene-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 24px 12px;
+  background: rgba(16, 16, 23, 0.6);
+  backdrop-filter: blur(8px);
+  border: 0;
+  border-radius: 0;
+  font-family: "Iowan Old Style", "Noto Sans SC", Georgia, serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-deep);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  text-decoration: none;
+  position: relative;
+  text-align: center;
+}
+.scene-chip:hover {
+  background: rgba(146, 170, 196, 0.12);
+  color: var(--gold);
+  transform: translateY(-3px);
+}
+.scene-chip:hover::after {
+  content: "↑";
+  position: absolute;
+  bottom: 6px;
+  color: var(--gold);
+  font-size: 10px;
+  animation: arrow 0.4s ease;
+}
+@keyframes arrow {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.scene-chip-num {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--gold);
+  background: transparent;
+  padding: 0;
+  border: 0;
+  text-align: center;
+  text-transform: uppercase;
+}
+.scene-chip-en {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--text-mute);
+  text-transform: uppercase;
+}
+
+.home-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; letter-spacing: 0.22em;
+  color: var(--text-soft); text-transform: uppercase;
+}
+.home-foot-cta {
+  color: var(--gold); letter-spacing: 0.32em;
+  position: relative;
+}
+.home-foot-cta::before, .home-foot-cta::after {
+  content: "—"; color: var(--bronze); margin: 0 12px;
+}
+
+/* ============================================
+   子页面 — 第一人称场景
+   ============================================ */
+.scene {
+  min-height: 100vh;
+  padding: 60px 40px 60px;
+  position: relative;
+}
+.scene-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px; letter-spacing: 0.22em;
+  color: var(--text-soft);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  cursor: pointer;
+  margin-bottom: 28px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+.scene-back:hover { color: var(--bronze); border-color: var(--bronze); }
+.scene-mast {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 32px;
+}
+.scene-tag {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px; letter-spacing: 0.4em;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.scene-h {
+  font-size: 48px; font-weight: 700; letter-spacing: 0.015em;
+  font-family: "Iowan Old Style", "Noto Sans SC", Georgia, serif;
+  color: var(--text-deep);
+  line-height: 1.05;
+}
+.scene-sub {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-size: 14px; color: var(--text-soft);
+  margin-top: 10px; max-width: 600px; line-height: 1.7;
+  font-style: italic;
+}
+.scene-meta {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; letter-spacing: 0.22em;
+  color: var(--text-soft);
+  text-align: right; text-transform: uppercase;
+  display: flex; flex-direction: column; gap: 4px;
+}
+
+/* 场景主区域: POV 大图 + 嵌入物件卡 */
+.scene-stage {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 28px;
+  margin-bottom: 32px;
+}
+.pov {
+  position: relative;
+  min-height: 460px;
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.058), rgba(255,255,255,0.022)),
+    radial-gradient(ellipse at 40% 40%, rgba(146,170,196,0.15), transparent 65%),
+    var(--bg-deep);
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+.pov::before {
+  content: ""; position: absolute; inset: 14px;
+  border: 1px dashed rgba(255,255,255,0.12);
+  border-radius: 6px;
+  pointer-events: none;
+}
+.pov-glyph {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 96px;
+  color: var(--gold);
+  opacity: 0.42;
+  text-shadow: 0 0 30px var(--gold-glow);
+}
+.pov-cap {
+  position: absolute; bottom: 22px; left: 24px; right: 24px;
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-size: 14px;
+  color: var(--text-mid);
+  font-style: italic;
+  line-height: 1.7;
+  background: rgba(16, 16, 23, 0.68);
+  backdrop-filter: blur(8px);
+  padding: 14px 18px;
+  border-radius: 6px;
+  border-left: 2px solid var(--gold);
+}
+.pov-tag {
+  position: absolute; top: 16px; left: 18px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; letter-spacing: 0.32em;
+  color: var(--gold); text-transform: uppercase;
+  background: rgba(16, 16, 23, 0.72);
+  padding: 4px 10px; border-radius: 99px;
+  border: 1px solid var(--line);
+}
+
+.scene-side {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.objcard {
+  background: linear-gradient(180deg, rgba(255,255,255,0.058), rgba(255,255,255,0.022));
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 20px;
+  position: relative;
+  overflow: hidden;
+}
+/* (objcard L 切角 + SYNC 小字 已删, 太 dashboard 感) */
+.objcard h4 {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; letter-spacing: 0.32em;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.objcard p {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text-deep);
+  margin: 0 0 8px;
+}
+.objcard ul {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.objcard li {
+  position: relative; padding-left: 14px;
+  font-size: 13px; color: var(--text-mid);
+  line-height: 1.6;
+}
+.objcard li::before {
+  content: "▸"; position: absolute; left: 0;
+  color: var(--gold);
+  font-family: "IBM Plex Mono", monospace;
+}
+.objcard-data {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 6px; margin-top: 10px;
+}
+.dat {
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 4px;
+  font-family: "IBM Plex Mono", monospace;
+}
+.dat-l { font-size: 9px; letter-spacing: 0.2em; color: var(--text-soft); text-transform: uppercase; }
+.dat-v { font-size: 14px; color: var(--text-deep); font-weight: 600; margin-top: 3px; font-variant-numeric: tabular-nums; }
+.dat-v.pos { color: var(--sage); }
+.dat-v.neg { color: var(--rust); }
+
+/* 双 AI 内心声部 — 浮在场景边 */
+.voices {
+  margin-top: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.voice {
+  position: relative;
+  padding: 18px 18px 18px 56px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.018));
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  border-left: 3px solid var(--vc);
+}
+.voice::before {
+  content: attr(data-name);
+  position: absolute;
+  top: 18px; left: 14px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--vc);
+  color: var(--bg);
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-size: 14px;
+  display: grid; place-items: center;
+  font-weight: 600;
+}
+.voice-tag {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  color: var(--vc);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.voice-quote {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text-deep);
+  font-style: italic;
+}
+.voice.shige { --vc: var(--shige); }
+.voice.cat   { --vc: var(--cat); }
+
+/* ─── 投资场景特有 ─── */
+.invest-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.invest-tk {
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 4px;
+  font-family: "IBM Plex Mono", monospace;
+}
+.invest-tk-tk { font-size: 13px; font-weight: 700; color: var(--text-deep); letter-spacing: 0.04em; }
+.invest-tk-nm { font-family: "Iowan Old Style", serif; font-size: 11px; color: var(--text-soft); margin-top: 2px; }
+.invest-tk-pot { font-size: 12px; color: var(--gold); margin-top: 4px; font-weight: 600; }
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+  .home-mast-h { font-size: 38px; }
+  .scene-stage { grid-template-columns: 1fr; }
+  .voices { grid-template-columns: 1fr; }
+  .scene-chip { font-size: 14px; padding: 10px 14px; }
+  .home-stage { grid-template-columns: 1fr; gap: 18px; }
+  .scenes { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<header class="hud-top">
+  <span><span class="hud-pulse"></span>WORLD MODEL · v3 · 沪川接入</span>
+  <span>POV · FIRST PERSON</span>
+  <span id="now">2030.05.09 · 07:14 KST</span>
+</header>
+
+<span class="corner-frame tl"></span>
+<span class="corner-frame tr"></span>
+<span class="corner-frame bl"></span>
+<span class="corner-frame br"></span>
+
+<div class="app">
+
+  <!-- ═════════════ HOME — 杂志封面 ═════════════ -->
+  <section class="page home active" data-page="home">
+    <div class="home-stage">
+      <div class="wallpaper">
+        <div class="wallpaper-overlay">
+          <span class="wallpaper-tag">ISSUE 01 · 2030 SPRING · 沪川</span>
+          <h1 class="wallpaper-h">我醒来时,<br/>雾正<em>让出一指宽</em>。</h1>
+          <p class="wallpaper-cap">2030 年 5 月 9 日, 沪川的清晨。<br/>通系统在我耳后轻声推了三件事——一把旧伞、一份桂花糕、一份未完成的书稿。<br/><b>选一扇门, 进入你的一日。</b></p>
+          <div class="wallpaper-meta">
+            <span><b>WORLD</b> · 2030 · 第一人称</span>
+            <span>沪川 31°N / 121°E · VIX 17.7</span>
+            <span>诗歌 · 肌肉猫 · 在场</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="scenes">
+      <a class="scene-chip" data-go="clothing">
+        <span class="scene-chip-num">01</span>
+        <span>衣</span>
+        <span class="scene-chip-en">CLOTHING</span>
+      </a>
+      <a class="scene-chip" data-go="food">
+        <span class="scene-chip-num">02</span>
+        <span>食</span>
+        <span class="scene-chip-en">FOOD</span>
+      </a>
+      <a class="scene-chip" data-go="home2">
+        <span class="scene-chip-num">03</span>
+        <span>住</span>
+        <span class="scene-chip-en">HOME</span>
+      </a>
+      <a class="scene-chip" data-go="transport">
+        <span class="scene-chip-num">04</span>
+        <span>行</span>
+        <span class="scene-chip-en">TRANSPORT</span>
+      </a>
+      <a class="scene-chip" data-go="invest">
+        <span class="scene-chip-num">05</span>
+        <span>投资</span>
+        <span class="scene-chip-en">INVEST</span>
+      </a>
+      <a class="scene-chip" data-go="health">
+        <span class="scene-chip-num">06</span>
+        <span>健康</span>
+        <span class="scene-chip-en">HEALTH</span>
+      </a>
+      <a class="scene-chip" data-go="work">
+        <span class="scene-chip-num">07</span>
+        <span>工作</span>
+        <span class="scene-chip-en">WORK</span>
+      </a>
+      <a class="scene-chip" data-go="agents">
+        <span class="scene-chip-num">08</span>
+        <span>内心</span>
+        <span class="scene-chip-en">VOICES</span>
+      </a>
+    </nav>
+  </section>
+
+  <!-- ═════════════ 01 衣 ═════════════ -->
+  <section class="page" data-page="clothing">
+    <a class="scene-back" data-go="home">← 回到主世界</a>
+    <header class="scene-mast">
+      <div>
+        <p class="scene-tag">01 / CLOTHING · 衣</p>
+        <h2 class="scene-h">我打开储物柜</h2>
+        <p class="scene-sub">柜门是磨砂木, 内嵌通风温度感应。"今天 18°C, 有风, 你昨晚睡眠 7.2 分。"通在我耳边轻声说。</p>
+      </div>
+      <div class="scene-meta"><span>CLOSET · 8 SLOT</span><span>SUBSCRIBE · 3 ITEMS</span><span>WEATHER · 18°C / 风 3 级</span></div>
+    </header>
+
+    <div class="scene-stage">
+      <div class="pov">
+        <span class="pov-tag">POV · 衣帽间</span>
+        <span class="pov-glyph">⬛⬛⬛<br>⬛⬛⬛</span>
+        <p class="pov-cap">8 格智能储物柜在我面前缓缓亮起暖光。每件衣服在小屏上显示状态: 已穿 12 次 / 充电中 / AI 推荐今日穿。<br>第二格的温感羊绒大衣闪了一下 — 它建议我穿它。</p>
+      </div>
+      <div class="scene-side">
+        <article class="objcard">
+          <h4>🧥 今日推荐 · 第二格</h4>
+          <p>温感羊绒大衣 · GoldThread 系列</p>
+          <ul>
+            <li>已与你的体温曲线学习 6 个月</li>
+            <li>今日室外 18°C → 内层加热 +1.5°C</li>
+            <li>电量 84%, 可续航 22 小时</li>
+          </ul>
+        </article>
+        <article class="objcard">
+          <h4>📦 衣柜状态</h4>
+          <div class="objcard-data">
+            <div class="dat"><div class="dat-l">订阅租赁</div><div class="dat-v">3 件</div></div>
+            <div class="dat"><div class="dat-l">买断</div><div class="dat-v">5 件</div></div>
+            <div class="dat"><div class="dat-l">本月碳积分</div><div class="dat-v pos">+18</div></div>
+            <div class="dat"><div class="dat-l">下次回收</div><div class="dat-v">5/16</div></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="voices">
+      <article class="voice shige" data-name="诗">
+        <div class="voice-tag">SENSOR · 数据视角</div>
+        <p class="voice-quote">"这件大衣的电量算上回程加 28% 的安全余量, 你今天 18 小时使用没问题。但订阅期 5/16 到期, 通系统问你要续吗。"</p>
+      </article>
+      <article class="voice cat" data-name="猫">
+        <div class="voice-tag">CRITIC · 反直觉</div>
+        <p class="voice-quote">"5 件买断 + 3 件订阅 = 你心里其实想'又不全有'。订阅是 hedge 不是品味——别拿环保来掩盖你不敢决定。"</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═════════════ 02 食 ═════════════ -->
+  <section class="page" data-page="food">
+    <a class="scene-back" data-go="home">← 回到主世界</a>
+    <header class="scene-mast">
+      <div>
+        <p class="scene-tag">02 / FOOD · 食</p>
+        <h2 class="scene-h">我走进厨房</h2>
+        <p class="scene-sub">三层智能冰箱在等我。蔬果层最里面那盒细胞培养的鸡胸——昨晚 AI 厨师订的, 今天午餐用。</p>
+      </div>
+      <div class="scene-meta"><span>FRIDGE · 3 LAYER</span><span>MEALS · 4 / DAY</span><span>WATER · 1.8L · 60%</span></div>
+    </header>
+
+    <div class="scene-stage">
+      <div class="pov">
+        <span class="pov-tag">POV · 厨房 · 7:32</span>
+        <span class="pov-glyph">▦▦▦<br>▦▦▦<br>▦▦▦</span>
+        <p class="pov-cap">冰箱 3 层货架像图书馆。蔬果层亮蓝光, 蛋白层亮金光, 主食层亮琥珀。<br>右上角弹出 AI 厨师 CLEO 的小窗: 今日 4 餐已配, 早餐 3 分钟后送到我桌前。</p>
+      </div>
+      <div class="scene-side">
+        <article class="objcard">
+          <h4>🍽 今日 4 餐 · CLEO 配</h4>
+          <ul>
+            <li>07:30 早餐 — 藻类蛋白吐司 + 鲜榨柠檬水</li>
+            <li>12:00 午餐 — 培养鸡胸 + 红藜麦 + 生菜</li>
+            <li>16:00 加餐 — 杏仁奶 + 一个橙子</li>
+            <li>19:00 晚餐 — 三文鱼 (家庭打印) + 时蔬</li>
+          </ul>
+        </article>
+        <article class="objcard">
+          <h4>📊 营养仪表盘</h4>
+          <div class="objcard-data">
+            <div class="dat"><div class="dat-l">热量</div><div class="dat-v">1820 kcal</div></div>
+            <div class="dat"><div class="dat-l">蛋白</div><div class="dat-v pos">98 g</div></div>
+            <div class="dat"><div class="dat-l">脂肪</div><div class="dat-v">62 g</div></div>
+            <div class="dat"><div class="dat-l">水分</div><div class="dat-v">2.4 L</div></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="voices">
+      <article class="voice shige" data-name="诗">
+        <div class="voice-tag">SENSOR</div>
+        <p class="voice-quote">"你这周蛋白摄入连续 5 天 > 90g, 是上月均值的 +18%。CLEO 在跟你的健身周期同步, 不需要担心摄入不足。"</p>
+      </article>
+      <article class="voice cat" data-name="猫">
+        <div class="voice-tag">CRITIC</div>
+        <p class="voice-quote">"你点过去年此时点的菜 — 吃习惯了的'高蛋白配色拉'。这是健身, 还是健康剧场? 你身体觉得舒服吗, 还是只是数据漂亮?"</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═════════════ 03 住 ═════════════ -->
+  <section class="page" data-page="home2">
+    <a class="scene-back" data-go="home">← 回到主世界</a>
+    <header class="scene-mast">
+      <div>
+        <p class="scene-tag">03 / HOME · 住</p>
+        <h2 class="scene-h">我站在客厅中央</h2>
+        <p class="scene-sub">屋顶太阳能今早自给率 87%, 余下的 13% 通系统说送给隔壁那位戴呼吸机的老人。</p>
+      </div>
+      <div class="scene-meta"><span>ROOM · 6 ZONE</span><span>SOLAR · 87% SELF</span><span>COMFORT · 22°C / 45%</span></div>
+    </header>
+
+    <div class="scene-stage">
+      <div class="pov">
+        <span class="pov-tag">POV · 客厅</span>
+        <span class="pov-glyph">⌂</span>
+        <p class="pov-cap">客厅落地窗, 沪川的雾在外面慢慢散开。<br>地板预热 22°C, 空气清新模式开启, 灯光跟我心率同步——它读到我刚醒, 调成暖橙色, 等会儿我开始工作再调白光。</p>
+      </div>
+      <div class="scene-side">
+        <article class="objcard">
+          <h4>🏠 6 个房间</h4>
+          <ul>
+            <li>客厅 22°C · 暖橙光 · 现在</li>
+            <li>卧室 19°C · 已通风</li>
+            <li>厨房 21°C · CLEO 备早餐</li>
+            <li>书房 22°C · 工作模式预备</li>
+            <li>卫浴 24°C · 镜面待机</li>
+            <li>车库 18°C · SkyDrive 充电中</li>
+          </ul>
+        </article>
+        <article class="objcard">
+          <h4>☀ 能源</h4>
+          <div class="objcard-data">
+            <div class="dat"><div class="dat-l">太阳能自给</div><div class="dat-v pos">87%</div></div>
+            <div class="dat"><div class="dat-l">送邻居</div><div class="dat-v">2.1 kWh</div></div>
+            <div class="dat"><div class="dat-l">本月碳积分</div><div class="dat-v pos">+42</div></div>
+            <div class="dat"><div class="dat-l">电费</div><div class="dat-v">¥-12</div></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="voices">
+      <article class="voice shige" data-name="诗">
+        <div class="voice-tag">SENSOR</div>
+        <p class="voice-quote">"屋顶今天的 13% 余电, 通系统问你: 送社区图书馆角落, 还是给隔壁老周家(他妻子昨晚睡眠分 -7%)?"</p>
+      </article>
+      <article class="voice cat" data-name="猫">
+        <div class="voice-tag">CRITIC</div>
+        <p class="voice-quote">"你按邻里关系送电是好心, 但你也别假装它是'选择'——通早就替你计算了最优路径。你做的是点头, 不是决定。"</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═════════════ 04 行 ═════════════ -->
+  <section class="page" data-page="transport">
+    <a class="scene-back" data-go="home">← 回到主世界</a>
+    <header class="scene-mast">
+      <div>
+        <p class="scene-tag">04 / TRANSPORT · 行</p>
+        <h2 class="scene-h">我走向 SkyDrive</h2>
+        <p class="scene-sub">车库门慢慢升起。我的 SkyDrive A2 飞行车安静地浮在空中 5 厘米——它认得我, 椅背已经调成我的姿势。</p>
+      </div>
+      <div class="scene-meta"><span>VEHICLE · SKYDRIVE A2</span><span>RANGE · 480 km</span><span>L5 · 全自动</span></div>
+    </header>
+
+    <div class="scene-stage">
+      <div class="pov">
+        <span class="pov-tag">POV · 车库 / 舱内</span>
+        <span class="pov-glyph">✈</span>
+        <p class="pov-cap">舱内是琥珀色调, 一块全息浮屏在我面前展开。<br>"今日去公司, 推荐 3 条路线: 高架快速 (12 min)、滨江 (18 min, 风景好)、地下隧道 (10 min)。"<br>RANGER 用沉稳的男声问我: 选哪条?</p>
+      </div>
+      <div class="scene-side">
+        <article class="objcard">
+          <h4>🛣 3 条路线</h4>
+          <ul>
+            <li>高架快速 — 12 min · 拥挤度 28%</li>
+            <li>滨江路 — 18 min · 风景好 · 推荐</li>
+            <li>地下隧道 — 10 min · 0 风险, 但闷</li>
+          </ul>
+        </article>
+        <article class="objcard">
+          <h4>📡 出行状态</h4>
+          <div class="objcard-data">
+            <div class="dat"><div class="dat-l">L5 自驾</div><div class="dat-v pos">就绪</div></div>
+            <div class="dat"><div class="dat-l">续航</div><div class="dat-v">480 km</div></div>
+            <div class="dat"><div class="dat-l">空气流</div><div class="dat-v">良好</div></div>
+            <div class="dat"><div class="dat-l">备选</div><div class="dat-v">eVTOL</div></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="voices">
+      <article class="voice shige" data-name="诗">
+        <div class="voice-tag">SENSOR</div>
+        <p class="voice-quote">"滨江路风景好, 但今天日出在 5:42, 你 8:00 出发已错过最佳光线。选效率高的隧道, 你能多 8 分钟看书。"</p>
+      </article>
+      <article class="voice cat" data-name="猫">
+        <div class="voice-tag">CRITIC</div>
+        <p class="voice-quote">"你每次都选效率, 然后到了公司怪自己没看见日出。8 分钟的书不会让你成为更好的人, 但 18 分钟的江会。"</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═════════════ 05 投资 ═════════════ -->
+  <section class="page" data-page="invest">
+    <a class="scene-back" data-go="home">← 回到主世界</a>
+    <header class="scene-mast">
+      <div>
+        <p class="scene-tag">05 / INVEST · 投资</p>
+        <h2 class="scene-h">我坐到电脑前</h2>
+        <p class="scene-sub">中央全息屏弹起, 持仓 8 只 + 待选 7 只, 实时曲线在我眼前慢慢呼吸。诗歌已经把今早数据准备好了。</p>
+      </div>
+      <div class="scene-meta"><span>HOLDINGS · 8</span><span>WATCHLIST · 7</span><span>YTD · +12.4%</span></div>
+    </header>
+
+    <div class="scene-stage">
+      <div class="pov">
+        <span class="pov-tag">POV · 工作桌 · 全息屏</span>
+        <span class="pov-glyph">⌬</span>
+        <p class="pov-cap">屏幕上方一行红绿数字: ATLAS LIVE FEED · YTD +12.4% · DAY +0.6%。<br>中央一条实时曲线缓慢向上, 终点一个呼吸圆点。底部 4 个小指标: 夏普 1.8 / 回撤 -8.2% / Beta 0.92 / Alpha +3.1%。</p>
+      </div>
+      <div class="scene-side">
+        <article class="objcard">
+          <h4>💼 我的持仓 (S 级)</h4>
+          <div class="invest-board">
+            <div class="invest-tk"><div class="invest-tk-tk">OKLO</div><div class="invest-tk-nm">小堆</div><div class="invest-tk-pot">93</div></div>
+            <div class="invest-tk"><div class="invest-tk-tk">RKLB</div><div class="invest-tk-nm">火箭</div><div class="invest-tk-pot">92</div></div>
+            <div class="invest-tk"><div class="invest-tk-tk">COHR</div><div class="invest-tk-nm">相干</div><div class="invest-tk-pot">91</div></div>
+            <div class="invest-tk"><div class="invest-tk-tk">MU</div><div class="invest-tk-nm">美光</div><div class="invest-tk-pot">90</div></div>
+            <div class="invest-tk"><div class="invest-tk-tk">NBIS</div><div class="invest-tk-nm">AI 云</div><div class="invest-tk-pot">90</div></div>
+            <div class="invest-tk"><div class="invest-tk-tk">PLTR</div><div class="invest-tk-nm">Palantir</div><div class="invest-tk-pot">89</div></div>
+          </div>
+        </article>
+        <article class="objcard">
+          <h4>📊 组合状态</h4>
+          <div class="objcard-data">
+            <div class="dat"><div class="dat-l">YTD</div><div class="dat-v pos">+12.4%</div></div>
+            <div class="dat"><div class="dat-l">夏普</div><div class="dat-v">1.8</div></div>
+            <div class="dat"><div class="dat-l">最大回撤</div><div class="dat-v neg">-8.2%</div></div>
+            <div class="dat"><div class="dat-l">现金</div><div class="dat-v">22%</div></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="voices">
+      <article class="voice shige" data-name="诗">
+        <div class="voice-tag">SENSOR</div>
+        <p class="voice-quote">"OKLO 上行 +47.36%, MU 33 位 Strong Buy。你持仓集中在 S 级, 夏普 1.8 高于市场均值。今早 ATLAS 没有交易建议——它认为你的持仓正在 work。"</p>
+      </article>
+      <article class="voice cat" data-name="猫">
+        <div class="voice-tag">CRITIC</div>
+        <p class="voice-quote">"+12.4% YTD 听起来很爽, 但你心里很清楚——核能板块今年涨, 不代表你看对了。换一个 sector 主导, 你的'判断'就被打回原形。别自我归因。"</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═════════════ 06 健康 ═════════════ -->
+  <section class="page" data-page="health">
+    <a class="scene-back" data-go="home">← 回到主世界</a>
+    <header class="scene-mast">
+      <div>
+        <p class="scene-tag">06 / HEALTH · 健康</p>
+        <h2 class="scene-h">我站在镜子前</h2>
+        <p class="scene-sub">镜面缓缓亮起, 4 个发光气泡浮在我身边——脑波 ALPHA / 心率 / 血氧 / 体温。它们用细金线连接到我身体不同部位。</p>
+      </div>
+      <div class="scene-meta"><span>VITALS · 4 LIVE</span><span>SYSTEM · 6 ZONE</span><span>LONGEVITY · 84</span></div>
+    </header>
+
+    <div class="scene-stage">
+      <div class="pov">
+        <span class="pov-tag">POV · 卫浴 / 镜面</span>
+        <span class="pov-glyph">⊕</span>
+        <p class="pov-cap">脑波 α 8.4 (放松), 心率 64 (静息低), 血氧 98%, 体温 36.6°C。<br>右下角 DR. AVA 浮出: "你今天可以多走 2000 步, 睡眠分这周 -7%, 建议 22:30 前关屏。"</p>
+      </div>
+      <div class="scene-side">
+        <article class="objcard">
+          <h4>🫀 6 大系统评分</h4>
+          <ul>
+            <li>心血管 92 · 优秀</li>
+            <li>代谢 88 · 良好</li>
+            <li>免疫 84 · 良好</li>
+            <li>认知 90 · 优秀</li>
+            <li>骨骼 78 · 关注</li>
+            <li>基因长寿 89 · 良好</li>
+          </ul>
+        </article>
+        <article class="objcard">
+          <h4>📈 今日生命指标</h4>
+          <div class="objcard-data">
+            <div class="dat"><div class="dat-l">睡眠</div><div class="dat-v">6.8 / 10</div></div>
+            <div class="dat"><div class="dat-l">压力</div><div class="dat-v">3.2 / 10</div></div>
+            <div class="dat"><div class="dat-l">步数</div><div class="dat-v">3 240</div></div>
+            <div class="dat"><div class="dat-l">水分</div><div class="dat-v">1.2 L</div></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="voices">
+      <article class="voice shige" data-name="诗">
+        <div class="voice-tag">SENSOR</div>
+        <p class="voice-quote">"睡眠分本周 6.8 比上周 7.2 -7%, 主因是周三周四晚睡。骨骼分 78 是 6 项里最低, 跟坐姿和缺钙相关。"</p>
+      </article>
+      <article class="voice cat" data-name="猫">
+        <div class="voice-tag">CRITIC</div>
+        <p class="voice-quote">"你看着 92/88/84 这些大数字觉得自己很健康。但骨骼 78 是 5 年后的你写来的提示——它在说: 现在不动, 等你 60 岁会还。"</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═════════════ 07 工作 ═════════════ -->
+  <section class="page" data-page="work">
+    <a class="scene-back" data-go="home">← 回到主世界</a>
+    <header class="scene-mast">
+      <div>
+        <p class="scene-tag">07 / WORK · 工作</p>
+        <h2 class="scene-h">我的全息工作站亮起</h2>
+        <p class="scene-sub">5 块漂浮屏排成弧形——主屏 IDE, 旁通讯, 中 AI 副驾, 数据看板, 日历。我今天有 4 件事需要做最终判断。</p>
+      </div>
+      <div class="scene-meta"><span>SCREENS · 5 FLOAT</span><span>TASKS · 4 P0</span><span>DEEP WORK · 4h</span></div>
+    </header>
+
+    <div class="scene-stage">
+      <div class="pov">
+        <span class="pov-tag">POV · 工作站</span>
+        <span class="pov-glyph">▤▤▤</span>
+        <p class="pov-cap">主屏 IDE 已打开昨天的代码, 通讯屏堆了 3 条非紧急消息, AI 副驾在等你说"今天先做哪件"。<br>桌面右下: "你的工作时长这周 -22%, 利润 +18% — 你在变得不可替代。"</p>
+      </div>
+      <div class="scene-side">
+        <article class="objcard">
+          <h4>🎯 今日 4 件事</h4>
+          <ul>
+            <li>🟥 P0 · 与汉堡港运输协议条款</li>
+            <li>🟧 P1 · 春季发布海报选稿</li>
+            <li>🟨 P2 · 财务月度异常审视</li>
+            <li>🟩 P3 · 议会听证会接受</li>
+          </ul>
+        </article>
+        <article class="objcard">
+          <h4>⏱ 工作节律</h4>
+          <div class="objcard-data">
+            <div class="dat"><div class="dat-l">本周时长</div><div class="dat-v">22h</div></div>
+            <div class="dat"><div class="dat-l">利润 vs 上月</div><div class="dat-v pos">+18%</div></div>
+            <div class="dat"><div class="dat-l">深度工作</div><div class="dat-v">4h</div></div>
+            <div class="dat"><div class="dat-l">会议</div><div class="dat-v">2 件</div></div>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="voices">
+      <article class="voice shige" data-name="诗">
+        <div class="voice-tag">SENSOR</div>
+        <p class="voice-quote">"22 小时 / 周, 利润 +18%。这是杠杆, 不是偶然。决策权保护条款让你保留这 4 件事不能被 AI 优化掉——这是这座城给你的'位置'。"</p>
+      </article>
+      <article class="voice cat" data-name="猫">
+        <div class="voice-tag">CRITIC</div>
+        <p class="voice-quote">"工作 22 小时利润 +18% 听起来很爽, 但你也别假装这是自己'技能'——是这座城用法令、AI、九百万人的同意书替你守住了这个位置。别忘了你欠人情。"</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ═════════════ 08 内心声部 ═════════════ -->
+  <section class="page" data-page="agents">
+    <a class="scene-back" data-go="home">← 回到主世界</a>
+    <header class="scene-mast">
+      <div>
+        <p class="scene-tag">08 / VOICES · 内心声部</p>
+        <h2 class="scene-h">两个声音陪我看世界</h2>
+        <p class="scene-sub">我活在 2030, 但我不是一个人在做决定。诗歌看到数据, 肌肉猫戳穿幻想——它们 24 小时在我意识的边缘。</p>
+      </div>
+      <div class="scene-meta"><span>VOICES · 2</span><span>UPTIME · 100%</span><span>MODE · INNER</span></div>
+    </header>
+
+    <div class="scene-stage">
+      <div class="pov" style="background: linear-gradient(135deg, rgba(107, 138, 160, 0.2), rgba(185, 120, 79, 0.2)), repeating-linear-gradient(45deg, rgba(180,140,90,0.08) 0 1px, transparent 1px 14px);">
+        <span class="pov-tag">POV · 意识边缘</span>
+        <span class="pov-glyph" style="color: var(--shige);">⊙</span>
+        <span class="pov-glyph" style="color: var(--cat); top: 60%; left: 60%;">⊙</span>
+        <p class="pov-cap">两个轮廓在我视野的左右两边静静浮着。<br>一个像监测仪表的反光, 冷静、不打断。<br>一个像炭火, 偶尔噼啪, 戳穿我自己都没注意到的自我安慰。</p>
+      </div>
+      <div class="scene-side">
+        <article class="objcard">
+          <h4>诗 · 诗歌 · SENSOR</h4>
+          <p>三轨监测官——看天 (VIX/利率/F&G)、看地 (BTC/链上)、看人 (新闻/社交/Polymarket)。她不评判, 只把数据排好放在我面前。</p>
+          <ul>
+            <li>常态: 沉默, 数据 JSON 后台</li>
+            <li>触发 ALERT: 异动出现, 走到我面前</li>
+            <li>风格: 克制、精准、不带情绪</li>
+          </ul>
+        </article>
+        <article class="objcard">
+          <h4>猫 · 肌肉猫 · CRITIC</h4>
+          <p>军师批判官——对所有信号反向推。我看到的"S 级", 他第一反应是"为什么 33 位都看多, 共识就是定价"。</p>
+          <ul>
+            <li>触发: 我做任何决定前的最后一秒</li>
+            <li>风格: 黑色幽默、不让我舒服</li>
+            <li>价值: 让我承担自我归因的代价</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+
+    <div class="voices">
+      <article class="voice shige" data-name="诗">
+        <div class="voice-tag">诗歌的话</div>
+        <p class="voice-quote">"我不替你决定。我把世界压缩成 6 个指标摆在你面前。你看完之后, 通系统会在你耳后轻问: 是不是这样? 你点头, 我就退回雾里。"</p>
+      </article>
+      <article class="voice cat" data-name="猫">
+        <div class="voice-tag">肌肉猫的话</div>
+        <p class="voice-quote">"诗歌克制是她的工作。我不克制是我的工作。你做的每一个'轻松决定', 我都会在你点头之前问一句: 这是你想要的, 还是你害怕另一个的?"</p>
+      </article>
+    </div>
+  </section>
+
+</div>
+
+<footer class="hud-bot">
+  <span>POV · FIRST PERSON</span>
+  <span id="crumb">// HOME</span>
+  <span>FRAME 0509 · STABLE</span>
+</footer>
+
+<script>
+const TITLE_MAP = {
+  home:      "// HOME",
+  clothing:  "// HOME / 衣",
+  food:      "// HOME / 食",
+  home2:     "// HOME / 住",
+  transport: "// HOME / 行",
+  invest:    "// HOME / 投资",
+  health:    "// HOME / 健康",
+  work:      "// HOME / 工作",
+  agents:    "// HOME / 内心声部",
+};
+
+function go(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = document.querySelector(`.page[data-page="${name}"]`);
+  if (target) {
+    target.classList.add('active');
+    document.getElementById('crumb').textContent = TITLE_MAP[name] || '// ?';
+    window.scrollTo({ top: 0 });
+  }
+}
+
+document.querySelectorAll('[data-go]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    go(el.dataset.go);
+  });
+});
+
+// Esc 回首页
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') go('home');
+});
+
+// HUD 时钟
+function tick() {
+  const d = new Date();
+  const fmt = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')} KST`;
+  document.getElementById('now').textContent = fmt;
+}
+tick(); setInterval(tick, 60000);
+</script>
+</body>
+</html>

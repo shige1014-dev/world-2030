@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>未来守护神殿 · WORLD 2030</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --paper:        #f5ead2;
+  --paper-warm:   #faf2e0;
+  --paper-deep:   #ead7b3;
+  --paper-shadow: #d4be96;
+  --ink:          #3a2818;
+  --ink-soft:     #6b5240;
+  --ink-mute:     #9a8674;
+  --ink-faded:    #c0aa8f;
+  --accent:       #c8553d;
+  --accent-soft:  #d97a64;
+  --jade:         #4a6b4a;
+  --bronze:       #8b6f47;
+  --gold-leaf:    #b89a50;
+  --line:         rgba(139, 111, 71, 0.28);
+  --line-2:       rgba(200, 85, 61, 0.4);
+}
+
+html, body {
+  background:
+    radial-gradient(ellipse 1200px 800px at 30% 20%, var(--paper-warm), transparent 70%),
+    radial-gradient(ellipse 900px 600px at 75% 85%, rgba(200, 85, 61, 0.06), transparent 60%),
+    var(--paper);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: "Iowan Old Style", "STSong", "Source Han Serif SC", "PingFang SC", "Noto Serif SC", serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: ""; position: fixed; inset: 0;
+  pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.18'/></svg>");
+  mix-blend-mode: multiply;
+  opacity: 0.32;
+}
+
+.bar {
+  position: fixed; left: 0; right: 0;
+  height: 36px; padding: 0 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px; letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  z-index: 50;
+  background: linear-gradient(180deg, var(--paper-warm) 0%, transparent 100%);
+}
+.bar.bot {
+  bottom: 0; top: auto;
+  background: linear-gradient(0deg, var(--paper-warm) 0%, transparent 100%);
+  border-top: 1px solid var(--line);
+}
+.bar.top { border-bottom: 1px solid var(--line); }
+.bar b { color: var(--accent); font-weight: 600; }
+
+.app { position: relative; z-index: 1; min-height: 100vh; padding: 50px 0 50px; }
+.page { display: none; opacity: 0; transition: opacity 0.4s ease; }
+.page.active { display: block; opacity: 1; animation: fadeUp 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.15); }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================
+   Home — 火山女儿风 + 3-col 状态卡填充
+   ============================================ */
+.home.active {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 24px 32px 32px;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 28px;
+  position: relative;
+}
+.page[data-page="home"].active::before {
+  content: "";
+  position: fixed;
+  inset: 36px 0 36px 0;
+  z-index: -1;
+  background-image: url('images/home-bg.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: 0.22;
+  filter: blur(3px) saturate(1.05);
+  pointer-events: none;
+  mask-image: linear-gradient(180deg, black 0%, black 75%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, black 0%, black 75%, transparent 100%);
+}
+
+.home-mast { text-align: center; padding-top: 8px; }
+
+.home-ornament {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  margin: 4px 0 14px;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 11px; letter-spacing: 0.5em;
+  color: var(--bronze);
+}
+.home-ornament::before, .home-ornament::after {
+  content: "═══════"; color: var(--gold-leaf);
+  font-size: 14px; letter-spacing: 0.05em;
+}
+.home-ornament-stamp {
+  display: inline-grid; place-items: center;
+  width: 34px; height: 34px;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  font-size: 14px; color: var(--accent);
+  background: var(--paper-warm);
+  font-family: "STSong", serif;
+  font-weight: 700;
+}
+.home-tag {
+  display: inline-block;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px; letter-spacing: 0.45em;
+  color: var(--accent);
+  padding: 5px 18px;
+  border-top: 1px solid var(--line-2);
+  border-bottom: 1px solid var(--line-2);
+}
+.home-h {
+  font-family: "Iowan Old Style", "STSong", "Source Han Serif SC", serif;
+  font-size: clamp(48px, 7vw, 88px);
+  font-weight: 700; letter-spacing: 0.04em;
+  color: var(--ink);
+  margin: 16px 0 8px;
+  line-height: 1;
+}
+.home-h em { color: var(--accent); font-style: italic; }
+.home-sub {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 16px; color: var(--ink-soft);
+  font-style: italic;
+  letter-spacing: 0.04em;
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.85;
+}
+.home-sub b { color: var(--accent); font-weight: 600; font-style: normal; }
+
+.home-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+/* 12 守护神 — 2 排 6 列 大图 */
+.guardians-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 22px;
+  width: 100%;
+  margin: 32px auto 0;
+  max-width: 1480px;
+  padding: 32px 28px;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 4px 0 var(--paper-shadow);
+}
+.guardian {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s ease;
+}
+.guardian:hover {
+  transform: translateY(-8px);
+}
+.guardian-portrait {
+  width: 100%;
+  aspect-ratio: 3/4;
+  border-radius: 8px;
+  background-color: var(--paper);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  border: 2.5px solid var(--vc, var(--line));
+  box-shadow: 0 3px 0 var(--paper-shadow);
+  position: relative;
+}
+.guardian-portrait::after {
+  content: attr(data-tk);
+  position: absolute;
+  bottom: 8px; left: 50%;
+  transform: translateX(-50%);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.1em;
+  background: rgba(58, 40, 24, 0.88);
+  color: var(--paper-warm);
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+.guardian-name {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+.guardian:hover .guardian-portrait {
+  border-color: var(--vc, var(--accent));
+  box-shadow: 0 5px 0 var(--paper-shadow), 0 6px 14px rgba(200, 85, 61, 0.18);
+}
+
+/* 大入殿按钮 */
+.enter-btn-wrap {
+  display: flex; justify-content: center;
+  margin: 24px 0 12px;
+}
+.enter-btn {
+  display: inline-flex; align-items: center;
+  gap: 12px;
+  padding: 10px 26px;
+  background: linear-gradient(180deg, var(--paper-warm), var(--paper-deep));
+  border: 1.5px solid var(--accent);
+  border-radius: 99px;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.18s ease;
+  box-shadow: 0 3px 0 var(--paper-shadow);
+  position: relative;
+}
+.enter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 0 var(--paper-shadow), 0 8px 16px rgba(200, 85, 61, 0.22);
+  background: linear-gradient(180deg, var(--paper), var(--paper-warm));
+}
+.enter-btn-stamp {
+  display: inline-grid; place-items: center;
+  width: 22px; height: 22px;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  font-family: "STSong", serif;
+  font-size: 11px; font-weight: 700;
+  color: var(--accent);
+  background: var(--paper);
+}
+.enter-btn-text {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+.enter-btn-en {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+@media (max-width: 1100px) {
+  .guardians-row { grid-template-columns: repeat(6, 1fr); gap: 8px; }
+}
+@media (max-width: 700px) {
+  .guardians-row { grid-template-columns: repeat(4, 1fr); }
+  .enter-btn-text { font-size: 20px; }
+}
+
+.side-col { display: flex; flex-direction: column; gap: 14px; }
+.side-card {
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  box-shadow: 0 3px 0 var(--paper-shadow);
+  position: relative;
+}
+.side-card::before {
+  content: ""; position: absolute;
+  top: -1px; left: 16px; right: 16px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.4;
+}
+.side-card-h {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 11px; letter-spacing: 0.32em;
+  color: var(--accent);
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--line);
+  text-transform: uppercase;
+}
+.side-card-h small {
+  display: block;
+  font-family: "STSong", serif;
+  font-size: 13px; color: var(--ink-soft);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+  text-transform: none;
+  font-weight: 500;
+}
+.side-stat-row {
+  display: flex; justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(139,111,71,0.15);
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 13px;
+}
+.side-stat-row:last-child { border-bottom: 0; }
+.side-stat-row b { font-weight: 700; color: var(--ink); font-family: "STSong", serif; }
+.side-stat-row b.pos { color: var(--jade); }
+.side-stat-row b.warn { color: var(--accent); }
+.side-stat-row span { color: var(--ink-mute); font-size: 11px; letter-spacing: 0.1em; }
+.side-card-quote {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12.5px;
+  font-style: italic; color: var(--ink-soft);
+  line-height: 1.85;
+  border-left: 2px solid var(--accent);
+  padding-left: 10px;
+}
+
+.protag {
+  width: min(340px, 28vw);
+  aspect-ratio: 3/4;
+  border-radius: 12px;
+  background:
+    url('images/shige.png') center top / cover no-repeat,
+    var(--paper-warm);
+  border: 2px solid var(--line);
+  box-shadow:
+    0 12px 40px rgba(139, 111, 71, 0.18),
+    inset 0 0 0 4px rgba(255, 248, 235, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+.protag::before {
+  content: ""; position: absolute; inset: 12px;
+  border: 1px dashed rgba(139, 111, 71, 0.25);
+  border-radius: 8px;
+  pointer-events: none;
+}
+.protag-overlay {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 16px 20px;
+  background: linear-gradient(0deg, rgba(58, 40, 24, 0.85), transparent);
+  color: var(--paper-warm);
+  text-align: center;
+}
+.protag-name {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 22px; font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.protag-role {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 11px; letter-spacing: 0.32em;
+  color: var(--gold-leaf);
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+.protag-tag {
+  position: absolute; top: 16px; left: 50%;
+  transform: translateX(-50%);
+  font-family: "Iowan Old Style", serif;
+  font-size: 10px; letter-spacing: 0.4em;
+  color: var(--accent);
+  background: rgba(245, 234, 210, 0.85);
+  padding: 4px 12px;
+  border-radius: 99px;
+  border: 1px solid var(--line-2);
+}
+.protag-glyph { display: none; }
+
+.scene-deck {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  width: 100%;
+  margin-top: 12px;
+}
+.scene-deck.single {
+  grid-template-columns: 1fr;
+  max-width: 640px;
+  margin: 12px auto 0;
+}
+.scene-card.big {
+  padding: 38px 28px;
+  background: linear-gradient(135deg, var(--paper-warm), var(--paper-deep));
+}
+.scene-card.big .scene-card-glyph {
+  font-size: 56px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin: 8px 0 6px;
+}
+.scene-card.big .scene-card-cap {
+  font-size: 13px;
+  line-height: 1.85;
+  margin-top: 8px;
+}
+.scene-card {
+  position: relative;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 6px;
+  padding: 22px 14px;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer; text-decoration: none;
+  color: var(--ink);
+  transition: all 0.22s ease;
+  text-align: center;
+  box-shadow: 0 3px 0 var(--paper-shadow);
+}
+.scene-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 0 var(--paper-shadow), 0 12px 24px rgba(200, 85, 61, 0.18);
+  background: var(--paper);
+}
+.scene-card-num {
+  font-family: "Iowan Old Style", serif;
+  font-size: 11px; letter-spacing: 0.3em;
+  color: var(--accent);
+}
+.scene-card-glyph {
+  font-family: "STSong", "Iowan Old Style", serif;
+  font-size: 32px; font-weight: 700;
+  color: var(--ink); margin: 4px 0;
+}
+.scene-card-en {
+  font-family: "Iowan Old Style", serif;
+  font-size: 9px; letter-spacing: 0.32em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+.scene-card-cap {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 11px; color: var(--ink-soft);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+.home-foot {
+  text-align: center;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px; color: var(--ink-mute);
+  letter-spacing: 0.18em;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+.home-foot b { color: var(--accent); font-weight: 600; }
+
+/* ============================================
+   场景页
+   ============================================ */
+.scene {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  position: relative;
+}
+/* 每场景全屏 faded bg 大图 — 打破单调 */
+.page.scene.active::before {
+  content: "";
+  position: fixed;
+  inset: 36px 0 36px 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: 0.28;
+  filter: blur(2px) saturate(1.08);
+  pointer-events: none;
+  mask-image: linear-gradient(180deg, black 0%, black 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, black 0%, black 70%, transparent 100%);
+}
+.page[data-page="clothing"].active::before  { background-image: url('images/scene-clothing.png'); }
+.page[data-page="food"].active::before      { background-image: url('images/scene-food.png'); }
+.page[data-page="home2"].active::before     { background-image: url('images/scene-home.png'); }
+.page[data-page="transport"].active::before { background-image: url('images/scene-transport.png'); }
+.page[data-page="invest"].active::before    { background-image: url('images/scene-invest.png'); }
+.page[data-page="health"].active::before    { background-image: url('images/scene-health.png'); }
+.page[data-page="work"].active::before      { background-image: url('images/scene-work.png'); }
+.page[data-page="agents"].active::before    { background-image: url('images/scene-voices.png'); }
+.scene-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 13px; color: var(--ink-soft);
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  cursor: pointer; text-decoration: none;
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 0 var(--paper-shadow);
+  margin-bottom: 16px;
+}
+.scene-back:hover { color: var(--accent); border-color: var(--accent); }
+
+.scene-mast {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.scene-tag {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 11px; letter-spacing: 0.4em;
+  color: var(--accent);
+  padding-bottom: 6px;
+}
+.scene-h {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 40px; font-weight: 700;
+  color: var(--ink); letter-spacing: 0.04em;
+  line-height: 1.05;
+}
+.scene-sub {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-style: italic; font-size: 14px;
+  color: var(--ink-soft);
+  margin-top: 8px;
+  line-height: 1.7;
+  max-width: 600px;
+}
+.scene-meta {
+  font-family: "Iowan Old Style", serif;
+  font-size: 11px; color: var(--ink-mute);
+  letter-spacing: 0.18em;
+  text-align: right;
+}
+
+.scene-stage {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 22px;
+}
+
+.bg-frame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--paper-warm);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px solid var(--line);
+  aspect-ratio: 4/5;
+  box-shadow: 0 8px 24px rgba(139, 111, 71, 0.14);
+}
+.bg-frame[data-scene="clothing"]  { background-image: url('images/scene-clothing.png'); }
+.bg-frame[data-scene="food"]      { background-image: url('images/scene-food.png'); }
+.bg-frame[data-scene="home"]      { background-image: url('images/scene-home.png'); }
+.bg-frame[data-scene="transport"] { background-image: url('images/scene-transport.png'); }
+.bg-frame[data-scene="invest"]    { background-image: url('images/scene-invest.png'); }
+.bg-frame[data-scene="health"]    { background-image: url('images/scene-health.png'); }
+.bg-frame[data-scene="work"]      { background-image: url('images/scene-work.png'); }
+.bg-frame[data-scene="voices"]    { background-image: url('images/scene-voices.png'); }
+.bg-frame::before {
+  content: ""; position: absolute; inset: 12px;
+  border: 1px dashed rgba(139,111,71,0.22);
+  border-radius: 8px; pointer-events: none;
+}
+.bg-tag {
+  position: absolute; top: 14px; left: 16px;
+  font-family: "Iowan Old Style", serif;
+  font-size: 10px; letter-spacing: 0.32em;
+  color: var(--accent);
+  background: rgba(245, 234, 210, 0.88);
+  padding: 4px 10px; border-radius: 99px;
+  border: 1px solid var(--line-2);
+  text-transform: uppercase;
+}
+.bg-glyph {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -55%);
+  font-family: "STSong", serif;
+  font-size: 120px;
+  color: var(--accent);
+  opacity: 0.28;
+  font-weight: 700;
+}
+.bg-cap {
+  position: absolute; bottom: 16px; left: 16px; right: 16px;
+  background: rgba(58, 40, 24, 0.85);
+  color: var(--paper-warm);
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px; line-height: 1.7;
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-style: italic;
+}
+/* 场景内 抠图全身立绘 — 浮在 bg-frame 右下 */
+.npc-portrait {
+  position: absolute;
+  bottom: -2%;
+  right: 0;
+  width: 62%;
+  height: 95%;
+  background-position: center bottom;
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(-6px 8px 16px rgba(58, 40, 24, 0.45));
+}
+.npc-portrait .ph, .npc-portrait small { display: none; }
+
+/* 每场景对应的人物 (抠图全身) */
+.page[data-page="clothing"]  .npc-portrait { background-image: url('images/cut-shige.png'); }
+.page[data-page="food"]      .npc-portrait { background-image: url('images/cut-cleo.png'); }
+.page[data-page="home2"]     .npc-portrait { background-image: url('images/cut-houston.png'); }
+.page[data-page="transport"] .npc-portrait { background-image: url('images/cut-ranger.png'); }
+.page[data-page="invest"]    .npc-portrait { background-image: url('images/cut-shige.png'); }
+.page[data-page="health"]    .npc-portrait { background-image: url('images/cut-drava.png'); }
+.page[data-page="work"]      .npc-portrait { background-image: url('images/cut-nova.png'); }
+
+/* 内心场景: 诗歌左 + 肌肉猫右 双立绘 */
+.page[data-page="agents"] .npc-portrait {
+  background-image:
+    url('images/cut-shige.png'),
+    url('images/cut-musclecat.png');
+  background-position: 0% bottom, 100% bottom;
+  background-size: 50% auto, 50% auto;
+  background-repeat: no-repeat, no-repeat;
+  width: 100%;
+  right: 0;
+}
+.npc-portrait .ph {
+  font-size: 64px;
+  color: var(--accent);
+  opacity: 0.45;
+  display: block;
+}
+.npc-portrait small {
+  display: block; margin-top: 8px;
+  font-size: 10px; color: var(--ink-mute);
+  letter-spacing: 0.18em;
+}
+
+.dialog { display: flex; flex-direction: column; gap: 14px; }
+.speech {
+  position: relative;
+  padding: 18px 20px 18px 64px;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  border-left: 4px solid var(--vc, var(--accent));
+  box-shadow: 0 3px 0 var(--paper-shadow);
+}
+.speech::before {
+  content: attr(data-name);
+  position: absolute; top: 14px; left: 12px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--vc, var(--accent));
+  color: var(--paper-warm);
+  font-family: "STSong", serif;
+  font-size: 16px; font-weight: 700;
+  display: grid; place-items: center;
+  border: 2px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--vc, var(--accent));
+}
+.speech-who {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--vc, var(--accent));
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+.speech-who small {
+  font-family: "Iowan Old Style", serif;
+  font-size: 9px; letter-spacing: 0.24em;
+  color: var(--ink-mute);
+  margin-left: 8px;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.speech-text {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 14.5px; line-height: 1.85;
+  color: var(--ink);
+}
+.speech.cat   { --vc: var(--bronze); }
+.speech.shige { --vc: var(--accent); }
+.speech.npc   { --vc: var(--jade); }
+
+.choices { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+.choice {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 14px; color: var(--ink);
+  transition: all 0.18s ease;
+  text-align: left; text-decoration: none;
+}
+.choice:hover {
+  border-color: var(--accent);
+  background: var(--paper-warm);
+  transform: translateX(4px);
+  box-shadow: -3px 3px 0 var(--paper-shadow);
+}
+.choice-mark {
+  font-family: "STSong", serif;
+  color: var(--accent); font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.choice-cap {
+  font-size: 11px; color: var(--ink-mute);
+  font-style: italic; margin-top: 2px;
+}
+
+.dat-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.dat {
+  padding: 10px 12px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: "Iowan Old Style", serif;
+}
+.dat-l { font-size: 9px; letter-spacing: 0.24em; color: var(--ink-mute); text-transform: uppercase; }
+.dat-v { font-family: "STSong", "Iowan Old Style", serif; font-size: 18px; font-weight: 700; color: var(--ink); margin-top: 4px; }
+.dat-v.pos { color: var(--jade); }
+.dat-v.neg { color: var(--accent); }
+
+.npc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 12px; }
+.npc-card {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  padding: 14px 10px;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 0 var(--paper-shadow);
+}
+.npc-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--vc, var(--accent));
+  box-shadow: 0 5px 0 var(--paper-shadow), 0 8px 16px rgba(139, 111, 71, 0.18);
+}
+.npc-card-bust {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background-color: var(--paper);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  border: 2px solid var(--vc, var(--accent));
+  box-shadow: 0 0 0 2px var(--paper-warm);
+}
+.npc-card-name {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--ink); letter-spacing: 0.06em;
+}
+.npc-card-tk {
+  font-family: "Iowan Old Style", serif;
+  font-size: 9px; letter-spacing: 0.18em;
+  color: var(--vc, var(--accent));
+  text-transform: uppercase;
+}
+.npc-card-pot {
+  font-family: "STSong", serif;
+  font-size: 11px; color: var(--ink-soft);
+}
+
+.guide {
+  position: fixed; bottom: 56px; right: 24px;
+  width: 320px;
+  background: var(--paper-warm);
+  border: 2px solid var(--bronze);
+  border-radius: 14px 14px 4px 14px;
+  padding: 14px 16px 14px 60px;
+  box-shadow: 0 6px 0 var(--paper-shadow), 0 12px 28px rgba(139, 111, 71, 0.22);
+  z-index: 40;
+  font-family: "Iowan Old Style", "STSong", serif;
+  cursor: default;
+}
+.guide::before {
+  content: "";
+  position: absolute; top: 12px; left: 10px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: url('images/musclecat.png') center top / cover no-repeat, var(--bronze);
+  border: 2px solid var(--paper);
+  box-shadow: 0 0 0 1px var(--bronze);
+}
+.guide-name {
+  font-size: 12px; font-weight: 700;
+  color: var(--bronze); letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.guide-name small {
+  font-size: 9px; letter-spacing: 0.24em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  margin-left: 6px;
+  font-weight: 400;
+}
+.guide-text {
+  font-size: 13px; line-height: 1.75;
+  color: var(--ink); font-style: italic;
+}
+.guide-close {
+  position: absolute; top: 4px; right: 8px;
+  background: none; border: 0;
+  font-size: 14px; color: var(--ink-mute);
+  cursor: pointer; line-height: 1;
+}
+.guide-close:hover { color: var(--accent); }
+
+.scene-nav {
+  display: flex; justify-content: space-between;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.scene-nav a {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 13px; color: var(--ink-soft);
+  text-decoration: none; padding: 8px 16px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  transition: all 0.18s ease;
+  box-shadow: 0 2px 0 var(--paper-shadow);
+}
+.scene-nav a:hover { color: var(--accent); border-color: var(--accent); }
+
+/* ===== NPC 对话 modal ===== */
+.npc-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  background: rgba(58, 40, 24, 0.65);
+  backdrop-filter: blur(6px);
+  animation: modalFade 0.22s ease;
+}
+.npc-modal.open { display: flex; }
+@keyframes modalFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.npc-modal-card {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  max-width: 920px;
+  width: 100%;
+  max-height: 88vh;
+  background: var(--paper);
+  border: 2px solid var(--vc, var(--accent));
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(58, 40, 24, 0.5);
+  animation: cardRise 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.18);
+}
+@keyframes cardRise {
+  from { opacity: 0; transform: translateY(20px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.npc-modal-portrait {
+  position: relative;
+  border-right: 2px solid var(--vc, var(--accent));
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, var(--paper-deep) 0%, var(--paper-warm) 60%, var(--paper-warm) 100%);
+}
+.npc-modal-portrait::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, var(--vc, var(--accent)) 0%, transparent 35%);
+  opacity: 0.18;
+  pointer-events: none;
+}
+.npc-modal-portrait img {
+  width: 100%;
+  max-height: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 -2px 8px rgba(58,40,24,0.12));
+}
+.npc-modal-portrait:not(:has(img[src])) { background: linear-gradient(160deg, var(--vc, var(--accent))44, var(--vc, var(--accent))cc); }
+.npc-modal-portrait::after {
+  content: attr(data-name);
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 14px 18px 12px;
+  background: linear-gradient(0deg, rgba(58,40,24,0.92), transparent);
+  color: var(--paper-warm);
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 18px; font-weight: 700;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+.npc-modal-body {
+  display: flex;
+  flex-direction: column;
+  padding: 22px 26px 22px;
+  gap: 14px;
+  position: relative;
+}
+.npc-modal-tag {
+  font-family: "Iowan Old Style", serif;
+  font-size: 10px; letter-spacing: 0.32em;
+  color: var(--vc, var(--accent));
+  text-transform: uppercase;
+}
+.npc-modal-h {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 26px; font-weight: 700;
+  color: var(--ink); letter-spacing: 0.04em;
+  line-height: 1.1;
+}
+.npc-modal-h small {
+  display: block;
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  margin-top: 4px;
+  font-style: italic;
+}
+.npc-modal-quote {
+  position: relative;
+  padding: 16px 18px 16px 30px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--vc, var(--accent));
+  border-radius: 6px;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 14px;
+  line-height: 1.95;
+  color: var(--ink);
+  font-style: italic;
+  white-space: pre-line;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.npc-modal-quote::-webkit-scrollbar { width: 4px; }
+.npc-modal-quote::-webkit-scrollbar-thumb { background: var(--line); border-radius: 2px; }
+.npc-modal-quote::before {
+  content: "「";
+  position: absolute; top: 8px; left: 10px;
+  font-size: 22px; font-weight: 700;
+  color: var(--vc, var(--accent));
+  font-style: normal;
+}
+.npc-modal-meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px;
+}
+.npc-modal-meta-row {
+  display: flex; justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.npc-modal-meta-l {
+  color: var(--ink-mute);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.npc-modal-meta-v {
+  color: var(--ink);
+  font-weight: 700;
+  font-family: "STSong", serif;
+}
+.npc-modal-meta-v.pos { color: var(--jade); }
+.npc-modal-meta-v.neg { color: var(--accent); }
+.npc-modal-actions {
+  display: flex; gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+}
+.npc-btn {
+  flex: 1;
+  padding: 10px 16px;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 6px;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-align: center;
+}
+.npc-btn:hover {
+  background: var(--paper);
+  border-color: var(--vc, var(--accent));
+  color: var(--vc, var(--accent));
+}
+.npc-btn.primary {
+  background: var(--vc, var(--accent));
+  color: var(--paper-warm);
+  border-color: var(--vc, var(--accent));
+}
+.npc-btn.primary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper-warm);
+}
+
+@media (max-width: 700px) {
+  .npc-modal-card { grid-template-columns: 1fr; max-width: 380px; }
+  .npc-modal-portrait { aspect-ratio: 4/3; border-right: 0; border-bottom: 2px solid var(--vc, var(--accent)); }
+}
+
+@media (max-width: 1100px) {
+  .home-stage { grid-template-columns: 1fr; }
+  .side-col { display: grid; grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px) {
+  .scene-deck { grid-template-columns: repeat(2, 1fr); }
+  .scene-stage { grid-template-columns: 1fr; }
+  .bg-frame { aspect-ratio: 1/1; }
+  .npc-portrait { width: 50%; height: 60%; }
+  .guide { display: none; }
+  .side-col { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════ 神殿首页 ═══════════════ */
+.shrine-cover {
+  position: relative;
+  width: 100%; max-width: 1480px;
+  margin: 8px auto 24px;
+  height: 320px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1.5px solid var(--line);
+  box-shadow: 0 6px 0 var(--paper-shadow), 0 12px 28px rgba(139, 111, 71, 0.16);
+}
+.shrine-cover-img {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 25% 35%, rgba(255, 216, 107, 0.18), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 75% 65%, rgba(200, 85, 61, 0.20), transparent 60%),
+    radial-gradient(ellipse 1000px 200px at 50% 100%, rgba(58, 40, 24, 0.6), transparent 70%),
+    linear-gradient(150deg, #2a1f17 0%, #4a3826 35%, #6b5240 75%, #4a3826 100%);
+}
+/* 金箔门 SVG-like CSS 装饰 */
+.shrine-cover-img::before {
+  content: "";
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -55%);
+  width: 280px; height: 380px;
+  border: 2px solid rgba(255, 216, 107, 0.35);
+  border-radius: 140px 140px 6px 6px;
+  background:
+    linear-gradient(180deg, rgba(255, 216, 107, 0.06), rgba(255, 216, 107, 0.02));
+  box-shadow:
+    inset 0 0 60px rgba(255, 216, 107, 0.08),
+    0 0 80px rgba(255, 216, 107, 0.12);
+}
+/* 12 颗装饰光点 (沿门拱排列) */
+.shrine-cover-img::after {
+  content: "";
+  position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -55%);
+  width: 280px; height: 380px;
+  background:
+    radial-gradient(circle 3px at 50% 8%, rgba(255, 216, 107, 0.7), transparent),
+    radial-gradient(circle 3px at 30% 14%, rgba(255, 216, 107, 0.6), transparent),
+    radial-gradient(circle 3px at 70% 14%, rgba(255, 216, 107, 0.6), transparent),
+    radial-gradient(circle 3px at 18% 28%, rgba(255, 216, 107, 0.55), transparent),
+    radial-gradient(circle 3px at 82% 28%, rgba(255, 216, 107, 0.55), transparent),
+    radial-gradient(circle 3px at 12% 48%, rgba(255, 216, 107, 0.5), transparent),
+    radial-gradient(circle 3px at 88% 48%, rgba(255, 216, 107, 0.5), transparent);
+  pointer-events: none;
+  animation: shimmerLight 3.6s ease-in-out infinite alternate;
+}
+@keyframes shimmerLight {
+  from { opacity: 0.7; }
+  to { opacity: 1; filter: drop-shadow(0 0 4px rgba(255, 216, 107, 0.5)); }
+}
+.shrine-cover-mask {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 0%, transparent 30%, rgba(245, 234, 210, 0.3) 75%, var(--paper) 100%);
+}
+.shrine-cover-text {
+  position: absolute; left: 0; right: 0; bottom: 24px;
+  text-align: center;
+  color: var(--paper-warm);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+}
+.shrine-stamp {
+  display: inline-grid; place-items: center;
+  width: 56px; height: 56px;
+  border: 2px solid var(--gold-leaf);
+  border-radius: 50%;
+  font-family: "STSong", serif;
+  font-size: 28px; font-weight: 700;
+  color: var(--gold-leaf);
+  background: rgba(58, 40, 24, 0.7);
+  margin-bottom: 10px;
+}
+.shrine-h {
+  font-family: "STSong", "Iowan Old Style", serif;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  margin: 0 0 6px;
+  color: #fff8e8;
+}
+.shrine-sub {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  color: rgba(245, 234, 210, 0.78);
+  margin: 0;
+}
+
+.shrine-actions {
+  display: flex; justify-content: center; gap: 18px;
+  margin: 10px 0 28px;
+  flex-wrap: wrap;
+}
+.shrine-btn {
+  display: inline-flex; flex-direction: column;
+  align-items: center; gap: 2px;
+  padding: 14px 32px;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--ink);
+  font-family: inherit;
+  transition: all 0.18s ease;
+  box-shadow: 0 3px 0 var(--paper-shadow);
+}
+.shrine-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 5px 0 var(--paper-shadow), 0 8px 16px rgba(200, 85, 61, 0.18);
+}
+.shrine-btn.gacha {
+  background: linear-gradient(180deg, #faf2e0, #f0d8a8);
+  border-color: var(--accent);
+  border-width: 2px;
+}
+.shrine-btn-glyph {
+  font-family: "STSong", serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+.shrine-btn span:nth-child(2) {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--ink);
+}
+.shrine-btn small {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.32em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+/* 队伍 + 收藏 */
+.shrine-team, .shrine-fav {
+  width: 100%; max-width: 1480px;
+  margin: 0 auto 22px;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 20px;
+  box-shadow: 0 3px 0 var(--paper-shadow);
+}
+.shrine-team-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--line-2);
+}
+.shrine-team-tag {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 14px; font-weight: 700;
+  letter-spacing: 0.32em;
+  color: var(--ink);
+}
+.shrine-team-count {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 12px; letter-spacing: 0.18em;
+  color: var(--accent);
+}
+.team-stats {
+  display: none;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, rgba(245, 234, 210, 0.7), rgba(234, 215, 179, 0.5));
+  border: 1px dashed var(--line-2);
+  border-radius: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.ts-row { display: flex; gap: 8px; align-items: center; padding-right: 14px; border-right: 1px solid var(--line-2); }
+.ts-row:last-of-type { border-right: 0; }
+.ts-l { font-family: "Iowan Old Style", "STSong", serif; font-size: 11px; letter-spacing: 0.18em; color: var(--ink-soft); }
+.ts-v { font-family: "IBM Plex Mono", monospace; font-size: 14px; font-weight: 700; letter-spacing: 0.04em; color: var(--ink); }
+.ts-v.pos { color: var(--jade); }
+.ts-v.neg { color: var(--accent); }
+.ts-tiers { display: flex; gap: 6px; margin-left: auto; }
+.ts-tier {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 99px;
+  background: rgba(58, 40, 24, 0.85);
+  color: var(--gold-leaf);
+  border: 1px solid var(--gold-leaf);
+}
+.ts-tier[data-tier="S"] { color: #ffd86b; border-color: #ffd86b; }
+.ts-tier[data-tier="A"] { color: #c89060; border-color: #c89060; }
+.ts-tier[data-tier="B"] { color: #8a9a7a; border-color: #8a9a7a; }
+.ts-tier[data-tier="C"] { color: #9a8a8a; border-color: #9a8a8a; }
+.team-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  min-height: 100px;
+}
+.team-row.fav-row { grid-template-columns: repeat(8, 1fr); }
+.team-empty {
+  grid-column: 1 / -1;
+  display: grid; place-items: center;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px; color: var(--ink-mute);
+  font-style: italic;
+  padding: 18px;
+}
+.team-slot {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 4px;
+  cursor: pointer; text-decoration: none;
+  transition: transform 0.18s ease;
+}
+.team-slot:hover { transform: translateY(-4px); }
+.team-slot-portrait {
+  width: 100%; aspect-ratio: 3/4;
+  background-color: var(--paper);
+  background-size: cover; background-position: center top;
+  background-repeat: no-repeat;
+  border: 2px solid var(--vc, var(--line));
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+}
+.team-slot-name {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px; font-weight: 700;
+  color: var(--ink);
+}
+.team-slot-tk {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px; color: var(--ink-mute);
+  letter-spacing: 0.08em;
+}
+
+/* ═══════════════ Gallery 图鉴 ═══════════════ */
+.page.gallery {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 12px 24px 32px;
+  position: relative;
+}
+.gallery-mast { text-align: center; margin-bottom: 18px; }
+.gallery-h {
+  font-family: "STSong", "Iowan Old Style", serif;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--ink);
+  margin: 4px 0 6px;
+}
+.gallery-sub {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; letter-spacing: 0.28em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.tier-tabs {
+  display: flex; justify-content: center; gap: 10px;
+  margin: 0 auto 20px;
+  max-width: 1480px;
+  padding: 12px 18px;
+  background: var(--paper-warm);
+  border: 1.5px solid var(--line);
+  border-radius: 99px;
+  flex-wrap: wrap;
+}
+.tier-tab {
+  padding: 9px 22px;
+  background: transparent;
+  border: 1.5px solid var(--line-2);
+  border-radius: 99px;
+  cursor: pointer;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+  transition: all 0.16s ease;
+}
+.tier-tab:hover { color: var(--ink); border-color: var(--accent); }
+.tier-tab.active {
+  background: var(--accent);
+  color: var(--paper);
+  border-color: var(--accent);
+  box-shadow: 0 2px 0 var(--paper-shadow);
+}
+
+/* tier badge mini (卡片右上角) */
+.tier-badge-mini {
+  position: absolute;
+  top: 6px; right: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.06em;
+  background: rgba(58, 40, 24, 0.92);
+  color: var(--gold-leaf);
+  padding: 3px 7px;
+  border-radius: 4px;
+  border: 1px solid var(--gold-leaf);
+}
+.tier-badge-mini.S, [data-tier="S"] .tier-badge-mini { color: #ffd86b; border-color: #ffd86b; }
+
+/* glyph fallback (无立绘的卡片) */
+.g-glyph {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -55%);
+  font-family: "STSong", serif;
+  font-size: 64px; font-weight: 700;
+  color: var(--vc, var(--accent));
+  opacity: 0.55;
+}
+.guardian-portrait { position: relative; overflow: hidden; }
+.guardian-portrait:not([style*="background-image"]) {
+  background: linear-gradient(160deg, var(--paper-deep), var(--paper));
+}
+.guardian-cn {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 10px; color: var(--ink-mute);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* modal tier badge */
+.tier-badge {
+  position: absolute;
+  top: 14px; right: 14px;
+  z-index: 10;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.1em;
+  background: rgba(58, 40, 24, 0.95);
+  color: var(--gold-leaf);
+  padding: 6px 14px;
+  border-radius: 6px;
+  border: 1.5px solid var(--gold-leaf);
+}
+.tier-badge[data-tier="S"] { color: #ffd86b; border-color: #ffd86b; box-shadow: 0 0 12px rgba(255, 216, 107, 0.4); }
+.tier-badge[data-tier="A"] { color: #c89060; border-color: #c89060; }
+.tier-badge[data-tier="B"] { color: #8a9a7a; border-color: #8a9a7a; }
+.tier-badge[data-tier="C"] { color: #9a8a8a; border-color: #9a8a8a; }
+.npc-modal-card { position: relative; }
+.modal-glyph {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "STSong", serif;
+  font-size: 140px; font-weight: 700;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ═══════════ 抽卡 翻牌 overlay ═══════════ */
+.gacha-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(58, 40, 24, 0.78);
+  backdrop-filter: blur(10px);
+  display: none; align-items: center; justify-content: center;
+  flex-direction: column; gap: 28px;
+}
+.gacha-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+.gacha-card {
+  position: relative;
+  width: 280px; height: 420px;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+.gacha-face {
+  position: absolute; inset: 0;
+  border-radius: 14px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 0.7s cubic-bezier(0.22, 1.1, 0.36, 1);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  border: 2.5px solid var(--gold-leaf);
+  overflow: hidden;
+}
+.gacha-back {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(255, 216, 107, 0.25), transparent 60%),
+    linear-gradient(160deg, #4a3826 0%, #2a1f17 100%);
+  color: var(--gold-leaf);
+  transform: rotateY(0);
+}
+.gacha-card.flipped .gacha-back { transform: rotateY(180deg); }
+.gacha-back-stamp {
+  font-family: "STSong", serif;
+  font-size: 110px; font-weight: 700;
+  width: 160px; height: 160px;
+  display: grid; place-items: center;
+  border: 3px solid var(--gold-leaf);
+  border-radius: 50%;
+  background: rgba(255, 216, 107, 0.08);
+  color: var(--gold-leaf);
+  text-shadow: 0 0 24px rgba(255, 216, 107, 0.5);
+}
+.gacha-back-en {
+  margin-top: 22px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 14px; letter-spacing: 0.5em;
+  color: var(--gold-leaf);
+}
+.gacha-front {
+  background: linear-gradient(180deg, var(--paper-deep) 0%, var(--paper-warm) 60%, var(--paper-warm) 100%);
+  color: var(--ink);
+  transform: rotateY(-180deg);
+  padding: 14px;
+  position: relative;
+}
+.gacha-card.flipped .gacha-front { transform: rotateY(0); }
+.gacha-front::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, var(--vc, var(--accent)) 0%, transparent 35%);
+  opacity: 0.2;
+  pointer-events: none;
+}
+.gacha-front::after {
+  content: "";
+  position: absolute; inset: -3px;
+  border: 3px solid var(--vc, var(--accent));
+  border-radius: 14px;
+  pointer-events: none;
+  opacity: 0;
+  animation: gachaGlow 1.2s ease-out 0.6s forwards;
+}
+.gacha-card.flipped .gacha-front[data-tier="S"] {
+  box-shadow: 0 0 60px rgba(255, 216, 107, 0.6), 0 0 120px rgba(255, 216, 107, 0.3);
+}
+.gacha-card.flipped .gacha-front[data-tier="A"] {
+  box-shadow: 0 0 36px rgba(200, 144, 96, 0.45);
+}
+.gf-tier {
+  position: absolute; top: 12px; right: 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px; font-weight: 700;
+  background: rgba(58, 40, 24, 0.9);
+  color: var(--gold-leaf);
+  padding: 5px 10px;
+  border: 1.5px solid var(--gold-leaf);
+  border-radius: 6px;
+  z-index: 2;
+}
+.gacha-front[data-tier="S"] .gf-tier { color: #ffd86b; border-color: #ffd86b; box-shadow: 0 0 12px rgba(255, 216, 107, 0.5); }
+.gf-img { max-width: 100%; max-height: 280px; object-fit: contain; margin-top: 10px; position: relative; z-index: 1; }
+.gf-glyph {
+  font-family: "STSong", serif; font-size: 130px; font-weight: 700;
+  color: var(--vc, var(--accent)); opacity: 0.55;
+  margin-top: 70px; position: relative; z-index: 1;
+}
+.gf-name {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 26px; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--ink);
+  margin-top: 12px; position: relative; z-index: 1;
+}
+.gf-tk {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px; letter-spacing: 0.16em;
+  color: var(--ink-soft);
+  margin-top: 4px; position: relative; z-index: 1;
+}
+.gacha-hint {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 14px; letter-spacing: 0.4em;
+  color: var(--gold-leaf);
+}
+@keyframes gachaGlow {
+  0% { opacity: 0; transform: scale(1); }
+  60% { opacity: 0.6; transform: scale(1.04); }
+  100% { opacity: 0; transform: scale(1.08); }
+}
+
+/* 卡片论点 + 风险段 */
+.npc-extra { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 6px; }
+.npc-extra-row {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 10px 12px;
+  background: var(--paper-warm);
+  border-left: 3px solid var(--vc, var(--accent));
+  border-radius: 0 6px 6px 0;
+}
+.npc-extra-l {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.3em;
+  color: var(--accent);
+  padding-top: 1px;
+}
+.npc-extra-v {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 13px; line-height: 1.7;
+  color: var(--ink);
+  margin: 0;
+}
+.npc-extra-v.warn { color: var(--ink-soft); }
+.npc-source {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 7px 12px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; letter-spacing: 0.18em;
+  color: var(--accent);
+  border: 1px dashed var(--accent);
+  border-radius: 6px;
+  text-decoration: none;
+  text-transform: uppercase;
+  align-self: flex-start;
+  transition: all 0.16s ease;
+}
+.npc-source:hover { background: var(--accent); color: var(--paper); border-style: solid; }
+.npc-meta-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
+.npc-data-stamp {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px; letter-spacing: 0.2em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+}
+/* modal body 允许内容滚 */
+.npc-modal-body { overflow-y: auto; max-height: 88vh; }
+.npc-modal-body::-webkit-scrollbar { width: 4px; }
+.npc-modal-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 2px; }
+
+.npc-btn.fav {
+  background: transparent;
+  border: 1.5px solid var(--gold-leaf);
+  color: var(--gold-leaf);
+}
+.npc-btn.fav:hover {
+  background: var(--gold-leaf); color: var(--paper);
+}
+.npc-btn:disabled {
+  opacity: 0.4; cursor: not-allowed;
+}
+
+/* gallery + 神殿 自适应 */
+@media (max-width: 1100px) {
+  .team-row { grid-template-columns: repeat(4, 1fr); }
+  .team-row.fav-row { grid-template-columns: repeat(6, 1fr); }
+  .guardians-row { grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 22px 16px; }
+  .shrine-cover { height: 280px; }
+}
+@media (max-width: 760px) {
+  .bar { font-size: 9px; letter-spacing: 0.08em; padding: 0 12px; }
+  .bar.top span:nth-child(2) { display: none; }
+  .home.active { padding: 16px 14px 32px; }
+  .shrine-cover { height: 200px; border-radius: 12px; }
+  .shrine-cover-img::before, .shrine-cover-img::after { width: 200px; height: 280px; }
+  .shrine-stamp { width: 44px; height: 44px; font-size: 22px; }
+  .shrine-h { font-size: 22px; letter-spacing: 0.12em; }
+  .shrine-sub { font-size: 9px; letter-spacing: 0.2em; }
+  .shrine-actions { gap: 12px; }
+  .shrine-btn { padding: 10px 20px; }
+  .shrine-btn span:nth-child(2) { font-size: 13px; letter-spacing: 0.1em; }
+  .shrine-btn small { font-size: 8px; letter-spacing: 0.22em; }
+  .team-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .team-row.fav-row { grid-template-columns: repeat(4, 1fr); }
+  .tier-tab { padding: 6px 12px; font-size: 10px; letter-spacing: 0.08em; }
+  .tier-tabs { gap: 6px; padding: 8px 10px; }
+  .guardians-row { grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px 12px; }
+  .guardian-name { font-size: 13px; }
+  .guardian-cn { font-size: 9px; }
+  .gallery-h { font-size: 22px; letter-spacing: 0.1em; }
+  .npc-modal-card { grid-template-columns: 1fr; max-height: 92vh; }
+  .npc-modal-portrait { aspect-ratio: 1.4/1; min-height: 200px; }
+  .npc-modal-h { font-size: 22px; }
+  .ts-tiers { width: 100%; margin-left: 0; }
+  .gacha-card { width: 240px; height: 360px; }
+  .gf-img { max-height: 230px; }
+  .gf-glyph { font-size: 100px; margin-top: 50px; }
+  .gf-name { font-size: 22px; }
+}
+@media (max-width: 480px) {
+  .guardians-row { grid-template-columns: repeat(2, 1fr); }
+  .team-row { grid-template-columns: repeat(2, 1fr); }
+  .team-row.fav-row { grid-template-columns: repeat(3, 1fr); }
+  .npc-modal-actions { flex-wrap: wrap; }
+  .npc-btn { flex: 1 1 calc(50% - 6px); }
+}
+</style>
+</head>
+<body>
+
+<header class="bar top">
+  <span>WORLD <b>·</b> 2030 — 守护神殿</span>
+  <span><b>44</b> 位守护神 · <b>S</b>/<b>A</b>/<b>B</b>/<b>C</b> 4 级</span>
+  <span id="now">数据 <b>2026.05</b> · 学习台</span>
+</header>
+
+<div class="app">
+
+  <!-- ═════════════ HOME — 神殿 ═════════════ -->
+  <section class="page home active" data-page="home">
+    <div class="shrine-cover">
+      <div class="shrine-cover-img"></div>
+      <div class="shrine-cover-mask"></div>
+      <div class="shrine-cover-text">
+        <div class="shrine-stamp">殿</div>
+        <h1 class="shrine-h">未 来 · 守 护 神 殿</h1>
+        <p class="shrine-sub">FUTURE GUARDIAN SHRINE · 44 位守护神 · 4 个等级</p>
+      </div>
+    </div>
+
+    <div class="shrine-actions">
+      <button class="shrine-btn gacha" id="gachaBtn">
+        <span class="shrine-btn-glyph">召</span>
+        <span>抽 一 张</span>
+        <small>RANDOM PULL</small>
+      </button>
+      <a class="shrine-btn" data-go="gallery">
+        <span class="shrine-btn-glyph">册</span>
+        <span>守 护 神 图 鉴</span>
+        <small>VIEW ALL · S/A/B/C</small>
+      </a>
+    </div>
+
+    <div class="shrine-team">
+      <div class="shrine-team-head">
+        <span class="shrine-team-tag">我 的 队 伍</span>
+        <span class="shrine-team-count" id="teamCount">0 / 6</span>
+      </div>
+      <div class="team-stats" id="teamStats"></div>
+      <div class="team-row" id="teamRow"></div>
+    </div>
+
+    <div class="shrine-fav">
+      <div class="shrine-team-head">
+        <span class="shrine-team-tag">我 的 收 藏</span>
+        <span class="shrine-team-count" id="favCount">0</span>
+      </div>
+      <div class="team-row fav-row" id="favRow"></div>
+    </div>
+  </section>
+
+  <!-- ═════════════ GALLERY — 图鉴 ═════════════ -->
+  <section class="page gallery" data-page="gallery">
+    <a class="scene-back" data-go="home">← 回神殿</a>
+    <header class="gallery-mast">
+      <h2 class="gallery-h">守 护 神 图 鉴</h2>
+      <p class="gallery-sub">FUTURE GUARDIANS · 数据来自学习台 + stockanalysis.com</p>
+    </header>
+    <div class="tier-tabs" id="tierTabs">
+      <button class="tier-tab active" data-tier="S">S 级 · 核心阵容</button>
+      <button class="tier-tab" data-tier="A">A 级 · 成长仓</button>
+      <button class="tier-tab" data-tier="B">B 级 · 期权仓</button>
+      <button class="tier-tab" data-tier="C">C 级 · 待观察</button>
+    </div>
+    <div class="guardians-row" id="guardiansRow"></div>
+  </section>
+
+</div>
+
+<!-- NPC 对话 modal -->
+<div class="npc-modal" id="npcModal">
+  <article class="npc-modal-card" id="npcModalCard">
+    <div class="tier-badge" id="npcModalTier">⭐ S</div>
+    <div class="npc-modal-portrait" id="npcModalPortrait" data-name="">
+      <img id="npcModalImg" alt="">
+    </div>
+    <div class="npc-modal-body">
+      <div class="npc-modal-tag" id="npcModalTag">— 守护神 · 自我介绍 —</div>
+      <h3 class="npc-modal-h" id="npcModalH">名字 <small>ticker · 中文名</small></h3>
+      <blockquote class="npc-modal-quote" id="npcModalQuote">...</blockquote>
+      <div class="npc-extra">
+        <div class="npc-extra-row"><span class="npc-extra-l">论 点</span><p class="npc-extra-v" id="npcModalThesis">...</p></div>
+        <div class="npc-extra-row"><span class="npc-extra-l">风 险</span><p class="npc-extra-v warn" id="npcModalRisk">...</p></div>
+      </div>
+      <div class="npc-modal-meta" id="npcModalMeta"></div>
+      <div class="npc-meta-foot">
+        <a class="npc-source" id="npcModalSource" target="_blank" rel="noopener">↗ stockanalysis.com 查最新评级</a>
+        <span class="npc-data-stamp">数据 2026.05 · 学习台</span>
+      </div>
+      <div class="npc-modal-actions">
+        <button class="npc-btn" id="npcModalClose">退下</button>
+        <button class="npc-btn primary" id="npcModalAlly">加入队伍</button>
+        <button class="npc-btn fav" id="npcModalFav">★ 收藏</button>
+      </div>
+    </div>
+  </article>
+</div>
+
+<footer class="bar bot">
+  <span>守护神殿 · FUTURE GUARDIAN SHRINE</span>
+  <span id="crumb">// 神殿</span>
+  <span>Esc 关闭弹窗</span>
+</footer>
+
+<script>
+const NPCS = [
+  // ───────── S 级 (10) ─────────
+  { tk:"OKLO", tier:"S", name:"火堇", cn:"小堆", glyph:"火", color:"#c8553d", pot:93,
+    sector:"核能", target:"$101.37", upside:"+47.36%", analysts:"16 Strong Buy", role:"成长仓 2-4%",
+    line:"我是火堇——Oklo (OKLO). 微型液态金属冷却快堆塞进数据中心旁边, 让 24/7 的电力不再依赖电网。目标 $101.37, 上行 +47.36%, 16 位 Strong Buy. 风险: NRC 牌照 + 首堆 2027 投运。" },
+  { tk:"RKLB", tier:"S", name:"阿尔忒弥斯", cn:"火箭实验室", glyph:"箭", color:"#a89c8a", pot:92,
+    sector:"太空", target:"$81.62", upside:"+1.72%", analysts:"14 Buy", role:"核心仓 3-5%",
+    line:"Rocket Lab (RKLB). Electron 跑商业, Neutron 是命门。目标 $81.62, 上行 +1.72%——已被定价。Neutron 首飞失败 = -50%。" },
+  { tk:"COHR", tier:"S", name:"光绫", cn:"相干", glyph:"光", color:"#7f6da6", pot:91,
+    sector:"光学", target:"$278.21", upside:"-16.32%", analysts:"15 Strong Buy", role:"核心仓 3-5%",
+    line:"Coherent (COHR). 光通信 + 激光 + SiC 衬底, 是 800G / 1.6T 光模块隐形供应商。15 位 Strong Buy. 风险: 业务太杂。" },
+  { tk:"MU", tier:"S", name:"韵存", cn:"美光", glyph:"存", color:"#4a7d6f", pot:90,
+    sector:"存储", target:"$482.90", upside:"-16.72%", analysts:"33 Strong Buy", role:"核心仓 3-5%",
+    line:"Micron (MU). HBM/DRAM/NAND, 美国唯一规模化存储制造商。33 位 Strong Buy 是覆盖最广的——共识就是定价。" },
+  { tk:"NBIS", tier:"S", name:"涅彼斯", cn:"Nebius AI 云", glyph:"云", color:"#6b8aa0", pot:90,
+    sector:"AI 基建", target:"$163.00", upside:"-8.68%", analysts:"12 Strong Buy", role:"成长仓 2-4%",
+    line:"Nebius (NBIS), 欧洲 AI GPU 云。12 位 Strong Buy. 风险: 客户集中 + 算力价格战 + 融资稀释。" },
+  { tk:"PLTR", tier:"S", name:"黑曜", cn:"帕兰提尔", glyph:"曜", color:"#3a3a4a", pot:89,
+    sector:"国防 AI", target:"$191.52", upside:"+30.80%", analysts:"23 Buy", role:"核心仓 3-5%",
+    line:"Palantir (PLTR). 政企数据 OS + 国防 AI——Foundry/Gotham/AIP. 上行 +30.80%, 在 S 级里少见的空间。最大风险: 估值贵。" },
+  { tk:"ALAB", tier:"S", name:"织梭", cn:"Astera Labs", glyph:"梭", color:"#5e8aa6", pot:89,
+    sector:"AI 基建", target:"$192.15", upside:"-5.11%", analysts:"21 Buy", role:"核心仓 2.5-4%",
+    line:"Astera Labs (ALAB). PCIe / CXL 互联芯片——AI 服务器'隐形卖铲人'. 21 位 Buy. 风险: AI 服务器加速放缓, 立刻重估。" },
+  { tk:"MRVL", tier:"S", name:"综衍", cn:"美满", glyph:"衍", color:"#c89060", pot:88,
+    sector:"半导体", target:"$120.28", upside:"-26.68%", analysts:"32 Strong Buy", role:"核心仓 2.5-4%",
+    line:"Marvell (MRVL). 定制 ASIC + 网络 + 存储控制器, 绑定 AWS Trainium / 谷歌 TPU. 32 位 Strong Buy——大家都喊买的通常已买完。" },
+  { tk:"BWXT", tier:"S", name:"缄海", cn:"BWX 核工程", glyph:"海", color:"#3d5a7d", pot:87,
+    sector:"核能", target:"$209.70", upside:"-3.03%", analysts:"11 Buy", role:"核心仓 2-4%",
+    line:"BWX Technologies (BWXT). 核燃料 + 海军核动力 + 医用同位素。现金流稳, 不弹。和火堇两面: 她弹我稳。" },
+  { tk:"AMZN", tier:"S", name:"大裁", cn:"亚马逊", glyph:"裁", color:"#b89a50", pot:87,
+    sector:"机器人/物流", target:"$302.93", upside:"+11.75%", analysts:"43 Strong Buy", role:"核心仓 3-6%",
+    line:"Amazon (AMZN). AWS + 物流 + 广告 + Prime. 43 位 Strong Buy, 市值 $4.21T。给你的不是 alpha 是'你不会比 SPY 差太多'。" },
+
+  // ───────── A 级 (17) ─────────
+  { tk:"ARM", tier:"A", name:"韧岩", cn:"Arm 控股", glyph:"岩", color:"#5a7d5a", pot:86,
+    sector:"半导体", target:"$180.75", upside:"-11.42%", analysts:"25 Buy", role:"核心仓 2-3.5%",
+    line:"Arm Holdings (ARM). CPU 内核 IP——几乎所有手机 + 半数 AI 边缘芯片用我的内核。常年 90+ PE. 风险: RISC-V 替代。" },
+  { tk:"AMD", tier:"A", name:"锐银", cn:"AMD 超微", glyph:"银", color:"#7a7a85", pot:85,
+    sector:"半导体", target:"$279.50", upside:"-18.61%", analysts:"35 Buy", role:"核心仓 2-4%",
+    line:"AMD. CPU + GPU + AI 加速器——NVIDIA 的影子。MI300 / MI400 是我对 NVIDIA 的挑战。买我 = 赌 NVIDIA 不是垄断。" },
+  { tk:"AAOI", tier:"A", name:"应光", cn:"应用光电", glyph:"应", color:"#9a8aa0", pot:88,
+    sector:"光学", target:"$66.80", upside:"-61.81%", analysts:"6 Buy", role:"成长仓 2.5-4%",
+    line:"Applied Optoelectronics (AAOI). AI 光模块高弹性. 订单兑现时利润弹性强, 涨幅后估值容易透支。" },
+  { tk:"LITE", tier:"A", name:"鎏明", cn:"Lumentum", glyph:"明", color:"#a07d8a", pot:86,
+    sector:"光学", target:"$687.07", upside:"-30.48%", analysts:"16 Buy", role:"成长仓 2-3.5%",
+    line:"Lumentum (LITE). 高速光模块 + 激光器, 卡 AI 集群互联升级。周期上行估值先走, 订单不及预期杀估值快。" },
+  { tk:"USAR", tier:"A", name:"赤稀", cn:"美国稀土", glyph:"赤", color:"#b85a3a", pot:85,
+    sector:"关键矿产", target:"$32.75", upside:"+27.53%", analysts:"5 Strong Buy", role:"期权仓 1-2.5%",
+    line:"USA Rare Earth (USAR). 美本土稀土 + 磁材供应链. 产能爬坡 + 融资 + 政策补贴决定真实价值。" },
+  { tk:"UUUU", tier:"A", name:"双轨", cn:"Energy Fuels", glyph:"轨", color:"#7a8b5a", pot:84,
+    sector:"关键矿产", target:"$19.92", upside:"-7.69%", analysts:"6 Strong Buy", role:"成长仓 1.5-3%",
+    line:"Energy Fuels (UUUU). 铀 + 美国稀土, 卡核能 + 关键矿产两条线。铀价周期会放大波动。" },
+  { tk:"MP", tier:"A", name:"赤铉", cn:"MP Materials", glyph:"铉", color:"#a04030", pot:83,
+    sector:"关键矿产", target:"$75.25", upside:"+13.22%", analysts:"13 Strong Buy", role:"成长仓 1.5-3%",
+    line:"MP Materials (MP). 美国唯一规模化稀土矿 + 加工链核心代理。分离 + 磁材量产仍需验证。" },
+  { tk:"UEC", tier:"A", name:"铀星", cn:"铀能源", glyph:"铀", color:"#5a7d3a", pot:82,
+    sector:"关键矿产", target:"$18.95", upside:"+27.27%", analysts:"5 Strong Buy", role:"成长仓 1-2.5%",
+    line:"Uranium Energy (UEC). 铀矿供给弹性, 受益核电重启 + 西方燃料安全。资源股波动大。" },
+  { tk:"SNDK", tier:"A", name:"闪迹", cn:"闪迪", glyph:"闪", color:"#7d6da0", pot:88,
+    sector:"存储", target:"$953.35", upside:"-24.32%", analysts:"20 Buy", role:"成长仓 2-3.5%",
+    line:"Sandisk (SNDK). NAND + 数据中心 SSD 进入 AI 存储周期。涨价共识过热时降权。" },
+  { tk:"WDC", tier:"A", name:"硬潭", cn:"西部数据", glyph:"潭", color:"#5a6b8a", pot:82,
+    sector:"存储", target:"$341.91", upside:"-22.55%", analysts:"23 Buy", role:"成长仓 1.5-3%",
+    line:"Western Digital (WDC). HDD 冷数据 + AI 数据湖扩张. 周期股属性强。" },
+  { tk:"ONDS", tier:"A", name:"翼影", cn:"Ondas 无人系统", glyph:"翼", color:"#3a4a5a", pot:86,
+    sector:"国防", target:"$19.83", upside:"+103.38%", analysts:"6 Strong Buy", role:"期权仓 1-2%",
+    line:"Ondas (ONDS). 无人机 + 边缘通信 + 防务自动化. 上行 +103.38% 但小盘高赔率。" },
+  { tk:"IONQ", tier:"A", name:"量阱", cn:"IonQ 量子", glyph:"阱", color:"#6b5aa0", pot:86,
+    sector:"量子", target:"$66.69", upside:"+45.80%", analysts:"13 Strong Buy", role:"期权仓 1-2%",
+    line:"IonQ. 离子阱量子, 商业订单 + 技术路线领先。当期权仓处理。" },
+  { tk:"FLY", tier:"A", name:"萤火", cn:"Firefly 航天", glyph:"萤", color:"#a07a3a", pot:84,
+    sector:"太空", target:"$38.88", upside:"+15.68%", analysts:"9 Buy", role:"成长仓 1-2.5%",
+    line:"Firefly Aerospace (FLY). 发射 + 月球任务能力稀缺. 新上市公司亏损 + 任务执行风险高。" },
+  { tk:"ASTS", tier:"A", name:"星桥", cn:"AST 太空移动", glyph:"桥", color:"#5a7da0", pot:88,
+    sector:"太空", target:"$72.10", upside:"+5.19%", analysts:"8 Hold", role:"期权仓 1-2.5%",
+    line:"AST SpaceMobile (ASTS). 卫星直连普通手机. 资本开支 + 发射节奏 + 运营商合作决定成败。" },
+  { tk:"IREN", tier:"A", name:"矿移", cn:"IREN 数据中心", glyph:"移", color:"#5a8a8a", pot:86,
+    sector:"AI 基建", target:"$62.50", upside:"+25.48%", analysts:"11 Buy", role:"成长仓 1.5-3%",
+    line:"IREN. 矿工转 AI/HPC 数据中心, 电力 + 机房是关键。BTC 周期 + AI 租赁同时影响估值。" },
+  { tk:"CIFR", tier:"A", name:"密刻", cn:"Cipher AI/HPC", glyph:"密", color:"#7a8a5a", pot:84,
+    sector:"AI 基建", target:"$24.91", upside:"+38.77%", analysts:"11 Strong Buy", role:"成长仓 1-2.5%",
+    line:"Cipher Digital (CIFR). 低成本电力 + 数据中心容量, 矿工转 AI 基建. 转型 + 客户签约 + 融资稀释。" },
+  { tk:"SYM", tier:"A", name:"仓枢", cn:"Symbotic", glyph:"枢", color:"#3a6b5a", pot:84,
+    sector:"机器人", target:"$62.50", upside:"+9.50%", analysts:"12 Buy", role:"成长仓 1.5-3%",
+    line:"Symbotic (SYM). 仓储自动化 + 供应链机器人, 已具备明确 ROI。客户集中 + 项目交付节奏。" },
+
+  // ───────── B 级 (14) ─────────
+  { tk:"AXTI", tier:"B", name:"砷晶", cn:"AXT 化合物衬底", glyph:"砷", color:"#7a6b8a", pot:72,
+    sector:"光学", target:"$57.00", upside:"-46.49%", analysts:"3 Hold", role:"观察仓 0-1.5%",
+    line:"AXT (AXTI). 砷化镓 + 磷化铟衬底, 受益光通信 + 传感材料。共识偏谨慎, 中国供应链风险高。" },
+  { tk:"ALB", tier:"B", name:"锂霸", cn:"雅宝", glyph:"锂", color:"#5a7d8a", pot:73,
+    sector:"关键矿产", target:"$179.74", upside:"-5.18%", analysts:"20 Buy", role:"观察仓 0-2%",
+    line:"Albemarle (ALB). 锂周期龙头, 适合作电池材料供给端观察锚. 锂价下行压制盈利。" },
+  { tk:"UAMY", tier:"B", name:"锑络", cn:"美国锑业", glyph:"锑", color:"#8a5a3a", pot:78,
+    sector:"关键矿产", target:"$9.44", upside:"-19.32%", analysts:"5 Strong Buy", role:"期权仓 0.5-1.5%",
+    line:"US Antimony (UAMY). 锑 = 军工 + 电池 + 阻燃材料约束点. 流动性 + 估值 + 单品类价格风险高。" },
+  { tk:"MRAM", tier:"B", name:"非散", cn:"Everspin MRAM", glyph:"散", color:"#5a6ba0", pot:76,
+    sector:"存储", target:"$18.50", upside:"-2.17%", analysts:"1 Strong Buy", role:"期权仓 0.5-1.5%",
+    line:"Everspin (MRAM). 非易失 MRAM, 边缘 AI + 工业 + 国防设备。市场规模 + 客户放量不确定。" },
+  { tk:"OSS", tier:"B", name:"边算", cn:"OSS 边缘算力", glyph:"算", color:"#3a5a6b", pot:77,
+    sector:"国防", target:"$10.00", upside:"+2.35%", analysts:"2 Strong Buy", role:"期权仓 0.5-1.5%",
+    line:"One Stop Systems (OSS). 军用 + 工业边缘 AI 计算设备. 规模小 + 客户集中。" },
+  { tk:"QBTS", tier:"B", name:"退火", cn:"D-Wave 量子退火", glyph:"退", color:"#6b5a8a", pot:79,
+    sector:"量子", target:"$32.53", upside:"+54.98%", analysts:"15 Strong Buy", role:"期权仓 0.5-1.5%",
+    line:"D-Wave (QBTS). 退火路线接近优化问题商业化, 通用性争议在。" },
+  { tk:"RGTI", tier:"B", name:"超导", cn:"Rigetti 超导量子", glyph:"超", color:"#5a4a7a", pot:80,
+    sector:"量子", target:"$30.78", upside:"+72.63%", analysts:"9 Strong Buy", role:"期权仓 0.5-1.5%",
+    line:"Rigetti (RGTI). 超导量子高弹性, 押技术突破. 技术 + 融资风险都高。" },
+  { tk:"PL", tier:"B", name:"瞳观", cn:"Planet Labs", glyph:"瞳", color:"#5a8a7d", pot:78,
+    sector:"太空", target:"$27.64", upside:"-28.34%", analysts:"12 Buy", role:"成长仓 1-2%",
+    line:"Planet Labs (PL). 高频地球观测数据 = 国防 + 农业 + 气候 + 保险基础数据层。收入增长 + 毛利改善需验证。" },
+  { tk:"AMPX", tier:"B", name:"硅锂", cn:"Amprius 高能电池", glyph:"硅", color:"#7a5a6b", pot:79,
+    sector:"能源", target:"$20.17", upside:"-0.35%", analysts:"7 Strong Buy", role:"期权仓 0.5-1.5%",
+    line:"Amprius (AMPX). 高能量密度硅负极电池, 无人机 + 航空 + 高性能设备。量产良率 + 成本曲线。" },
+  { tk:"TE", tier:"B", name:"日泽", cn:"T1 Energy", glyph:"日", color:"#a08a4a", pot:74,
+    sector:"能源", target:"$7.70", upside:"+50.24%", analysts:"5 Strong Buy", role:"观察仓 0-1.5%",
+    line:"T1 Energy (TE). 美国本土太阳能组件 + 电池制造重构政策受益。利润质量 + 产能利用率需验证。" },
+  { tk:"BE", tier:"B", name:"氢芯", cn:"Bloom Energy", glyph:"氢", color:"#5a7a8a", pot:76,
+    sector:"能源", target:"$180.14", upside:"-36.62%", analysts:"21 Buy", role:"观察仓 0-1.5%",
+    line:"Bloom Energy (BE). 燃料电池 + 分布式电源, 服务高可靠数据中心. 盈利质量 + 氢成本压力。" },
+  { tk:"SERV", tier:"B", name:"地配", cn:"Serve 配送机器人", glyph:"配", color:"#6b8a3a", pot:80,
+    sector:"机器人", target:"$17.67", upside:"+89.09%", analysts:"7 Buy", role:"期权仓 0.5-1.5%",
+    line:"Serve Robotics (SERV). 最后一公里配送机器人. 监管 + 运营成本 + 规模化维护未验证。" },
+  { tk:"NVTS", tier:"B", name:"氮镓", cn:"Navitas 氮化镓", glyph:"氮", color:"#5a6b3a", pot:79,
+    sector:"半导体", target:"$8.90", upside:"-44.10%", analysts:"6 Buy", role:"期权仓 0.5-1.5%",
+    line:"Navitas (NVTS). GaN/SiC 功率半导体, 受益快充 + 数据中心电源 + 电动化. 竞争激烈。" },
+  { tk:"AMBQ", tier:"B", name:"低耗", cn:"Ambiq 低功耗芯片", glyph:"耗", color:"#7a8a6b", pot:78,
+    sector:"半导体", target:"$42.20", upside:"+6.54%", analysts:"5 Buy", role:"期权仓 0.5-1.5%",
+    line:"Ambiq Micro (AMBQ). 超低功耗边缘 AI 芯片, 可穿戴 + 传感器 + 端侧智能。规模 + 客户结构跟踪。" },
+
+  // ───────── C 级 (3) ─────────
+  { tk:"LWLG", tier:"C", name:"聚光", cn:"Lightwave Logic 聚合物光子", glyph:"聚", color:"#8a7a8a", pot:66,
+    sector:"光学", target:"n/a", upside:"待核验", analysts:"无覆盖", role:"期权仓 0-1%",
+    line:"Lightwave Logic (LWLG). 电光聚合物若被主流硅光平台采用, 赔率高。商业化节奏不确定。" },
+  { tk:"SATL", tier:"C", name:"瞭微", cn:"Satellogic", glyph:"瞭", color:"#5a7a6b", pot:67,
+    sector:"太空", target:"n/a", upside:"待核验", analysts:"无覆盖", role:"观察仓 0-1%",
+    line:"Satellogic (SATL). 低成本地球观测, 数据订阅模式空间。商业模式 + 资产负债表需复核。" },
+  { tk:"EOSE", tier:"C", name:"锌岩", cn:"Eos 长时储能", glyph:"锌", color:"#6b8a5a", pot:70,
+    sector:"能源", target:"$9.42", upside:"+47.88%", analysts:"7 Hold", role:"期权仓 0-1%",
+    line:"Eos Energy (EOSE). 锌基长时储能, 补足电网级储能短板。融资 + 量产 + 毛利风险高。" },
+];
+// ───── 论点 + 风险 (源: 学习台 stock-learning data.ts) ─────
+const EXTRA = {
+  OKLO: { thesis:"先进核裂变与数据中心电力叙事高度同频, 是高赔率核能入口。", risk:"监管 + 首堆建设 + 收入兑现时间可能显著晚于市场预期。", weight:"2%-4%" },
+  RKLB: { thesis:"发射 + 卫星平台 + 政府订单三线推进, 商业航天最清晰的上市代理。", risk:"估值会提前反映成功, 发射事故或订单延迟冲击大。", weight:"3%-5%" },
+  COHR: { thesis:"光通信 + 激光 + SiC 多线共振, 光学链里更均衡的复合资产。", risk:"业务线复杂, 若 AI 光模块降温, 重估会拖累整体。", weight:"3%-5%" },
+  MU:   { thesis:"HBM 是 AI 加速器的硬瓶颈, 美光是美国存储链核心。", risk:"资本开支扩张后, 存储周期反转会很快压利润。", weight:"3%-5%" },
+  NBIS: { thesis:"AI 云和 GPU 容量租赁, 是欧洲和全球非美 hyperscaler 的弹性代理。", risk:"算力租赁价格 + 融资成本 + 客户集中度要持续跟踪。", weight:"2%-4%" },
+  PLTR: { thesis:"政企数据 OS + 国防 AI 决策层, 护城河来自部署深度。", risk:"估值一直是主要风险, 任何增长放缓都会被放大。", weight:"3%-5%" },
+  ALAB: { thesis:"PCIe/CXL 互联芯片卡住 AI 服务器内部数据流, AI 基建的隐形卖铲人。", risk:"估值较高, 若 GPU 服务器增速放缓会被重估。", weight:"2.5%-4%" },
+  MRVL: { thesis:"定制 ASIC + 网络 + 存储控制器直接绑定 hyperscaler AI 建设。", risk:"客户项目节奏 + 估值过热是主要风险。", weight:"2.5%-4%" },
+  BWXT: { thesis:"核燃料 + 海军核动力 + 专用核工程, 现金流质量比概念小堆稳。", risk:"估值偏贵时, 上行弹性不如早期核能公司。", weight:"2%-4%" },
+  AMZN: { thesis:"AWS + 物流自动化 + 电商履约让机器人有真实部署场景。", risk:"体量大导致弹性低于小盘机器人公司。", weight:"3%-6%" },
+  ARM:  { thesis:"低功耗 IP + 授权模式横跨手机 + 边缘 AI + 服务器。", risk:"估值要求高, 授权增长需要持续兑现。", weight:"2%-3.5%" },
+  AMD:  { thesis:"CPU + GPU + AI 加速器替代供给, 受益算力多元化。", risk:"与 NVIDIA 的生态差距仍是上限约束。", weight:"2%-4%" },
+  AAOI: { thesis:"AI 数据中心光模块高弹性, 订单兑现时利润弹性强。", risk:"涨幅后估值容易透支, 客户集中和价格周期要盯紧。", weight:"2.5%-4%" },
+  LITE: { thesis:"高速光模块和激光器直接卡住 AI 集群互联升级。", risk:"周期上行估值先走, 订单不及预期杀估值快。", weight:"2%-3.5%" },
+  USAR: { thesis:"美国本土稀土 + 磁材供应链重建的高弹性筹码。", risk:"产能爬坡 + 融资 + 政策补贴兑现决定真实价值。", weight:"1%-2.5%" },
+  UUUU: { thesis:"铀和美国稀土处理能力叠加, 卡核能与关键矿产两条线。", risk:"铀价周期和项目执行会放大波动。", weight:"1.5%-3%" },
+  MP:   { thesis:"美国唯一规模化稀土矿和加工链核心代理。", risk:"分离 + 磁材量产 + 价格周期仍需验证。", weight:"1.5%-3%" },
+  UEC:  { thesis:"铀矿供给弹性, 受益核电重启和西方燃料安全。", risk:"资源股波动大, 现货铀价回撤会快速传导。", weight:"1%-2.5%" },
+  SNDK: { thesis:"NAND + 数据中心 SSD 进入 AI 存储周期, 弹性强。", risk:"存储价格周期残酷, 涨价共识过热时降权。", weight:"2%-3.5%" },
+  WDC:  { thesis:"HDD 冷数据 + AI 数据湖扩张受益, 与 SNDK 分拆后更清晰。", risk:"周期股属性强, 云厂商库存调整会受压。", weight:"1.5%-3%" },
+  ONDS: { thesis:"无人机 + 边缘通信 + 防务自动化叙事完整, 小盘赔率高。", risk:"订单质量 + 融资稀释 + 政府采购节奏是关键。", weight:"1%-2%" },
+  IONQ: { thesis:"离子阱路线代表, 商业订单和技术路线都具备叙事领先性。", risk:"量子优势兑现时间不可控, 按期权仓处理。", weight:"1%-2%" },
+  FLY:  { thesis:"发射和月球任务能力稀缺, 国防和商业客户双线。", risk:"新上市公司财务亏损和任务执行风险高。", weight:"1%-2.5%" },
+  ASTS: { thesis:"卫星直连普通手机, 一旦商业部署顺畅, 网络价值大。", risk:"资本开支 + 发射节奏 + 运营商合作决定成败。", weight:"1%-2.5%" },
+  IREN: { thesis:"矿工转型 AI/HPC 数据中心, 电力资产和机房能力是关键。", risk:"比特币周期和 AI 租赁转型同时影响估值。", weight:"1.5%-3%" },
+  CIFR: { thesis:"低成本电力和数据中心容量, 适合观察矿工转 AI 基建。", risk:"转型执行 + 客户签约 + 融资稀释是核心变量。", weight:"1%-2.5%" },
+  SYM:  { thesis:"仓储自动化和供应链机器人已具备明确 ROI。", risk:"客户集中和项目交付节奏影响收入确认。", weight:"1.5%-3%" },
+  AXTI: { thesis:"砷化镓 + 磷化铟衬底, 受益光通信和传感材料需求。", risk:"共识偏谨慎, 材料周期和中国供应链风险高。", weight:"0%-1.5%" },
+  ALB:  { thesis:"锂周期龙头, 适合作为电池材料供给端观察锚。", risk:"锂价下行周期会压制盈利和估值。", weight:"0%-2%" },
+  UAMY: { thesis:"锑是军工 + 电池 + 阻燃材料约束点, 小盘弹性强。", risk:"流动性 + 估值 + 单品类价格风险很高。", weight:"0.5%-1.5%" },
+  MRAM: { thesis:"非易失 MRAM 是边缘 AI + 工业 + 国防设备的持久化小众路线。", risk:"市场规模和客户放量仍不确定。", weight:"0.5%-1.5%" },
+  OSS:  { thesis:"军用和工业边缘 AI 计算设备, 贴近战场算力需求。", risk:"规模小 + 客户集中, 订单波动会放大利润波动。", weight:"0.5%-1.5%" },
+  QBTS: { thesis:"退火路线更接近优化问题商业化, 通用性争议仍在。", risk:"路线天花板可能弱于通用量子计算。", weight:"0.5%-1.5%" },
+  RGTI: { thesis:"超导量子高弹性标的, 适合小仓位押技术突破。", risk:"技术和融资风险都高, 不能当核心仓。", weight:"0.5%-1.5%" },
+  PL:   { thesis:"高频地球观测数据是国防 + 农业 + 气候 + 保险的基础数据层。", risk:"收入增长 + 毛利改善速度仍要验证。", weight:"1%-2%" },
+  AMPX: { thesis:"高能量密度硅负极电池, 适合无人机 + 航空 + 高性能设备。", risk:"量产良率和成本曲线是核心风险。", weight:"0.5%-1.5%" },
+  TE:   { thesis:"美国本土太阳能组件和电池制造重构的政策受益标的。", risk:"前身转型后仍需验证利润质量和产能利用率。", weight:"0%-1.5%" },
+  BE:   { thesis:"燃料电池和分布式电源可服务高可靠性数据中心。", risk:"盈利质量 + 氢成本 + 估值周期仍是压力。", weight:"0%-1.5%" },
+  SERV: { thesis:"最后一公里配送机器人, 单位经济模型成立时城市密度放大价值。", risk:"监管 + 运营成本 + 规模化维护仍未完全验证。", weight:"0.5%-1.5%" },
+  NVTS: { thesis:"GaN/SiC 功率半导体受益快充 + 数据中心电源 + 电动化。", risk:"竞争激烈, 规模化盈利仍需证明。", weight:"0.5%-1.5%" },
+  AMBQ: { thesis:"超低功耗边缘 AI 芯片适合可穿戴 + 传感器 + 端侧智能。", risk:"规模 + 客户结构 + 竞争格局仍需跟踪。", weight:"0.5%-1.5%" },
+  LWLG: { thesis:"电光聚合物若被主流硅光平台采用, 赔率很高。", risk:"分析师覆盖不足, 商业化节奏仍是最大不确定性。", weight:"0%-1%" },
+  SATL: { thesis:"低成本地球观测若能形成数据订阅, 会有空间数据价值。", risk:"评级覆盖不足, 商业模式和资产负债表需复核。", weight:"0%-1%" },
+  EOSE: { thesis:"锌基长时储能若放量, 可补足电网级储能短板。", risk:"市场共识为 Hold, 融资 + 量产 + 毛利风险都高。", weight:"0%-1%" },
+};
+
+// ───── State (localStorage) ─────
+const TEAM_KEY = 'w2030.team', FAV_KEY = 'w2030.fav', TEAM_MAX = 6;
+const loadSet = k => new Set(JSON.parse(localStorage.getItem(k) || '[]'));
+const saveSet = (k, s) => localStorage.setItem(k, JSON.stringify([...s]));
+let team = loadSet(TEAM_KEY), fav = loadSet(FAV_KEY);
+const findNpc = tk => NPCS.find(n => n.tk === tk);
+
+// ───── 立绘背景: S 级用真图, 其他用纯色 + glyph ─────
+function portraitBg(n) {
+  const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+  return hasImg ? `background-image:url('images/npc-${n.tk}.png?v=2')` : '';
+}
+
+// ───── Gallery 渲染 (按 tier) ─────
+const guardiansRow = document.getElementById("guardiansRow");
+let currentTier = 'S';
+function renderGallery() {
+  guardiansRow.innerHTML = '';
+  const list = NPCS.filter(n => n.tier === currentTier);
+  list.forEach(n => {
+    const a = document.createElement("a");
+    a.className = "guardian";
+    a.style.setProperty("--vc", n.color);
+    const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+    a.innerHTML = `
+      <div class="guardian-portrait" data-tk="${n.tk}" style="${portraitBg(n)}">
+        ${!hasImg ? `<div class="g-glyph">${n.glyph}</div>` : ''}
+        <div class="tier-badge-mini">⭐${n.tier}</div>
+      </div>
+      <div class="guardian-name">${n.name}</div>
+      <div class="guardian-cn">${n.cn}</div>
+    `;
+    a.onclick = () => openNpcModal(n);
+    guardiansRow.appendChild(a);
+  });
+}
+renderGallery();
+
+document.querySelectorAll('.tier-tab').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.tier-tab').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    currentTier = b.dataset.tier;
+    renderGallery();
+  };
+});
+
+// ───── 队伍 + 收藏 渲染 ─────
+function parseWeight(s) {
+  // "成长仓 2-4%" → 取中位 3
+  const m = s && s.match(/(\d+(?:\.\d+)?)\s*(?:%-|-|—)\s*(\d+(?:\.\d+)?)/);
+  if (m) return (parseFloat(m[1]) + parseFloat(m[2])) / 2;
+  const single = s && s.match(/(\d+(?:\.\d+)?)\s*%/);
+  return single ? parseFloat(single[1]) : 0;
+}
+function parseUpside(s) {
+  const m = s && s.match(/([+-]?\d+(?:\.\d+)?)/);
+  return m ? parseFloat(m[1]) : null;
+}
+function renderTeam() {
+  const row = document.getElementById('teamRow');
+  const stats = document.getElementById('teamStats');
+  document.getElementById('teamCount').textContent = `${team.size} / ${TEAM_MAX}`;
+  row.innerHTML = '';
+  // 队伍统计
+  if (team.size > 0) {
+    const teamNpcs = [...team].map(findNpc).filter(Boolean);
+    const totalWeight = teamNpcs.reduce((s, n) => s + parseWeight(n.role), 0);
+    const upsides = teamNpcs.map(n => parseUpside(n.upside)).filter(x => x !== null);
+    const avgUpside = upsides.length ? (upsides.reduce((a, b) => a + b, 0) / upsides.length) : 0;
+    const sectors = [...new Set(teamNpcs.map(n => n.sector))];
+    const tierCount = { S: 0, A: 0, B: 0, C: 0 };
+    teamNpcs.forEach(n => tierCount[n.tier]++);
+    const tierBadges = ['S','A','B','C'].filter(t => tierCount[t] > 0).map(t => `<span class="ts-tier" data-tier="${t}">⭐${t}×${tierCount[t]}</span>`).join('');
+    stats.innerHTML = `
+      <div class="ts-row"><span class="ts-l">仓位</span><b class="ts-v">${totalWeight.toFixed(1)}%</b></div>
+      <div class="ts-row"><span class="ts-l">均上行</span><b class="ts-v ${avgUpside > 0 ? 'pos' : avgUpside < 0 ? 'neg' : ''}">${avgUpside >= 0 ? '+' : ''}${avgUpside.toFixed(1)}%</b></div>
+      <div class="ts-row"><span class="ts-l">板块</span><b class="ts-v">${sectors.length} 类</b></div>
+      <div class="ts-tiers">${tierBadges}</div>
+    `;
+    stats.style.display = 'flex';
+  } else {
+    stats.style.display = 'none';
+  }
+  if (team.size === 0) {
+    row.innerHTML = '<div class="team-empty">空。点抽卡或进图鉴, 选守护神加入队伍。</div>';
+    return;
+  }
+  [...team].forEach(tk => {
+    const n = findNpc(tk); if (!n) return;
+    const a = document.createElement('a');
+    a.className = 'team-slot';
+    a.style.setProperty('--vc', n.color);
+    const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+    a.innerHTML = `
+      <div class="team-slot-portrait" style="${portraitBg(n)}">
+        ${!hasImg ? `<div class="g-glyph">${n.glyph}</div>` : ''}
+        <div class="tier-badge-mini">⭐${n.tier}</div>
+      </div>
+      <div class="team-slot-name">${n.name}</div>
+      <div class="team-slot-tk">${n.tk}</div>
+    `;
+    a.onclick = () => openNpcModal(n);
+    row.appendChild(a);
+  });
+}
+function renderFav() {
+  const row = document.getElementById('favRow');
+  document.getElementById('favCount').textContent = `${fav.size}`;
+  row.innerHTML = '';
+  if (fav.size === 0) {
+    row.innerHTML = '<div class="team-empty">空。卡片点 ★ 收藏后出现这里。</div>';
+    return;
+  }
+  [...fav].forEach(tk => {
+    const n = findNpc(tk); if (!n) return;
+    const a = document.createElement('a');
+    a.className = 'team-slot fav';
+    a.style.setProperty('--vc', n.color);
+    const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+    a.innerHTML = `
+      <div class="team-slot-portrait" style="${portraitBg(n)}">
+        ${!hasImg ? `<div class="g-glyph">${n.glyph}</div>` : ''}
+        <div class="tier-badge-mini">⭐${n.tier}</div>
+      </div>
+      <div class="team-slot-name">${n.name}</div>
+      <div class="team-slot-tk">${n.tk}</div>
+    `;
+    a.onclick = () => openNpcModal(n);
+    row.appendChild(a);
+  });
+}
+renderTeam(); renderFav();
+
+// ───── 抽卡 ─────
+// 抽卡: 翻牌动画 → modal
+const gachaOverlay = document.createElement('div');
+gachaOverlay.className = 'gacha-overlay';
+gachaOverlay.innerHTML = `
+  <div class="gacha-card" id="gachaCard">
+    <div class="gacha-face gacha-back">
+      <div class="gacha-back-stamp">召</div>
+      <div class="gacha-back-en">SUMMON</div>
+    </div>
+    <div class="gacha-face gacha-front" id="gachaFront"></div>
+  </div>
+  <div class="gacha-hint" id="gachaHint">翻 牌 中…</div>
+`;
+document.body.appendChild(gachaOverlay);
+
+document.getElementById('gachaBtn').onclick = () => {
+  const n = NPCS[Math.floor(Math.random() * NPCS.length)];
+  const front = document.getElementById('gachaFront');
+  const card = document.getElementById('gachaCard');
+  const hint = document.getElementById('gachaHint');
+  const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+  front.style.setProperty('--vc', n.color);
+  front.dataset.tier = n.tier;
+  front.innerHTML = `
+    <div class="gf-tier">⭐ ${n.tier}</div>
+    ${hasImg ? `<img src="images/npc-${n.tk}.png?v=2" class="gf-img">` : `<div class="gf-glyph">${n.glyph}</div>`}
+    <div class="gf-name">${n.name}</div>
+    <div class="gf-tk">${n.tk} · ${n.cn}</div>
+  `;
+  card.classList.remove('flipped');
+  hint.textContent = '点 击 翻 牌';
+  hint.style.opacity = 1;
+  gachaOverlay.classList.add('open');
+  // 1 帧后开始翻
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    setTimeout(() => {
+      card.classList.add('flipped');
+      hint.textContent = `${n.tier} 级 · ${n.name}`;
+    }, 400);
+    setTimeout(() => {
+      gachaOverlay.classList.remove('open');
+      openNpcModal(n);
+    }, 1600);
+  }));
+};
+gachaOverlay.addEventListener('click', () => {
+  gachaOverlay.classList.remove('open');
+});
+
+// ───── 页面切换 ─────
+document.querySelectorAll('[data-go]').forEach(el => {
+  el.onclick = e => {
+    e.preventDefault();
+    const n = el.dataset.go;
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelector(`.page[data-page="${n}"]`).classList.add('active');
+    document.getElementById('crumb').textContent = n === 'home' ? '// 神殿' : '// 图鉴';
+    window.scrollTo({ top: 0 });
+  };
+});
+
+// ───── NPC modal ─────
+const modal = document.getElementById('npcModal');
+const modalCard = document.getElementById('npcModalCard');
+let currentNpc = null;
+function openNpcModal(n) {
+  currentNpc = n;
+  const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+  const port = document.getElementById('npcModalPortrait');
+  const img = document.getElementById('npcModalImg');
+  if (hasImg) {
+    img.src = `images/npc-${n.tk}.png?v=2`;
+    img.style.display = '';
+    port.style.background = '';
+    // 移除可能残留的 glyph
+    const oldGlyph = port.querySelector('.modal-glyph');
+    if (oldGlyph) oldGlyph.remove();
+  } else {
+    img.removeAttribute('src');
+    img.style.display = 'none';
+    port.style.background = `linear-gradient(160deg, ${n.color}38, ${n.color}88)`;
+    if (!port.querySelector('.modal-glyph')) {
+      const g = document.createElement('div');
+      g.className = 'modal-glyph';
+      port.appendChild(g);
+    }
+    port.querySelector('.modal-glyph').textContent = n.glyph;
+  }
+  port.dataset.name = n.name;
+  document.getElementById('npcModalTier').textContent = `⭐ ${n.tier}`;
+  document.getElementById('npcModalTier').dataset.tier = n.tier;
+  document.getElementById('npcModalH').innerHTML = `${n.name} <small>${n.tk} · ${n.cn}</small>`;
+  document.getElementById('npcModalQuote').textContent = `「${n.line}」`;
+  const ex = EXTRA[n.tk] || { thesis:"—", risk:"—", weight: n.role };
+  document.getElementById('npcModalThesis').textContent = ex.thesis;
+  document.getElementById('npcModalRisk').textContent = ex.risk;
+  document.getElementById('npcModalSource').href = `https://stockanalysis.com/stocks/${n.tk.toLowerCase()}/ratings/`;
+  const upClass = n.upside.startsWith('+') ? 'pos' : n.upside.startsWith('-') ? 'neg' : '';
+  document.getElementById('npcModalMeta').innerHTML = `
+    <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">代码</span><b class="npc-modal-meta-v">${n.tk}</b></div>
+    <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">板块</span><b class="npc-modal-meta-v">${n.sector}</b></div>
+    <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">潜力</span><b class="npc-modal-meta-v">${n.pot} · ${n.tier} 级</b></div>
+    <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">12 月目标</span><b class="npc-modal-meta-v">${n.target}</b></div>
+    <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">上行空间</span><b class="npc-modal-meta-v ${upClass}">${n.upside}</b></div>
+    <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">分析师</span><b class="npc-modal-meta-v">${n.analysts}</b></div>
+    <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">仓位建议</span><b class="npc-modal-meta-v">${n.role}</b></div>
+  `;
+  modalCard.style.setProperty('--vc', n.color);
+  modalCard.dataset.tier = n.tier;
+  // 按钮文案随状态切换
+  document.getElementById('npcModalAlly').textContent = team.has(n.tk) ? '✓ 移出队伍' : (team.size >= TEAM_MAX ? '队伍已满' : '加入队伍');
+  document.getElementById('npcModalAlly').disabled = !team.has(n.tk) && team.size >= TEAM_MAX;
+  document.getElementById('npcModalFav').textContent = fav.has(n.tk) ? '★ 已收藏' : '★ 收藏';
+  modal.classList.add('open');
+}
+function closeNpcModal() { modal.classList.remove('open'); }
+document.getElementById('npcModalClose').addEventListener('click', closeNpcModal);
+document.getElementById('npcModalAlly').addEventListener('click', () => {
+  if (!currentNpc) return;
+  const tk = currentNpc.tk;
+  if (team.has(tk)) team.delete(tk);
+  else if (team.size < TEAM_MAX) team.add(tk);
+  saveSet(TEAM_KEY, team); renderTeam(); openNpcModal(currentNpc);
+});
+document.getElementById('npcModalFav').addEventListener('click', () => {
+  if (!currentNpc) return;
+  const tk = currentNpc.tk;
+  if (fav.has(tk)) fav.delete(tk); else fav.add(tk);
+  saveSet(FAV_KEY, fav); renderFav(); openNpcModal(currentNpc);
+});
+modal.addEventListener('click', e => { if (e.target === modal) closeNpcModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNpcModal(); });
+</script>
+</body>
+</html>
