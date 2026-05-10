@@ -68,26 +68,54 @@ body::before {
   align-items: center;
   gap: 6px;
 }
-.music-toggle {
-  border: 1px solid var(--line-2);
+/* 音乐 player — 浮动右下 */
+.music-player {
+  position: fixed;
+  bottom: 56px;
+  right: 16px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 8px;
+  background: rgba(58, 40, 24, 0.88);
+  border: 1px solid var(--gold-leaf);
   border-radius: 999px;
-  padding: 5px 10px;
-  background: rgba(250, 242, 224, 0.76);
-  color: var(--accent);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  backdrop-filter: blur(10px);
+}
+.music-toggle {
+  border: 0;
+  background: transparent;
+  color: var(--gold-leaf);
   font-family: "IBM Plex Mono", monospace;
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.14em;
   cursor: pointer;
-  box-shadow: 0 1px 0 var(--paper-shadow);
+  padding: 4px 10px;
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
+.music-toggle:hover { color: #fff8e8; }
 .music-next {
-  width: 28px;
-  padding: 5px 0;
-}
-.music-toggle.playing {
-  background: rgba(58, 40, 24, 0.86);
-  border-color: var(--gold-leaf);
+  border: 0;
+  background: transparent;
   color: var(--gold-leaf);
+  width: 24px; height: 24px;
+  display: grid; place-items: center;
+  font-size: 13px;
+  cursor: pointer;
+  border-left: 1px solid rgba(255, 216, 107, 0.3);
+  padding: 0;
+}
+.music-next:hover { color: #fff8e8; }
+.music-toggle.playing { color: #ffd86b; }
+@media (max-width: 760px) {
+  .music-player { bottom: 48px; right: 10px; padding: 4px 6px; }
+  .music-toggle { font-size: 9px; padding: 3px 6px; max-width: 120px; }
+  .music-next { width: 22px; height: 22px; font-size: 11px; }
 }
 
 .app { position: relative; z-index: 1; min-height: 100vh; padding: 50px 0 50px; }
@@ -2052,6 +2080,47 @@ body::before {
 }
 .npc-source:hover { background: var(--accent); color: var(--paper); border-style: solid; }
 .npc-meta-foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 4px; flex-wrap: wrap; }
+.npc-source-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+.src-chip {
+  display: flex; align-items: center; justify-content: center;
+  gap: 4px;
+  padding: 7px 6px;
+  border: 1px solid var(--line-2);
+  border-radius: 7px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  background: var(--paper-warm);
+  transition: all 0.15s ease;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 11px;
+}
+.src-chip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(200, 85, 61, 0.18);
+}
+.src-icon {
+  display: grid; place-items: center;
+  width: 18px; height: 18px;
+  background: rgba(200, 85, 61, 0.12);
+  color: var(--accent);
+  border-radius: 4px;
+  font-weight: 700; font-size: 10px;
+  font-family: "STSong", serif;
+}
+.src-chip.en .src-icon { background: rgba(74, 107, 74, 0.12); color: var(--jade); font-family: monospace; }
+.src-chip.en:hover { color: var(--jade); border-color: var(--jade); box-shadow: 0 2px 6px rgba(74, 107, 74, 0.18); }
+.src-name { font-weight: 600; letter-spacing: 0.04em; }
+@media (max-width: 760px) {
+  .npc-source-grid { grid-template-columns: repeat(3, 1fr); gap: 5px; }
+  .src-chip { font-size: 10px; padding: 6px 4px; }
+}
 .npc-data-stamp {
   font-family: "IBM Plex Mono", monospace;
   font-size: 9px; letter-spacing: 0.2em;
@@ -2097,8 +2166,6 @@ body::before {
 @media (max-width: 760px) {
   .bar { font-size: 9px; letter-spacing: 0.08em; padding: 0 12px; }
   .bar.top span:nth-child(2) { display: none; }
-  .music-toggle { font-size: 9px; padding: 4px 8px; letter-spacing: 0.08em; }
-  .music-next { width: 24px; padding: 4px 0; }
   .home.active { padding: 16px 14px 32px; }
   .shrine-cover { height: 320px; border-radius: 12px; }
   .shrine-cover-img { background-position: center 60%; }
@@ -2263,9 +2330,12 @@ body::before {
   <span>WORLD <b>·</b> 2030 — 守护神殿</span>
   <span><b>8</b> 位主神 · <b>44</b> 位守护神 · <b>P</b>/<b>S</b>/<b>A</b>/<b>B</b>/<b>C</b></span>
   <span id="now">数据 <b>2026.05</b> · 学习台</span>
+</header>
+
+<div class="music-player">
   <button class="music-toggle" id="musicBtn" type="button">♪ 月光旧王城</button>
   <button class="music-next" id="musicNext" type="button" title="下一首">⏭</button>
-</header>
+</div>
 
 <div class="app">
 
@@ -2398,9 +2468,8 @@ body::before {
         <div class="npc-extra-row"><span class="npc-extra-l">风 险</span><p class="npc-extra-v warn" id="npcModalRisk">...</p></div>
       </div>
       <div class="npc-modal-meta" id="npcModalMeta"></div>
+      <div class="npc-source-grid" id="npcSourceGrid"></div>
       <div class="npc-meta-foot">
-        <a class="npc-source" id="npcModalSourceCN" target="_blank" rel="noopener">↗ 雪球 中文评级</a>
-        <a class="npc-source" id="npcModalSource" target="_blank" rel="noopener">↗ stockanalysis 英文</a>
         <span class="npc-data-stamp">数据 2026.05 · 学习台</span>
       </div>
       <div class="npc-modal-actions">
@@ -2552,7 +2621,13 @@ const NPCS = [
     sector:"机器人/物流", target:"$302.93", upside:"+11.75%", analysts:"43 Strong Buy", role:"核心仓 3-6%",
     line:"Amazon (AMZN). AWS + 物流 + 广告 + Prime. 43 位 Strong Buy, 市值 $4.21T。给你的不是 alpha 是'你不会比 SPY 差太多'。" },
 
-  // ───────── A 级 (17) ─────────
+  // ───────── A 级 (19) ─────────
+  { tk:"GLW", tier:"A", name:"璃晖", cn:"康宁", glyph:"璃", color:"#5a9a8a", pot:88,
+    sector:"光学", target:"$195.67", upside:"+4.7%", analysts:"15 Buy", role:"核心仓 2-3.5%",
+    line:"Corning (GLW). 玻璃 + 光纤 + 显示, NVIDIA 投资 AI 数据中心光纤互联。Gorilla Glass 是 iPhone 标配。目标 $195.67, 15 个 Buy。风险: 显示业务周期 + AI 光纤兑现节奏。" },
+  { tk:"INTC", tier:"A", name:"硅霸", cn:"英特尔", glyph:"硅", color:"#3a5a8a", pot:80,
+    sector:"半导体", target:"$82.60", upside:"-33.9%", analysts:"42 Hold", role:"期权仓 1-2%",
+    line:"Intel (INTC). 18A 节点 + Foundry 转型 + 政府补贴 + 国家安全战略。一年从 $19 涨到 $125 = 5x 逼空。但 42 个分析师 Hold, 目标价比现价低 34%。" },
   { tk:"ARM", tier:"A", name:"韧岩", cn:"Arm 控股", glyph:"岩", color:"#5a7d5a", pot:86,
     sector:"半导体", target:"$180.75", upside:"-11.42%", analysts:"25 Buy", role:"核心仓 2-3.5%",
     line:"Arm Holdings (ARM). CPU 内核 IP——几乎所有手机 + 半数 AI 边缘芯片用我的内核。常年 90+ PE. 风险: RISC-V 替代。" },
@@ -2662,6 +2737,8 @@ const NPCS = [
 ];
 // ───── 论点 + 风险 (源: 学习台 stock-learning data.ts) ─────
 const EXTRA = {
+  GLW:  { thesis:"康宁玻璃 + 光纤 + 显示, NVIDIA 投资 AI 数据中心光纤互联是新主线。", risk:"显示业务周期波动 + AI 光纤业务规模化兑现速度。", weight:"2%-3.5%" },
+  INTC: { thesis:"18A 节点 + Foundry 转型 + 政府补贴, 国家半导体战略卡位。", risk:"42 个分析师 Hold + 目标价 -34%, 转型执行不及预期就崩。", weight:"1%-2%" },
   NVDA: { thesis:"AI 算力生态王座, CUDA、GPU、网络和整机系统形成复合护城河。", risk:"估值和预期极高, 任何 capex 放缓都会放大波动。", weight:"3%-8%" },
   GOOGL:{ thesis:"搜索现金流 + TPU + 云 + Waymo, 是最综合的 AI 基础设施与入口资产。", risk:"搜索被 AI 交互改写、监管和云竞争是主要压力。", weight:"3%-8%" },
   TSLA: { thesis:"自动驾驶、机器人和能源网络构成高分歧高上限叙事。", risk:"估值、执行、监管和周期都会极端放大波动。", weight:"2%-6%" },
@@ -2992,8 +3069,19 @@ function openNpcModal(n) {
   const ex = EXTRA[n.tk] || { thesis:"—", risk:"—", weight: n.role };
   document.getElementById('npcModalThesis').textContent = ex.thesis;
   document.getElementById('npcModalRisk').textContent = ex.risk;
-  document.getElementById('npcModalSource').href = `https://stockanalysis.com/stocks/${n.tk.toLowerCase()}/ratings/`;
-  document.getElementById('npcModalSourceCN').href = `https://xueqiu.com/S/${n.tk}`;
+  // 6 评级源 (中文 + 英文)
+  const tk = n.tk, tkLow = n.tk.toLowerCase();
+  const SOURCES = [
+    { name: '雪球',         icon: '球', url: `https://xueqiu.com/S/${tk}`, cn: true },
+    { name: '富途',         icon: '富', url: `https://www.futunn.com/stock/${tk}-US`, cn: true },
+    { name: '老虎',         icon: '虎', url: `https://www.laohu8.com/stock/${tk}`, cn: true },
+    { name: 'Finviz',       icon: 'F',  url: `https://finviz.com/quote.ashx?t=${tk}`, cn: false },
+    { name: 'TipRanks',     icon: 'T',  url: `https://www.tipranks.com/stocks/${tkLow}/forecast`, cn: false },
+    { name: 'StockAnalysis', icon: 'S', url: `https://stockanalysis.com/stocks/${tkLow}/ratings/`, cn: false },
+  ];
+  document.getElementById('npcSourceGrid').innerHTML = SOURCES.map(s =>
+    `<a class="src-chip ${s.cn ? 'cn' : 'en'}" href="${s.url}" target="_blank" rel="noopener" title="${s.name}"><span class="src-icon">${s.icon}</span><span class="src-name">${s.name}</span></a>`
+  ).join('');
   const upClass = n.upside.startsWith('+') ? 'pos' : n.upside.startsWith('-') ? 'neg' : '';
   document.getElementById('npcModalMeta').innerHTML = `
     <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">代码</span><b class="npc-modal-meta-v">${n.tk}</b></div>
