@@ -1,0 +1,127 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]: WORLD · 2030 — 守护神殿
+    - generic [ref=e4]: 数据 2026.05 · 学习台
+  - generic [ref=e5]:
+    - text: 核 算 光 防
+    - generic [ref=e59]:
+      - generic [ref=e60] [cursor=pointer]: ← 回神殿
+      - generic [ref=e61]:
+        - heading "守 护 神 图 鉴" [level=2] [ref=e62]
+        - paragraph [ref=e63]: FUTURE GUARDIANS · 数据来自学习台 + stockanalysis.com
+      - generic [ref=e64]:
+        - button "S 级 · 核心阵容" [ref=e65] [cursor=pointer]
+        - button "A 级 · 成长仓" [ref=e66] [cursor=pointer]
+        - button "B 级 · 期权仓" [ref=e67] [cursor=pointer]
+        - button "C 级 · 待观察" [ref=e68] [cursor=pointer]
+      - generic [ref=e69]:
+        - generic [ref=e70] [cursor=pointer]:
+          - generic [ref=e71]:
+            - generic [ref=e72]: ⭐S
+            - text: OKLO
+          - generic [ref=e73]: 火堇
+          - generic [ref=e74]: 小堆
+        - generic [ref=e75] [cursor=pointer]:
+          - generic [ref=e76]:
+            - generic [ref=e77]: ⭐S
+            - text: RKLB
+          - generic [ref=e78]: 阿尔忒弥斯
+          - generic [ref=e79]: 火箭实验室
+        - generic [ref=e80] [cursor=pointer]:
+          - generic [ref=e81]:
+            - generic [ref=e82]: ⭐S
+            - text: COHR
+          - generic [ref=e83]: 光绫
+          - generic [ref=e84]: 相干
+        - generic [ref=e85] [cursor=pointer]:
+          - generic [ref=e86]:
+            - generic [ref=e87]: ⭐S
+            - text: MU
+          - generic [ref=e88]: 韵存
+          - generic [ref=e89]: 美光
+        - generic [ref=e90] [cursor=pointer]:
+          - generic [ref=e91]:
+            - generic [ref=e92]: ⭐S
+            - text: NBIS
+          - generic [ref=e93]: 涅彼斯
+          - generic [ref=e94]: Nebius AI 云
+        - generic [ref=e95] [cursor=pointer]:
+          - generic [ref=e96]:
+            - generic [ref=e97]: ⭐S
+            - text: PLTR
+          - generic [ref=e98]: 黑曜
+          - generic [ref=e99]: 帕兰提尔
+        - generic [ref=e100] [cursor=pointer]:
+          - generic [ref=e101]:
+            - generic [ref=e102]: ⭐S
+            - text: ALAB
+          - generic [ref=e103]: 织梭
+          - generic [ref=e104]: Astera Labs
+        - generic [ref=e105] [cursor=pointer]:
+          - generic [ref=e106]:
+            - generic [ref=e107]: ⭐S
+            - text: MRVL
+          - generic [ref=e108]: 综衍
+          - generic [ref=e109]: 美满
+        - generic [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]:
+            - generic [ref=e112]: ⭐S
+            - text: BWXT
+          - generic [ref=e113]: 缄海
+          - generic [ref=e114]: BWX 核工程
+        - generic [ref=e115] [cursor=pointer]:
+          - generic [ref=e116]:
+            - generic [ref=e117]: ⭐S
+            - text: AMZN
+          - generic [ref=e118]: 大裁
+          - generic [ref=e119]: 亚马逊
+  - article [ref=e121]:
+    - generic [ref=e122]: ⭐ S
+    - generic [ref=e123]: 韵存
+    - generic [ref=e124]:
+      - generic [ref=e125]: — 守护神 · 自我介绍 —
+      - heading "韵存 MU · 美光" [level=3] [ref=e126]:
+        - text: 韵存
+        - generic [ref=e127]: MU · 美光
+      - blockquote [ref=e128]: 「 Micron (MU). HBM/DRAM/NAND, 美国唯一规模化存储制造商。33 位 Strong Buy 是覆盖最广的——共识就是定价。
+      - generic [ref=e129]:
+        - generic [ref=e130]:
+          - generic [ref=e131]: 论 点
+          - paragraph [ref=e132]: HBM 是 AI 加速器的硬瓶颈, 美光是美国存储链核心。
+        - generic [ref=e133]:
+          - generic [ref=e134]: 风 险
+          - paragraph [ref=e135]: 资本开支扩张后, 存储周期反转会很快压利润。
+      - generic [ref=e136]:
+        - generic [ref=e137]:
+          - generic [ref=e138]: 代码
+          - generic [ref=e139]: MU
+        - generic [ref=e140]:
+          - generic [ref=e141]: 板块
+          - generic [ref=e142]: 存储
+        - generic [ref=e143]:
+          - generic [ref=e144]: 潜力
+          - generic [ref=e145]: 90 · S 级
+        - generic [ref=e146]:
+          - generic [ref=e147]: 12 月目标
+          - generic [ref=e148]: $482.90
+        - generic [ref=e149]:
+          - generic [ref=e150]: 上行空间
+          - generic [ref=e151]: "-16.72%"
+        - generic [ref=e152]:
+          - generic [ref=e153]: 分析师
+          - generic [ref=e154]: 33 Strong Buy
+        - generic [ref=e155]:
+          - generic [ref=e156]: 仓位建议
+          - generic [ref=e157]: 核心仓 3-5%
+      - generic [ref=e158]:
+        - link "↗ stockanalysis.com 查最新评级" [ref=e159] [cursor=pointer]:
+          - /url: https://stockanalysis.com/stocks/mu/ratings/
+        - generic [ref=e160]: 数据 2026.05 · 学习台
+      - generic [ref=e161]:
+        - button "退下" [ref=e162] [cursor=pointer]
+        - button "加入队伍" [ref=e163] [cursor=pointer]
+        - button "★ 收藏" [ref=e164] [cursor=pointer]
+  - contentinfo [ref=e55]:
+    - generic [ref=e56]: 守护神殿 · FUTURE GUARDIAN SHRINE
+    - generic [ref=e57]: // 图鉴
+    - generic [ref=e58]: Esc 关闭弹窗

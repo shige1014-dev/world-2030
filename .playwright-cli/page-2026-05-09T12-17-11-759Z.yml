@@ -1,0 +1,82 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]: WORLD · 2030 — 守护神殿
+    - generic [ref=e4]: 数据 2026.05 · 学习台
+  - generic [ref=e5]:
+    - text: 核 算 光 防
+    - generic [ref=e59]:
+      - generic [ref=e60] [cursor=pointer]: ← 回神殿
+      - generic [ref=e61]:
+        - heading "守 护 神 图 鉴" [level=2] [ref=e62]
+        - paragraph [ref=e63]: FUTURE GUARDIANS · 数据来自学习台 + stockanalysis.com
+      - generic [ref=e64]:
+        - button "S 级 · 核心阵容" [ref=e65] [cursor=pointer]
+        - button "A 级 · 成长仓" [ref=e66] [cursor=pointer]
+        - button "B 级 · 期权仓" [ref=e67] [cursor=pointer]
+        - button "C 级 · 待观察" [ref=e68] [cursor=pointer]
+      - generic [ref=e69]:
+        - generic [ref=e70] [cursor=pointer]:
+          - generic [ref=e71]:
+            - generic [ref=e72]: ⭐S
+            - text: OKLO
+          - generic [ref=e73]: 火堇
+          - generic [ref=e74]: 小堆
+        - generic [ref=e75] [cursor=pointer]:
+          - generic [ref=e76]:
+            - generic [ref=e77]: ⭐S
+            - text: RKLB
+          - generic [ref=e78]: 阿尔忒弥斯
+          - generic [ref=e79]: 火箭实验室
+        - generic [ref=e80] [cursor=pointer]:
+          - generic [ref=e81]:
+            - generic [ref=e82]: ⭐S
+            - text: COHR
+          - generic [ref=e83]: 光绫
+          - generic [ref=e84]: 相干
+        - generic [ref=e85] [cursor=pointer]:
+          - generic [ref=e86]:
+            - generic [ref=e87]: ⭐S
+            - text: MU
+          - generic [ref=e88]: 韵存
+          - generic [ref=e89]: 美光
+        - generic [ref=e90] [cursor=pointer]:
+          - generic [ref=e91]:
+            - generic [ref=e92]: ⭐S
+            - text: NBIS
+          - generic [ref=e93]: 涅彼斯
+          - generic [ref=e94]: Nebius AI 云
+        - generic [ref=e95] [cursor=pointer]:
+          - generic [ref=e96]:
+            - generic [ref=e97]: ⭐S
+            - text: PLTR
+          - generic [ref=e98]: 黑曜
+          - generic [ref=e99]: 帕兰提尔
+        - generic [ref=e100] [cursor=pointer]:
+          - generic [ref=e101]:
+            - generic [ref=e102]: ⭐S
+            - text: ALAB
+          - generic [ref=e103]: 织梭
+          - generic [ref=e104]: Astera Labs
+        - generic [ref=e105] [cursor=pointer]:
+          - generic [ref=e106]:
+            - generic [ref=e107]: ⭐S
+            - text: MRVL
+          - generic [ref=e108]: 综衍
+          - generic [ref=e109]: 美满
+        - generic [ref=e110] [cursor=pointer]:
+          - generic [ref=e111]:
+            - generic [ref=e112]: ⭐S
+            - text: BWXT
+          - generic [ref=e113]: 缄海
+          - generic [ref=e114]: BWX 核工程
+        - generic [ref=e115] [cursor=pointer]:
+          - generic [ref=e116]:
+            - generic [ref=e117]: ⭐S
+            - text: AMZN
+          - generic [ref=e118]: 大裁
+          - generic [ref=e119]: 亚马逊
+  - text: 「
+  - contentinfo [ref=e55]:
+    - generic [ref=e56]: 守护神殿 · FUTURE GUARDIAN SHRINE
+    - generic [ref=e57]: // 图鉴
+    - generic [ref=e58]: Esc 关闭弹窗

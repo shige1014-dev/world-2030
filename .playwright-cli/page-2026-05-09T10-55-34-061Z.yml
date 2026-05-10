@@ -1,0 +1,126 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]: WORLD · 2030 — 守护神殿
+    - generic [ref=e4]: 44 位守护神 · S/A/B/C 4 级
+    - generic [ref=e5]: 数据 2026.05 · 学习台
+  - generic [ref=e40]:
+    - generic [ref=e41] [cursor=pointer]: ← 回神殿
+    - generic [ref=e42]:
+      - heading "守 护 神 图 鉴" [level=2] [ref=e43]
+      - paragraph [ref=e44]: FUTURE GUARDIANS · 数据来自学习台 + stockanalysis.com
+    - generic [ref=e45]:
+      - button "S 级 · 核心阵容" [ref=e46] [cursor=pointer]
+      - button "A 级 · 成长仓" [ref=e47] [cursor=pointer]
+      - button "B 级 · 期权仓" [ref=e48] [cursor=pointer]
+      - button "C 级 · 待观察" [ref=e49] [cursor=pointer]
+    - generic [ref=e50]:
+      - generic [ref=e51] [cursor=pointer]:
+        - generic [ref=e52]:
+          - generic [ref=e53]: ⭐S
+          - text: OKLO
+        - generic [ref=e54]: 火堇
+        - generic [ref=e55]: 小堆
+      - generic [ref=e56] [cursor=pointer]:
+        - generic [ref=e57]:
+          - generic [ref=e58]: ⭐S
+          - text: RKLB
+        - generic [ref=e59]: 阿尔忒弥斯
+        - generic [ref=e60]: 火箭实验室
+      - generic [ref=e61] [cursor=pointer]:
+        - generic [ref=e62]:
+          - generic [ref=e63]: ⭐S
+          - text: COHR
+        - generic [ref=e64]: 光绫
+        - generic [ref=e65]: 相干
+      - generic [ref=e66] [cursor=pointer]:
+        - generic [ref=e67]:
+          - generic [ref=e68]: ⭐S
+          - text: MU
+        - generic [ref=e69]: 韵存
+        - generic [ref=e70]: 美光
+      - generic [ref=e71] [cursor=pointer]:
+        - generic [ref=e72]:
+          - generic [ref=e73]: ⭐S
+          - text: NBIS
+        - generic [ref=e74]: 涅彼斯
+        - generic [ref=e75]: Nebius AI 云
+      - generic [ref=e76] [cursor=pointer]:
+        - generic [ref=e77]:
+          - generic [ref=e78]: ⭐S
+          - text: PLTR
+        - generic [ref=e79]: 黑曜
+        - generic [ref=e80]: 帕兰提尔
+      - generic [ref=e81] [cursor=pointer]:
+        - generic [ref=e82]:
+          - generic [ref=e83]: ⭐S
+          - text: ALAB
+        - generic [ref=e84]: 织梭
+        - generic [ref=e85]: Astera Labs
+      - generic [ref=e86] [cursor=pointer]:
+        - generic [ref=e87]:
+          - generic [ref=e88]: ⭐S
+          - text: MRVL
+        - generic [ref=e89]: 综衍
+        - generic [ref=e90]: 美满
+      - generic [ref=e91] [cursor=pointer]:
+        - generic [ref=e92]:
+          - generic [ref=e93]: ⭐S
+          - text: BWXT
+        - generic [ref=e94]: 缄海
+        - generic [ref=e95]: BWX 核工程
+      - generic [ref=e96] [cursor=pointer]:
+        - generic [ref=e97]:
+          - generic [ref=e98]: ⭐S
+          - text: AMZN
+        - generic [ref=e99]: 大裁
+        - generic [ref=e100]: 亚马逊
+  - article [ref=e102]:
+    - generic [ref=e103]: ⭐ S
+    - generic [ref=e104]: 火堇
+    - generic [ref=e105]:
+      - generic [ref=e106]: — 守护神 · 自我介绍 —
+      - heading "火堇 OKLO · 小堆" [level=3] [ref=e107]:
+        - text: 火堇
+        - generic [ref=e108]: OKLO · 小堆
+      - blockquote [ref=e109]: "「 「我是火堇——Oklo (OKLO). 微型液态金属冷却快堆塞进数据中心旁边, 让 24/7 的电力不再依赖电网。目标 $101.37, 上行 +47.36%, 16 位 Strong Buy. 风险: NRC 牌照 + 首堆 2027 投运。」"
+      - generic [ref=e110]:
+        - generic [ref=e111]:
+          - generic [ref=e112]: 论 点
+          - paragraph [ref=e113]: 先进核裂变与数据中心电力叙事高度同频, 是高赔率核能入口。
+        - generic [ref=e114]:
+          - generic [ref=e115]: 风 险
+          - paragraph [ref=e116]: 监管 + 首堆建设 + 收入兑现时间可能显著晚于市场预期。
+      - generic [ref=e117]:
+        - generic [ref=e118]:
+          - generic [ref=e119]: 代码
+          - generic [ref=e120]: OKLO
+        - generic [ref=e121]:
+          - generic [ref=e122]: 板块
+          - generic [ref=e123]: 核能
+        - generic [ref=e124]:
+          - generic [ref=e125]: 潜力
+          - generic [ref=e126]: 93 · S 级
+        - generic [ref=e127]:
+          - generic [ref=e128]: 12 月目标
+          - generic [ref=e129]: $101.37
+        - generic [ref=e130]:
+          - generic [ref=e131]: 上行空间
+          - generic [ref=e132]: +47.36%
+        - generic [ref=e133]:
+          - generic [ref=e134]: 分析师
+          - generic [ref=e135]: 16 Strong Buy
+        - generic [ref=e136]:
+          - generic [ref=e137]: 仓位建议
+          - generic [ref=e138]: 成长仓 2-4%
+      - generic [ref=e139]:
+        - link "↗ stockanalysis.com 查最新评级" [ref=e140] [cursor=pointer]:
+          - /url: https://stockanalysis.com/stocks/oklo/ratings/
+        - generic [ref=e141]: 数据 2026.05 · 学习台
+      - generic [ref=e142]:
+        - button "退下" [ref=e143] [cursor=pointer]
+        - button "加入队伍" [ref=e144] [cursor=pointer]
+        - button "★ 收藏" [ref=e145] [cursor=pointer]
+  - contentinfo [ref=e36]:
+    - generic [ref=e37]: 守护神殿 · FUTURE GUARDIAN SHRINE
+    - generic [ref=e38]: // 图鉴
+    - generic [ref=e39]: Esc 关闭弹窗

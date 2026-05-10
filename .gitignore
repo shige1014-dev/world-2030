@@ -5,3 +5,4 @@ node_modules/
 .env.local
 *.bak
 *-test*.png
+.vercel

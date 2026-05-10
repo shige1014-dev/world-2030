@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>未来守护神殿 · WORLD 2030</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23f5ead2'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23c8553d' stroke-width='4'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-size='28' font-family='serif' fill='%23c8553d'%3E殿%3C/text%3E%3C/svg%3E">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -62,6 +63,32 @@ body::before {
 }
 .bar.top { border-bottom: 1px solid var(--line); }
 .bar b { color: var(--accent); font-weight: 600; }
+.music-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.music-toggle {
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  padding: 5px 10px;
+  background: rgba(250, 242, 224, 0.76);
+  color: var(--accent);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  box-shadow: 0 1px 0 var(--paper-shadow);
+}
+.music-next {
+  width: 28px;
+  padding: 5px 0;
+}
+.music-toggle.playing {
+  background: rgba(58, 40, 24, 0.86);
+  border-color: var(--gold-leaf);
+  color: var(--gold-leaf);
+}
 
 .app { position: relative; z-index: 1; min-height: 100vh; padding: 50px 0 50px; }
 .page { display: none; opacity: 0; transition: opacity 0.4s ease; }
@@ -1044,8 +1071,31 @@ body::before {
 }
 
 @media (max-width: 700px) {
-  .npc-modal-card { grid-template-columns: 1fr; max-width: 380px; }
-  .npc-modal-portrait { aspect-ratio: 4/3; border-right: 0; border-bottom: 2px solid var(--vc, var(--accent)); }
+  .npc-modal {
+    align-items: flex-start;
+    padding: 12px;
+    overflow-y: auto;
+  }
+  .npc-modal-card {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    max-height: none;
+    min-height: 0;
+    overflow: visible;
+  }
+  .npc-modal-portrait {
+    height: clamp(210px, 34vh, 320px);
+    flex: 0 0 auto;
+    border-right: 0;
+    border-bottom: 2px solid var(--vc, var(--accent));
+  }
+  .npc-modal-body {
+    min-height: 0;
+    max-height: none;
+    overflow: visible;
+  }
 }
 
 @media (max-width: 1100px) {
@@ -1066,75 +1116,230 @@ body::before {
   position: relative;
   width: 100%; max-width: 1480px;
   margin: 8px auto 24px;
-  height: 320px;
+  height: 430px;
   border-radius: 16px;
   overflow: hidden;
   border: 1.5px solid var(--line);
   box-shadow: 0 6px 0 var(--paper-shadow), 0 12px 28px rgba(139, 111, 71, 0.16);
+  background: #2a1f17;
 }
 .shrine-cover-img {
   position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 600px 400px at 25% 35%, rgba(255, 216, 107, 0.18), transparent 60%),
-    radial-gradient(ellipse 700px 500px at 75% 65%, rgba(200, 85, 61, 0.20), transparent 60%),
-    radial-gradient(ellipse 1000px 200px at 50% 100%, rgba(58, 40, 24, 0.6), transparent 70%),
-    linear-gradient(150deg, #2a1f17 0%, #4a3826 35%, #6b5240 75%, #4a3826 100%);
+  background-image: url('images/home-goddess-shrine.png');
+  background-size: cover;
+  background-position: center 64%;
+  filter: saturate(1.08) contrast(1.04) brightness(0.96);
+  transform: scale(1.02);
+  animation: shrineBreath 12s ease-in-out infinite alternate;
 }
-/* 金箔门 SVG-like CSS 装饰 */
 .shrine-cover-img::before {
   content: "";
-  position: absolute; left: 50%; top: 50%;
-  transform: translate(-50%, -55%);
-  width: 280px; height: 380px;
-  border: 2px solid rgba(255, 216, 107, 0.35);
-  border-radius: 140px 140px 6px 6px;
+  position: absolute; inset: 0;
   background:
-    linear-gradient(180deg, rgba(255, 216, 107, 0.06), rgba(255, 216, 107, 0.02));
-  box-shadow:
-    inset 0 0 60px rgba(255, 216, 107, 0.08),
-    0 0 80px rgba(255, 216, 107, 0.12);
+    radial-gradient(ellipse 720px 280px at 50% 28%, rgba(255, 242, 180, 0.26), transparent 58%),
+    linear-gradient(90deg, rgba(42, 31, 23, 0.46), transparent 24%, transparent 76%, rgba(42, 31, 23, 0.46)),
+    linear-gradient(180deg, rgba(42, 31, 23, 0.04), rgba(42, 31, 23, 0.50));
 }
-/* 12 颗装饰光点 (沿门拱排列) */
 .shrine-cover-img::after {
   content: "";
-  position: absolute; left: 50%; top: 50%;
-  transform: translate(-50%, -55%);
-  width: 280px; height: 380px;
+  position: absolute; inset: 0;
   background:
-    radial-gradient(circle 3px at 50% 8%, rgba(255, 216, 107, 0.7), transparent),
-    radial-gradient(circle 3px at 30% 14%, rgba(255, 216, 107, 0.6), transparent),
-    radial-gradient(circle 3px at 70% 14%, rgba(255, 216, 107, 0.6), transparent),
-    radial-gradient(circle 3px at 18% 28%, rgba(255, 216, 107, 0.55), transparent),
-    radial-gradient(circle 3px at 82% 28%, rgba(255, 216, 107, 0.55), transparent),
-    radial-gradient(circle 3px at 12% 48%, rgba(255, 216, 107, 0.5), transparent),
-    radial-gradient(circle 3px at 88% 48%, rgba(255, 216, 107, 0.5), transparent);
+    radial-gradient(circle 2px at 14% 24%, rgba(255,255,255,0.85), transparent),
+    radial-gradient(circle 2px at 23% 72%, rgba(255,232,153,0.75), transparent),
+    radial-gradient(circle 2px at 38% 18%, rgba(255,255,255,0.82), transparent),
+    radial-gradient(circle 3px at 62% 20%, rgba(255,232,153,0.9), transparent),
+    radial-gradient(circle 2px at 76% 64%, rgba(255,255,255,0.72), transparent),
+    radial-gradient(circle 2px at 88% 34%, rgba(255,232,153,0.78), transparent),
+    linear-gradient(105deg, transparent 0 38%, rgba(255, 244, 190, 0.22) 47%, transparent 58% 100%);
+  opacity: 0.72;
+  mix-blend-mode: screen;
+  animation: shrineSpark 4.8s ease-in-out infinite alternate, shrineSweep 8s ease-in-out infinite;
+}
+.shrine-cover::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: 1;
+  pointer-events: none;
+  background: conic-gradient(from 0deg, transparent, rgba(255, 216, 107, 0.14), transparent 26%, transparent 100%);
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  animation: shrineRotate 18s linear infinite;
+}
+.shrine-gate {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 44px;
+  transform: translateX(-50%);
+  width: min(34vw, 390px);
+  height: 220px;
+  border: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 232, 153, 0.24) 0 18%, transparent 19%),
+    radial-gradient(ellipse at 50% 58%, rgba(255, 216, 107, 0.20), transparent 58%);
+  box-shadow:
+    0 0 92px rgba(255, 216, 107, 0.30),
+    inset 0 0 60px rgba(255, 216, 107, 0.10);
+  z-index: 2;
+  opacity: 0.42;
+}
+.shrine-gate::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 310px;
+  height: 310px;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(255, 216, 107, 0.34);
+  border-radius: 50%;
+  background:
+    linear-gradient(0deg, transparent 48%, rgba(255, 216, 107, 0.30) 49%, rgba(255, 216, 107, 0.30) 51%, transparent 52%),
+    linear-gradient(90deg, transparent 48%, rgba(255, 216, 107, 0.22) 49%, rgba(255, 216, 107, 0.22) 51%, transparent 52%),
+    radial-gradient(circle, transparent 0 48%, rgba(255, 216, 107, 0.22) 49%, transparent 50%);
+}
+.shrine-gate::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 124px;
+  height: 124px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 216, 107, 0.52);
+  background:
+    radial-gradient(circle 3px at 50% 8%, rgba(255, 232, 153, 0.9), transparent),
+    radial-gradient(circle 3px at 50% 92%, rgba(255, 232, 153, 0.7), transparent),
+    radial-gradient(circle 3px at 8% 50%, rgba(255, 232, 153, 0.7), transparent),
+    radial-gradient(circle 3px at 92% 50%, rgba(255, 232, 153, 0.7), transparent),
+    linear-gradient(0deg, transparent 49%, rgba(255, 216, 107, 0.34) 50%, transparent 51%),
+    linear-gradient(90deg, transparent 49%, rgba(255, 216, 107, 0.34) 50%, transparent 51%),
+    radial-gradient(circle, transparent 0 42%, rgba(255, 216, 107, 0.22) 43%, transparent 45%, transparent 0 66%, rgba(255, 216, 107, 0.16) 67%, transparent 69%);
+  box-shadow: 0 0 34px rgba(255, 216, 107, 0.38);
   pointer-events: none;
   animation: shimmerLight 3.6s ease-in-out infinite alternate;
 }
+.shrine-symbol {
+  position: absolute;
+  left: 50%;
+  top: 154px;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  opacity: 0.82;
+  font-family: "STSong", serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: rgba(255, 232, 153, 0.9);
+  text-shadow: 0 0 18px rgba(255, 216, 107, 0.72);
+  pointer-events: none;
+}
+.shrine-pillar {
+  position: absolute;
+  top: 66px;
+  width: 34px;
+  height: 210px;
+  z-index: 2;
+  opacity: 0.38;
+  opacity: 0.72;
+  background:
+    linear-gradient(180deg, transparent, rgba(255, 216, 107, 0.34), transparent),
+    linear-gradient(90deg, transparent 0 40%, rgba(255, 216, 107, 0.46) 42% 58%, transparent 60%);
+}
+.shrine-pillar.left { left: 34%; }
+.shrine-pillar.right { right: 34%; }
+.shrine-runes {
+  position: absolute;
+  left: 36%;
+  right: 36%;
+  bottom: 116px;
+  height: 1px;
+  z-index: 3;
+  background: linear-gradient(90deg, transparent, rgba(255, 216, 107, 0.68), transparent);
+}
+.shrine-runes::before,
+.shrine-runes::after {
+  content: "✦";
+  position: absolute;
+  top: -10px;
+  font-size: 16px;
+  color: rgba(255, 216, 107, 0.78);
+}
+.shrine-runes::before { left: 22%; }
+.shrine-runes::after { right: 22%; }
 @keyframes shimmerLight {
   from { opacity: 0.7; }
   to { opacity: 1; filter: drop-shadow(0 0 4px rgba(255, 216, 107, 0.5)); }
 }
+@keyframes shrineBreath {
+  from { transform: scale(1.02) translate3d(0, 0, 0); }
+  to { transform: scale(1.075) translate3d(0, -10px, 0); }
+}
+@keyframes shrineSpark {
+  from { opacity: 0.42; filter: brightness(0.9); }
+  to { opacity: 0.95; filter: brightness(1.16); }
+}
+@keyframes shrineSweep {
+  0%, 35% { transform: translateX(-18%); }
+  70%, 100% { transform: translateX(18%); }
+}
+@keyframes shrineRotate {
+  to { transform: rotate(360deg); }
+}
 .shrine-cover-mask {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, transparent 0%, transparent 30%, rgba(245, 234, 210, 0.3) 75%, var(--paper) 100%);
+  background:
+    linear-gradient(180deg, rgba(58, 40, 24, 0.08) 0%, transparent 28%, rgba(245, 234, 210, 0.25) 76%, var(--paper) 100%),
+    linear-gradient(90deg, rgba(58, 40, 24, 0.58), transparent 34%, transparent 66%, rgba(58, 40, 24, 0.58));
+  z-index: 1;
+}
+.shrine-avatar {
+  display: none;
+  position: absolute;
+  top: -10px;
+  bottom: -18px;
+  width: min(24vw, 330px);
+  height: auto;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center bottom;
+  filter: drop-shadow(0 18px 20px rgba(32, 20, 12, 0.42));
+  opacity: 0.98;
+  z-index: 2;
+}
+.shrine-avatar::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 86%;
+  height: 76%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(255, 216, 107, 0.18), transparent 62%);
+  pointer-events: none;
+  z-index: -1;
+}
+.shrine-avatar.left {
+  left: clamp(12px, 4vw, 70px);
+  background-image: url('images/hero-shige-guardian-cut.png');
+}
+.shrine-avatar.right {
+  right: clamp(12px, 4vw, 70px);
+  background-image: url('images/hero-musclecat-guardian-cut.png');
 }
 .shrine-cover-text {
-  position: absolute; left: 0; right: 0; bottom: 24px;
+  position: absolute; left: 27%; right: 27%; bottom: 32px;
   text-align: center;
   color: var(--paper-warm);
   text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+  z-index: 3;
 }
 .shrine-stamp {
-  display: inline-grid; place-items: center;
-  width: 56px; height: 56px;
-  border: 2px solid var(--gold-leaf);
-  border-radius: 50%;
-  font-family: "STSong", serif;
-  font-size: 28px; font-weight: 700;
-  color: var(--gold-leaf);
-  background: rgba(58, 40, 24, 0.7);
-  margin-bottom: 10px;
+  display: none;
 }
 .shrine-h {
   font-family: "STSong", "Iowan Old Style", serif;
@@ -1151,11 +1356,12 @@ body::before {
   color: rgba(245, 234, 210, 0.78);
   margin: 0;
 }
-
 .shrine-actions {
   display: flex; justify-content: center; gap: 18px;
-  margin: 10px 0 28px;
+  margin: -34px 0 18px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 4;
 }
 .shrine-btn {
   display: inline-flex; flex-direction: column;
@@ -1202,6 +1408,239 @@ body::before {
   color: var(--accent);
   text-transform: uppercase;
   margin-top: 3px;
+}
+.home-orbit {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto 18px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.orbit-card {
+  position: relative;
+  min-height: 78px;
+  padding: 14px 16px;
+  background: linear-gradient(180deg, rgba(250, 242, 224, 0.94), rgba(234, 215, 179, 0.72));
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 3px 0 var(--paper-shadow);
+  overflow: hidden;
+}
+.orbit-card::after {
+  content: attr(data-glyph);
+  position: absolute;
+  right: 10px;
+  bottom: -12px;
+  font-family: "STSong", serif;
+  font-size: 66px;
+  font-weight: 700;
+  color: var(--vc, var(--accent));
+  opacity: 0.12;
+}
+.orbit-card b {
+  display: block;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+}
+.orbit-card span {
+  display: block;
+  margin-top: 8px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+}
+.orbit-card small {
+  display: block;
+  margin-top: 8px;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.lineage-panel {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto 22px;
+  padding: 18px 20px 20px;
+  background:
+    radial-gradient(ellipse 760px 280px at 50% 0%, rgba(255, 216, 107, 0.14), transparent 66%),
+    linear-gradient(180deg, rgba(250, 242, 224, 0.97), rgba(234, 215, 179, 0.72));
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 3px 0 var(--paper-shadow);
+  overflow: hidden;
+}
+.lineage-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 18px;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed var(--line-2);
+}
+.lineage-kicker {
+  display: block;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  color: var(--accent);
+}
+.lineage-title {
+  margin-top: 5px;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 22px;
+  letter-spacing: 0.22em;
+  color: var(--ink);
+}
+.lineage-note {
+  max-width: 480px;
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  text-align: right;
+}
+.lineage-map {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 12px;
+}
+.lineage-map::before {
+  content: "";
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 54px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(184, 154, 80, 0.7), transparent);
+  pointer-events: none;
+}
+.lineage-clan {
+  --vc: var(--bronze);
+  position: relative;
+  min-height: 286px;
+  padding: 12px 10px 14px;
+  border: 1px solid color-mix(in srgb, var(--vc) 44%, var(--line));
+  border-radius: 10px;
+  background: rgba(245, 234, 210, 0.62);
+}
+.lineage-clan::before {
+  content: "";
+  position: absolute;
+  top: 45px;
+  left: 50%;
+  bottom: 86px;
+  width: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(184, 154, 80, 0.78), rgba(200, 85, 61, 0.18));
+}
+.lineage-clan::after {
+  content: attr(data-glyph);
+  position: absolute;
+  right: 8px;
+  bottom: -12px;
+  font-family: "STSong", serif;
+  font-size: 72px;
+  font-weight: 700;
+  color: var(--vc);
+  opacity: 0.10;
+  pointer-events: none;
+}
+.lineage-pantheon,
+.lineage-children {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.lineage-pantheon { min-height: 44px; align-items: center; }
+.lineage-node {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  cursor: pointer;
+}
+.lineage-avatar {
+  display: block;
+  width: 38px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background-color: var(--paper);
+  background-size: cover;
+  background-position: center top;
+  border: 2px solid var(--vc);
+  box-shadow: 0 2px 0 var(--paper-shadow);
+  overflow: hidden;
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+}
+.lineage-node:hover .lineage-avatar {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 5px 0 var(--paper-shadow), 0 8px 14px rgba(58, 40, 24, 0.18);
+}
+.lineage-avatar .g-glyph {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+}
+.lineage-core {
+  position: relative;
+  z-index: 1;
+  margin: 18px auto 14px;
+  width: 112px;
+  min-height: 112px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  border-radius: 50%;
+  border: 1.5px solid rgba(184, 154, 80, 0.62);
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255, 216, 107, 0.32), transparent 58%),
+    rgba(58, 40, 24, 0.86);
+  box-shadow: inset 0 0 32px rgba(255, 216, 107, 0.10), 0 0 18px rgba(184, 154, 80, 0.22);
+}
+.lineage-core-title {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #fff2c1;
+}
+.lineage-core-sub {
+  display: block;
+  margin-top: 6px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  color: rgba(245, 234, 210, 0.72);
+}
+.lineage-children {
+  min-height: 74px;
+  align-content: center;
+}
+.lineage-child .lineage-avatar {
+  width: 34px;
+  border-width: 1.5px;
+}
+.lineage-label {
+  margin-top: 10px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  text-align: center;
 }
 
 /* 队伍 + 收藏 */
@@ -1259,6 +1698,7 @@ body::before {
   border: 1px solid var(--gold-leaf);
 }
 .ts-tier[data-tier="S"] { color: #ffd86b; border-color: #ffd86b; }
+.ts-tier[data-tier="P"] { color: #fff2a8; border-color: #fff2a8; box-shadow: 0 0 10px rgba(255, 216, 107, 0.35); }
 .ts-tier[data-tier="A"] { color: #c89060; border-color: #c89060; }
 .ts-tier[data-tier="B"] { color: #8a9a7a; border-color: #8a9a7a; }
 .ts-tier[data-tier="C"] { color: #9a8a8a; border-color: #9a8a8a; }
@@ -1306,7 +1746,8 @@ body::before {
 }
 
 /* ═══════════════ Gallery 图鉴 ═══════════════ */
-.page.gallery {
+.page.gallery,
+.page.lineage {
   max-width: 1480px;
   margin: 0 auto;
   padding: 12px 24px 32px;
@@ -1373,6 +1814,7 @@ body::before {
   border: 1px solid var(--gold-leaf);
 }
 .tier-badge-mini.S, [data-tier="S"] .tier-badge-mini { color: #ffd86b; border-color: #ffd86b; }
+[data-tier="P"] .tier-badge-mini { color: #fff2a8; border-color: #fff2a8; box-shadow: 0 0 12px rgba(255, 216, 107, 0.45); }
 
 /* glyph fallback (无立绘的卡片) */
 .g-glyph {
@@ -1409,6 +1851,7 @@ body::before {
   border: 1.5px solid var(--gold-leaf);
 }
 .tier-badge[data-tier="S"] { color: #ffd86b; border-color: #ffd86b; box-shadow: 0 0 12px rgba(255, 216, 107, 0.4); }
+.tier-badge[data-tier="P"] { color: #fff2a8; border-color: #fff2a8; box-shadow: 0 0 16px rgba(255, 216, 107, 0.55); }
 .tier-badge[data-tier="A"] { color: #c89060; border-color: #c89060; }
 .tier-badge[data-tier="B"] { color: #8a9a7a; border-color: #8a9a7a; }
 .tier-badge[data-tier="C"] { color: #9a8a8a; border-color: #9a8a8a; }
@@ -1450,28 +1893,52 @@ body::before {
 }
 .gacha-back {
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(255, 216, 107, 0.25), transparent 60%),
-    linear-gradient(160deg, #4a3826 0%, #2a1f17 100%);
+    linear-gradient(180deg, rgba(42, 31, 23, 0.10), rgba(42, 31, 23, 0.66)),
+    radial-gradient(ellipse at 50% 18%, rgba(255, 244, 190, 0.36), transparent 54%),
+    url('images/home-goddess-shrine.png');
+  background-size: cover;
+  background-position: center 55%;
   color: var(--gold-leaf);
   transform: rotateY(0);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 232, 153, 0.42),
+    inset 0 0 54px rgba(255, 216, 107, 0.22);
+}
+.gacha-back::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(255, 232, 153, 0.58);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle 2px at 18% 18%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(circle 2px at 82% 22%, rgba(255,232,153,0.85), transparent),
+    radial-gradient(circle 2px at 24% 76%, rgba(255,232,153,0.72), transparent),
+    radial-gradient(circle 2px at 76% 78%, rgba(255,255,255,0.78), transparent),
+    linear-gradient(105deg, transparent 0 38%, rgba(255, 244, 190, 0.28) 48%, transparent 58% 100%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+.gacha-back::after {
+  content: "SUMMON";
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.42em;
+  color: rgba(255, 244, 190, 0.92);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.72);
+  pointer-events: none;
 }
 .gacha-card.flipped .gacha-back { transform: rotateY(180deg); }
 .gacha-back-stamp {
-  font-family: "STSong", serif;
-  font-size: 110px; font-weight: 700;
-  width: 160px; height: 160px;
-  display: grid; place-items: center;
-  border: 3px solid var(--gold-leaf);
-  border-radius: 50%;
-  background: rgba(255, 216, 107, 0.08);
-  color: var(--gold-leaf);
-  text-shadow: 0 0 24px rgba(255, 216, 107, 0.5);
+  display: none;
 }
 .gacha-back-en {
-  margin-top: 22px;
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 14px; letter-spacing: 0.5em;
-  color: var(--gold-leaf);
+  display: none;
 }
 .gacha-front {
   background: linear-gradient(180deg, var(--paper-deep) 0%, var(--paper-warm) 60%, var(--paper-warm) 100%);
@@ -1500,6 +1967,9 @@ body::before {
 .gacha-card.flipped .gacha-front[data-tier="S"] {
   box-shadow: 0 0 60px rgba(255, 216, 107, 0.6), 0 0 120px rgba(255, 216, 107, 0.3);
 }
+.gacha-card.flipped .gacha-front[data-tier="P"] {
+  box-shadow: 0 0 70px rgba(255, 216, 107, 0.75), 0 0 140px rgba(255, 216, 107, 0.36);
+}
 .gacha-card.flipped .gacha-front[data-tier="A"] {
   box-shadow: 0 0 36px rgba(200, 144, 96, 0.45);
 }
@@ -1515,6 +1985,7 @@ body::before {
   z-index: 2;
 }
 .gacha-front[data-tier="S"] .gf-tier { color: #ffd86b; border-color: #ffd86b; box-shadow: 0 0 12px rgba(255, 216, 107, 0.5); }
+.gacha-front[data-tier="P"] .gf-tier { color: #fff2a8; border-color: #fff2a8; box-shadow: 0 0 14px rgba(255, 216, 107, 0.58); }
 .gf-img { max-width: 100%; max-height: 280px; object-fit: contain; margin-top: 10px; position: relative; z-index: 1; }
 .gf-glyph {
   font-family: "STSong", serif; font-size: 130px; font-weight: 700;
@@ -1614,14 +2085,38 @@ body::before {
   .team-row { grid-template-columns: repeat(4, 1fr); }
   .team-row.fav-row { grid-template-columns: repeat(6, 1fr); }
   .guardians-row { grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 22px 16px; }
-  .shrine-cover { height: 280px; }
+  .shrine-cover { height: 330px; }
+  .shrine-avatar { width: min(25vw, 250px); top: -2px; bottom: -12px; }
+  .shrine-avatar.left { left: 6px; }
+  .shrine-avatar.right { right: 6px; }
+  .shrine-gate { width: 320px; height: 200px; top: 48px; }
+  .shrine-gate::before { width: 260px; height: 260px; }
+  .shrine-symbol { top: 148px; }
+  .shrine-pillar.left { left: 31%; }
+  .shrine-pillar.right { right: 31%; }
+  .shrine-cover-text { left: 24%; right: 24%; }
+  .home-orbit { grid-template-columns: repeat(2, 1fr); }
+  .lineage-map { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .lineage-map::before { display: none; }
 }
 @media (max-width: 760px) {
   .bar { font-size: 9px; letter-spacing: 0.08em; padding: 0 12px; }
   .bar.top span:nth-child(2) { display: none; }
+  .music-toggle { font-size: 9px; padding: 4px 8px; letter-spacing: 0.08em; }
+  .music-next { width: 24px; padding: 4px 0; }
   .home.active { padding: 16px 14px 32px; }
-  .shrine-cover { height: 200px; border-radius: 12px; }
-  .shrine-cover-img::before, .shrine-cover-img::after { width: 200px; height: 280px; }
+  .shrine-cover { height: 320px; border-radius: 12px; }
+  .shrine-cover-img { background-position: center 60%; }
+  .shrine-gate { width: 220px; height: 180px; top: 48px; bottom: auto; }
+  .shrine-gate::before { width: 210px; height: 210px; }
+  .shrine-gate::after { width: 76px; height: 76px; }
+  .shrine-symbol { top: 138px; font-size: 34px; }
+  .shrine-pillar { display: none; }
+  .shrine-runes { left: 26%; right: 26%; bottom: 104px; }
+  .shrine-avatar { width: 38vw; top: 8px; bottom: 34px; opacity: 0.88; }
+  .shrine-avatar.left { left: -28px; }
+  .shrine-avatar.right { right: -28px; }
+  .shrine-cover-text { left: 12%; right: 12%; bottom: 18px; }
   .shrine-stamp { width: 44px; height: 44px; font-size: 22px; }
   .shrine-h { font-size: 22px; letter-spacing: 0.12em; }
   .shrine-sub { font-size: 9px; letter-spacing: 0.2em; }
@@ -1631,15 +2126,51 @@ body::before {
   .shrine-btn small { font-size: 8px; letter-spacing: 0.22em; }
   .team-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .team-row.fav-row { grid-template-columns: repeat(4, 1fr); }
+  .home-orbit { grid-template-columns: 1fr; gap: 8px; }
+  .orbit-card { min-height: 74px; padding: 12px 14px; }
+  .lineage-panel { padding: 14px 12px 16px; }
+  .lineage-head { display: block; }
+  .lineage-title { font-size: 18px; letter-spacing: 0.16em; }
+  .lineage-note { margin-top: 8px; max-width: none; text-align: left; }
+  .lineage-map { grid-template-columns: 1fr; gap: 10px; }
+  .lineage-clan {
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 86px 96px 1fr;
+    align-items: center;
+    gap: 8px;
+  }
+  .lineage-clan::before {
+    top: 50%;
+    left: 72px;
+    right: 18px;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+    transform: none;
+  }
+  .lineage-core { width: 82px; min-height: 82px; margin: 0 auto; }
+  .lineage-core-title { font-size: 13px; letter-spacing: 0.08em; }
+  .lineage-core-sub { font-size: 7px; }
+  .lineage-pantheon, .lineage-children { justify-content: flex-start; }
+  .lineage-avatar { width: 32px; }
+  .lineage-child .lineage-avatar { width: 30px; }
+  .lineage-label { grid-column: 1 / -1; margin-top: 4px; text-align: left; }
   .tier-tab { padding: 6px 12px; font-size: 10px; letter-spacing: 0.08em; }
   .tier-tabs { gap: 6px; padding: 8px 10px; }
   .guardians-row { grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px 12px; }
   .guardian-name { font-size: 13px; }
   .guardian-cn { font-size: 9px; }
   .gallery-h { font-size: 22px; letter-spacing: 0.1em; }
-  .npc-modal-card { grid-template-columns: 1fr; max-height: 92vh; }
-  .npc-modal-portrait { aspect-ratio: 1.4/1; min-height: 200px; }
+  .npc-modal-card { grid-template-columns: 1fr; max-height: none; }
+  .npc-modal-portrait { height: clamp(210px, 34vh, 320px); min-height: 0; }
+  .npc-modal-body { padding: 18px 18px 16px; gap: 10px; max-height: none; overflow: visible; }
   .npc-modal-h { font-size: 22px; }
+  .npc-modal-quote { max-height: none; padding: 12px 14px 12px 26px; line-height: 1.75; }
+  .npc-extra { gap: 6px; }
+  .npc-extra-row { grid-template-columns: 52px 1fr; padding: 9px 10px; gap: 10px; }
+  .npc-modal-meta { grid-template-columns: 1fr; }
+  .npc-modal-actions { position: sticky; bottom: 0; background: var(--paper); padding: 10px 0 0; }
   .ts-tiers { width: 100%; margin-left: 0; }
   .gacha-card { width: 240px; height: 360px; }
   .gf-img { max-height: 230px; }
@@ -1659,8 +2190,9 @@ body::before {
 
 <header class="bar top">
   <span>WORLD <b>·</b> 2030 — 守护神殿</span>
-  <span><b>44</b> 位守护神 · <b>S</b>/<b>A</b>/<b>B</b>/<b>C</b> 4 级</span>
+  <span><b>8</b> 位主神 · <b>44</b> 位守护神 · <b>P</b>/<b>S</b>/<b>A</b>/<b>B</b>/<b>C</b></span>
   <span id="now">数据 <b>2026.05</b> · 学习台</span>
+  <button class="music-toggle" id="musicBtn" type="button">♪ 月光旧王城</button>
 </header>
 
 <div class="app">
@@ -1669,11 +2201,18 @@ body::before {
   <section class="page home active" data-page="home">
     <div class="shrine-cover">
       <div class="shrine-cover-img"></div>
+      <div class="shrine-gate"></div>
+      <div class="shrine-pillar left" aria-hidden="true"></div>
+      <div class="shrine-pillar right" aria-hidden="true"></div>
+      <div class="shrine-runes" aria-hidden="true"></div>
+      <div class="shrine-symbol" aria-hidden="true">殿</div>
+      <div class="shrine-avatar left" aria-hidden="true"></div>
+      <div class="shrine-avatar right" aria-hidden="true"></div>
       <div class="shrine-cover-mask"></div>
       <div class="shrine-cover-text">
         <div class="shrine-stamp">殿</div>
         <h1 class="shrine-h">未 来 · 守 护 神 殿</h1>
-        <p class="shrine-sub">FUTURE GUARDIAN SHRINE · 44 位守护神 · 4 个等级</p>
+        <p class="shrine-sub">PANTHEON + FUTURE GUARDIANS · 8 主神 · 44 守护神</p>
       </div>
     </div>
 
@@ -1686,8 +2225,36 @@ body::before {
       <a class="shrine-btn" data-go="gallery">
         <span class="shrine-btn-glyph">册</span>
         <span>守 护 神 图 鉴</span>
-        <small>VIEW ALL · S/A/B/C</small>
+        <small>VIEW ALL · P/S/A/B/C</small>
       </a>
+      <a class="shrine-btn" data-go="lineage">
+        <span class="shrine-btn-glyph">谱</span>
+        <span>关 系 谱 系</span>
+        <small>RELATION MAP</small>
+      </a>
+    </div>
+
+    <div class="home-orbit">
+      <div class="orbit-card" style="--vc:#c8553d" data-glyph="核">
+        <b>核能 / 电力</b>
+        <span>OKLO · BWXT · UEC</span>
+        <small>数据中心电力、安全燃料与下一代供给约束。</small>
+      </div>
+      <div class="orbit-card" style="--vc:#5e8aa6" data-glyph="算">
+        <b>AI 基建</b>
+        <span>ALAB · NBIS · IREN</span>
+        <small>互联芯片、GPU 云、低成本电力机房。</small>
+      </div>
+      <div class="orbit-card" style="--vc:#7f6da6" data-glyph="光">
+        <b>光学 / 存储</b>
+        <span>COHR · MU · LITE</span>
+        <small>光模块、HBM、NAND 与集群内部数据流。</small>
+      </div>
+      <div class="orbit-card" style="--vc:#3d5a7d" data-glyph="防">
+        <b>太空 / 国防</b>
+        <span>RKLB · PLTR · ONDS</span>
+        <small>发射、情报 OS、无人系统与边缘决策。</small>
+      </div>
     </div>
 
     <div class="shrine-team">
@@ -1708,15 +2275,31 @@ body::before {
     </div>
   </section>
 
+  <!-- ═════════════ LINEAGE — 谱系 ═════════════ -->
+  <section class="page lineage" data-page="lineage">
+    <a class="scene-back" data-go="home">← 回神殿</a>
+    <section class="lineage-panel" id="lineagePanel" aria-label="守护神谱系关系图">
+      <div class="lineage-head">
+        <div>
+          <span class="lineage-kicker">RELATION MAP</span>
+          <h2 class="lineage-title">守 护 神 谱 系</h2>
+        </div>
+        <p class="lineage-note">主神在上, 分支为产业神系, 下层头像是对应赛道的守护神。点任意头像可查看人物卡。</p>
+      </div>
+      <div class="lineage-map" id="lineageMap"></div>
+    </section>
+  </section>
+
   <!-- ═════════════ GALLERY — 图鉴 ═════════════ -->
   <section class="page gallery" data-page="gallery">
     <a class="scene-back" data-go="home">← 回神殿</a>
     <header class="gallery-mast">
       <h2 class="gallery-h">守 护 神 图 鉴</h2>
-      <p class="gallery-sub">FUTURE GUARDIANS · 数据来自学习台 + stockanalysis.com</p>
+      <p class="gallery-sub">PANTHEON + FUTURE GUARDIANS · 主神级巨头 + 未来产业守护神</p>
     </header>
     <div class="tier-tabs" id="tierTabs">
-      <button class="tier-tab active" data-tier="S">S 级 · 核心阵容</button>
+      <button class="tier-tab active" data-tier="P">主神级 · Pantheon</button>
+      <button class="tier-tab" data-tier="S">S 级 · 核心阵容</button>
       <button class="tier-tab" data-tier="A">A 级 · 成长仓</button>
       <button class="tier-tab" data-tier="B">B 级 · 期权仓</button>
       <button class="tier-tab" data-tier="C">C 级 · 待观察</button>
@@ -1755,6 +2338,8 @@ body::before {
   </article>
 </div>
 
+<audio id="bgm" src="audio/moonlit-old-kingdom.mp3" loop preload="auto"></audio>
+
 <footer class="bar bot">
   <span>守护神殿 · FUTURE GUARDIAN SHRINE</span>
   <span id="crumb">// 神殿</span>
@@ -1762,7 +2347,73 @@ body::before {
 </footer>
 
 <script>
+// ───── 背景音乐: 浏览器会拦截无交互播放, 首次点击页面后启动 ─────
+const bgm = document.getElementById('bgm');
+const musicBtn = document.getElementById('musicBtn');
+bgm.volume = 0.42;
+let musicManuallyPaused = false;
+
+function updateMusicButton() {
+  musicBtn.textContent = bgm.paused ? '♪ 月光旧王城' : '♪ 播放中';
+  musicBtn.classList.toggle('playing', !bgm.paused);
+}
+
+async function playBgm() {
+  try {
+    await bgm.play();
+    musicManuallyPaused = false;
+  } catch {
+    musicBtn.textContent = '♪ 点击播放';
+  }
+  updateMusicButton();
+}
+
+function pauseBgm() {
+  bgm.pause();
+  musicManuallyPaused = true;
+  updateMusicButton();
+}
+
+musicBtn.addEventListener('pointerdown', e => e.stopPropagation());
+musicBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  if (bgm.paused) playBgm();
+  else pauseBgm();
+});
+window.addEventListener('pointerdown', () => {
+  if (bgm.paused && !musicManuallyPaused) playBgm();
+}, { once: true });
+bgm.addEventListener('play', updateMusicButton);
+bgm.addEventListener('pause', updateMusicButton);
+updateMusicButton();
+
 const NPCS = [
+  // ───────── P 级 / Pantheon 主神级 (8) ─────────
+  { tk:"NVDA", tier:"P", name:"辉冕", cn:"英伟达", glyph:"冕", color:"#6b8a3a", pot:99,
+    sector:"AI 芯片", target:"主神级", upside:"已定价", analysts:"AI King", role:"核心锚 3-8%",
+    line:"NVIDIA (NVDA). GPU + CUDA + 网络 + 系统级平台, 是 AI 时代最明确的算力王座。不是没有它, 而是它已经从守护神升格为主神。" },
+  { tk:"GOOGL", tier:"P", name:"穹索", cn:"谷歌 Alphabet", glyph:"索", color:"#5a7da0", pot:98,
+    sector:"AI / 搜索 / 云", target:"主神级", upside:"已定价", analysts:"AI Cloud", role:"核心锚 3-8%",
+    line:"Alphabet (GOOGL). Search 现金流、YouTube、Google Cloud、TPU 和 Waymo 同时在场。它不是单一赛道代理, 而是未来系统的底层索引。" },
+  { tk:"TSLA", tier:"P", name:"雷驭", cn:"特斯拉", glyph:"驭", color:"#b85a3a", pot:97,
+    sector:"自动驾驶 / 机器人 / 能源", target:"主神级", upside:"高分歧", analysts:"AI Mobility", role:"高波动核心 2-6%",
+    line:"Tesla (TSLA). 电动车只是外壳, FSD、机器人、能源网络才是 2030 叙事核心。分歧极大, 所以只适合有纪律地持有。" },
+  { tk:"MSFT", tier:"P", name:"执衡", cn:"微软", glyph:"衡", color:"#4a6b8a", pot:97,
+    sector:"企业 AI / 云", target:"主神级", upside:"稳态复利", analysts:"Enterprise AI", role:"核心锚 4-8%",
+    line:"Microsoft (MSFT). Azure、Office、GitHub、Copilot 把 AI 嵌进企业工作流。它不是最高弹性, 但可能是最稳的 AI 税收层。" },
+  { tk:"META", tier:"P", name:"镜域", cn:"Meta", glyph:"镜", color:"#5e8aa6", pot:96,
+    sector:"社交 AI / 眼镜", target:"主神级", upside:"平台重估", analysts:"AI Social", role:"核心仓 3-6%",
+    line:"Meta (META). 全球注意力网络 + 开源模型 + AI 眼镜入口。若下一代交互入口成立, 它会从广告平台变成感知平台。" },
+  { tk:"AVGO", tier:"P", name:"织主", cn:"博通", glyph:"织", color:"#8b6f47", pot:96,
+    sector:"ASIC / 网络", target:"主神级", upside:"卖铲复利", analysts:"AI ASIC", role:"核心仓 3-6%",
+    line:"Broadcom (AVGO). 定制 ASIC、网络芯片和 VMware 现金流叠加, 是 hyperscaler AI 基建的主神级卖铲人。" },
+  { tk:"TSM", tier:"P", name:"铸台", cn:"台积电", glyph:"铸", color:"#7a7a85", pot:96,
+    sector:"先进制程", target:"主神级", upside:"制造王座", analysts:"Foundry King", role:"核心锚 3-6%",
+    line:"TSMC (TSM). 先进制程的现实王座。NVDA、AMD、Apple、Broadcom 的很多神话, 最后都要落在它的晶圆厂里。" },
+  { tk:"ASML", tier:"P", name:"光刻圣匠", cn:"阿斯麦", glyph:"匠", color:"#7f6da6", pot:95,
+    sector:"EUV 光刻", target:"主神级", upside:"稀缺垄断", analysts:"EUV Gatekeeper", role:"核心仓 2-5%",
+    line:"ASML. EUV 光刻是先进制程的门。它不直接卖 AI, 但没有它, 很多 AI 芯片只能停在图纸上。" },
+
   // ───────── S 级 (10) ─────────
   { tk:"OKLO", tier:"S", name:"火堇", cn:"小堆", glyph:"火", color:"#c8553d", pot:93,
     sector:"核能", target:"$101.37", upside:"+47.36%", analysts:"16 Strong Buy", role:"成长仓 2-4%",
@@ -1905,6 +2556,14 @@ const NPCS = [
 ];
 // ───── 论点 + 风险 (源: 学习台 stock-learning data.ts) ─────
 const EXTRA = {
+  NVDA: { thesis:"AI 算力生态王座, CUDA、GPU、网络和整机系统形成复合护城河。", risk:"估值和预期极高, 任何 capex 放缓都会放大波动。", weight:"3%-8%" },
+  GOOGL:{ thesis:"搜索现金流 + TPU + 云 + Waymo, 是最综合的 AI 基础设施与入口资产。", risk:"搜索被 AI 交互改写、监管和云竞争是主要压力。", weight:"3%-8%" },
+  TSLA: { thesis:"自动驾驶、机器人和能源网络构成高分歧高上限叙事。", risk:"估值、执行、监管和周期都会极端放大波动。", weight:"2%-6%" },
+  MSFT: { thesis:"企业 AI 工作流和 Azure 把模型能力变成订阅与生产力税。", risk:"AI 投入回报周期、云竞争和监管压力需要跟踪。", weight:"4%-8%" },
+  META: { thesis:"注意力网络、开源模型和 AI 眼镜有机会重塑下一代交互入口。", risk:"广告周期、Reality Labs 投入和监管会影响估值。", weight:"3%-6%" },
+  AVGO: { thesis:"定制 ASIC、网络芯片和基础软件现金流组合, 是 AI 基建卖铲主神。", risk:"客户集中和并购整合后的估值压力要盯。", weight:"3%-6%" },
+  TSM:  { thesis:"先进制程制造王座, 承接多数顶级 AI 芯片的现实产能。", risk:"地缘政治、周期和客户集中是不可忽视的核心风险。", weight:"3%-6%" },
+  ASML: { thesis:"EUV 光刻稀缺垄断, 是先进制程的门槛资产。", risk:"出口限制、半导体 capex 周期和高基数增长压力。", weight:"2%-5%" },
   OKLO: { thesis:"先进核裂变与数据中心电力叙事高度同频, 是高赔率核能入口。", risk:"监管 + 首堆建设 + 收入兑现时间可能显著晚于市场预期。", weight:"2%-4%" },
   RKLB: { thesis:"发射 + 卫星平台 + 政府订单三线推进, 商业航天最清晰的上市代理。", risk:"估值会提前反映成功, 发射事故或订单延迟冲击大。", weight:"3%-5%" },
   COHR: { thesis:"光通信 + 激光 + SiC 多线共振, 光学链里更均衡的复合资产。", risk:"业务线复杂, 若 AI 光模块降温, 重估会拖累整体。", weight:"3%-5%" },
@@ -1957,16 +2616,60 @@ const loadSet = k => new Set(JSON.parse(localStorage.getItem(k) || '[]'));
 const saveSet = (k, s) => localStorage.setItem(k, JSON.stringify([...s]));
 let team = loadSet(TEAM_KEY), fav = loadSet(FAV_KEY);
 const findNpc = tk => NPCS.find(n => n.tk === tk);
+const MISSING_NPC_IMAGES = new Set();
+const hasPortraitImage = n => !MISSING_NPC_IMAGES.has(n.tk);
 
-// ───── 立绘背景: S 级用真图, 其他用纯色 + glyph ─────
+// ───── 立绘背景: 已落盘用真图, 缺图位临时用纯色 + glyph ─────
 function portraitBg(n) {
-  const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
-  return hasImg ? `background-image:url('images/npc-${n.tk}.png?v=2')` : '';
+  return hasPortraitImage(n) ? `background-image:url('images/npc-${n.tk}.png?v=6')` : '';
 }
+
+// ───── 首页谱系图: 主神 → 产业神系 → 守护神 ─────
+const LINEAGE = [
+  { title:"算力王座", glyph:"算", color:"#6b8a3a", parents:["NVDA","MSFT"], children:["ALAB","NBIS","IREN","CIFR","AMD","ARM"] },
+  { title:"数据神谕", glyph:"数", color:"#5a7da0", parents:["GOOGL","META"], children:["PLTR","AMZN","SYM"] },
+  { title:"光存储脉", glyph:"光", color:"#7f6da6", parents:["AVGO","TSM","ASML"], children:["COHR","MU","MRVL","AAOI","LITE","SNDK","WDC"] },
+  { title:"核能电力", glyph:"核", color:"#c8553d", parents:["TSLA"], children:["OKLO","BWXT","UEC","UUUU","BE","EOSE"] },
+  { title:"星海国防", glyph:"星", color:"#3d5a7d", parents:["RKLB","PLTR"], children:["FLY","ASTS","PL","ONDS","OSS","SATL"] },
+  { title:"材料量子", glyph:"材", color:"#8b6f47", parents:["ASML","TSM"], children:["USAR","MP","AXTI","IONQ","QBTS","RGTI","NVTS","MRAM","AMBQ","LWLG"] },
+];
+
+function lineageNode(tk, extraClass = '') {
+  const n = findNpc(tk);
+  if (!n) return '';
+  const hasImg = hasPortraitImage(n);
+  return `
+    <button class="lineage-node ${extraClass}" type="button" data-tk="${n.tk}" title="${n.tk} · ${n.cn}" style="--vc:${n.color}">
+      <span class="lineage-avatar" style="${portraitBg(n)}">${!hasImg ? `<span class="g-glyph">${n.glyph}</span>` : ''}</span>
+    </button>
+  `;
+}
+
+function renderLineage() {
+  const map = document.getElementById('lineageMap');
+  if (!map) return;
+  map.innerHTML = LINEAGE.map(g => `
+    <article class="lineage-clan" style="--vc:${g.color}" data-glyph="${g.glyph}">
+      <div class="lineage-pantheon">${g.parents.map(tk => lineageNode(tk, 'lineage-parent')).join('')}</div>
+      <div class="lineage-core">
+        <div>
+          <span class="lineage-core-title">${g.title}</span>
+          <span class="lineage-core-sub">${g.parents.join(' · ')}</span>
+        </div>
+      </div>
+      <div class="lineage-children">${g.children.map(tk => lineageNode(tk, 'lineage-child')).join('')}</div>
+      <div class="lineage-label">${g.children.join(' · ')}</div>
+    </article>
+  `).join('');
+  map.querySelectorAll('.lineage-node').forEach(btn => {
+    btn.onclick = () => openNpcModal(findNpc(btn.dataset.tk));
+  });
+}
+renderLineage();
 
 // ───── Gallery 渲染 (按 tier) ─────
 const guardiansRow = document.getElementById("guardiansRow");
-let currentTier = 'S';
+let currentTier = 'P';
 function renderGallery() {
   guardiansRow.innerHTML = '';
   const list = NPCS.filter(n => n.tier === currentTier);
@@ -1974,7 +2677,7 @@ function renderGallery() {
     const a = document.createElement("a");
     a.className = "guardian";
     a.style.setProperty("--vc", n.color);
-    const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+    const hasImg = hasPortraitImage(n);
     a.innerHTML = `
       <div class="guardian-portrait" data-tk="${n.tk}" style="${portraitBg(n)}">
         ${!hasImg ? `<div class="g-glyph">${n.glyph}</div>` : ''}
@@ -2022,9 +2725,9 @@ function renderTeam() {
     const upsides = teamNpcs.map(n => parseUpside(n.upside)).filter(x => x !== null);
     const avgUpside = upsides.length ? (upsides.reduce((a, b) => a + b, 0) / upsides.length) : 0;
     const sectors = [...new Set(teamNpcs.map(n => n.sector))];
-    const tierCount = { S: 0, A: 0, B: 0, C: 0 };
+    const tierCount = { P: 0, S: 0, A: 0, B: 0, C: 0 };
     teamNpcs.forEach(n => tierCount[n.tier]++);
-    const tierBadges = ['S','A','B','C'].filter(t => tierCount[t] > 0).map(t => `<span class="ts-tier" data-tier="${t}">⭐${t}×${tierCount[t]}</span>`).join('');
+    const tierBadges = ['P','S','A','B','C'].filter(t => tierCount[t] > 0).map(t => `<span class="ts-tier" data-tier="${t}">⭐${t}×${tierCount[t]}</span>`).join('');
     stats.innerHTML = `
       <div class="ts-row"><span class="ts-l">仓位</span><b class="ts-v">${totalWeight.toFixed(1)}%</b></div>
       <div class="ts-row"><span class="ts-l">均上行</span><b class="ts-v ${avgUpside > 0 ? 'pos' : avgUpside < 0 ? 'neg' : ''}">${avgUpside >= 0 ? '+' : ''}${avgUpside.toFixed(1)}%</b></div>
@@ -2044,7 +2747,7 @@ function renderTeam() {
     const a = document.createElement('a');
     a.className = 'team-slot';
     a.style.setProperty('--vc', n.color);
-    const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+    const hasImg = hasPortraitImage(n);
     a.innerHTML = `
       <div class="team-slot-portrait" style="${portraitBg(n)}">
         ${!hasImg ? `<div class="g-glyph">${n.glyph}</div>` : ''}
@@ -2070,7 +2773,7 @@ function renderFav() {
     const a = document.createElement('a');
     a.className = 'team-slot fav';
     a.style.setProperty('--vc', n.color);
-    const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+    const hasImg = hasPortraitImage(n);
     a.innerHTML = `
       <div class="team-slot-portrait" style="${portraitBg(n)}">
         ${!hasImg ? `<div class="g-glyph">${n.glyph}</div>` : ''}
@@ -2106,12 +2809,12 @@ document.getElementById('gachaBtn').onclick = () => {
   const front = document.getElementById('gachaFront');
   const card = document.getElementById('gachaCard');
   const hint = document.getElementById('gachaHint');
-  const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+  const hasImg = hasPortraitImage(n);
   front.style.setProperty('--vc', n.color);
   front.dataset.tier = n.tier;
   front.innerHTML = `
     <div class="gf-tier">⭐ ${n.tier}</div>
-    ${hasImg ? `<img src="images/npc-${n.tk}.png?v=2" class="gf-img">` : `<div class="gf-glyph">${n.glyph}</div>`}
+    ${hasImg ? `<img src="images/npc-${n.tk}.png?v=6" class="gf-img">` : `<div class="gf-glyph">${n.glyph}</div>`}
     <div class="gf-name">${n.name}</div>
     <div class="gf-tk">${n.tk} · ${n.cn}</div>
   `;
@@ -2142,7 +2845,8 @@ document.querySelectorAll('[data-go]').forEach(el => {
     const n = el.dataset.go;
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.querySelector(`.page[data-page="${n}"]`).classList.add('active');
-    document.getElementById('crumb').textContent = n === 'home' ? '// 神殿' : '// 图鉴';
+    const crumb = n === 'home' ? '// 神殿' : (n === 'lineage' ? '// 谱系' : '// 图鉴');
+    document.getElementById('crumb').textContent = crumb;
     window.scrollTo({ top: 0 });
   };
 });
@@ -2153,11 +2857,11 @@ const modalCard = document.getElementById('npcModalCard');
 let currentNpc = null;
 function openNpcModal(n) {
   currentNpc = n;
-  const hasImg = !["TE","BE","SERV","NVTS","AMBQ","LWLG","SATL","EOSE"].includes(n.tk);
+  const hasImg = hasPortraitImage(n);
   const port = document.getElementById('npcModalPortrait');
   const img = document.getElementById('npcModalImg');
   if (hasImg) {
-    img.src = `images/npc-${n.tk}.png?v=2`;
+    img.src = `images/npc-${n.tk}.png?v=6`;
     img.style.display = '';
     port.style.background = '';
     // 移除可能残留的 glyph
@@ -2178,7 +2882,7 @@ function openNpcModal(n) {
   document.getElementById('npcModalTier').textContent = `⭐ ${n.tier}`;
   document.getElementById('npcModalTier').dataset.tier = n.tier;
   document.getElementById('npcModalH').innerHTML = `${n.name} <small>${n.tk} · ${n.cn}</small>`;
-  document.getElementById('npcModalQuote').textContent = `「${n.line}」`;
+  document.getElementById('npcModalQuote').textContent = n.line;
   const ex = EXTRA[n.tk] || { thesis:"—", risk:"—", weight: n.role };
   document.getElementById('npcModalThesis').textContent = ex.thesis;
   document.getElementById('npcModalRisk').textContent = ex.risk;

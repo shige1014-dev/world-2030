@@ -1,0 +1,41 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]: WORLD · 2030 — 守护神殿
+    - generic [ref=e4]: 44 位守护神 · S/A/B/C 4 级
+    - generic [ref=e5]: 数据 2026.05 · 学习台
+  - generic [ref=e6]:
+    - text: 核 算 光 防
+    - generic [ref=e73]:
+      - generic [ref=e74] [cursor=pointer]: ← 回神殿
+      - generic [ref=e75]:
+        - heading "守 护 神 图 鉴" [level=2] [ref=e76]
+        - paragraph [ref=e77]: FUTURE GUARDIANS · 数据来自学习台 + stockanalysis.com
+      - generic [ref=e78]:
+        - button "S 级 · 核心阵容" [ref=e79] [cursor=pointer]
+        - button "A 级 · 成长仓" [ref=e80] [cursor=pointer]
+        - button "B 级 · 期权仓" [ref=e81] [cursor=pointer]
+        - button "C 级 · 待观察" [active] [ref=e82] [cursor=pointer]
+      - generic [ref=e83]:
+        - generic [ref=e204] [cursor=pointer]:
+          - generic [ref=e205]:
+            - generic [ref=e206]: ⭐C
+            - text: LWLG
+          - generic [ref=e207]: 聚光
+          - generic [ref=e208]: Lightwave Logic 聚合物光子
+        - generic [ref=e209] [cursor=pointer]:
+          - generic [ref=e210]:
+            - generic [ref=e211]: ⭐C
+            - text: SATL
+          - generic [ref=e212]: 瞭微
+          - generic [ref=e213]: Satellogic
+        - generic [ref=e214] [cursor=pointer]:
+          - generic [ref=e215]:
+            - generic [ref=e216]: ⭐C
+            - text: EOSE
+          - generic [ref=e217]: 锌岩
+          - generic [ref=e218]: Eos 长时储能
+  - text: 「
+  - contentinfo [ref=e69]:
+    - generic [ref=e70]: 守护神殿 · FUTURE GUARDIAN SHRINE
+    - generic [ref=e71]: // 图鉴
+    - generic [ref=e72]: Esc 关闭弹窗

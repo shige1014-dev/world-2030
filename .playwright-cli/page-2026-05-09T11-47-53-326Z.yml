@@ -1,0 +1,107 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]: WORLD · 2030 — 守护神殿
+    - generic [ref=e4]: 44 位守护神 · S/A/B/C 4 级
+    - generic [ref=e5]: 数据 2026.05 · 学习台
+  - generic [ref=e6]:
+    - text: 核 算 光 防
+    - generic [ref=e73]:
+      - generic [ref=e74] [cursor=pointer]: ← 回神殿
+      - generic [ref=e75]:
+        - heading "守 护 神 图 鉴" [level=2] [ref=e76]
+        - paragraph [ref=e77]: FUTURE GUARDIANS · 数据来自学习台 + stockanalysis.com
+      - generic [ref=e78]:
+        - button "S 级 · 核心阵容" [ref=e79] [cursor=pointer]
+        - button "A 级 · 成长仓" [ref=e80] [cursor=pointer]
+        - button "B 级 · 期权仓" [active] [ref=e81] [cursor=pointer]
+        - button "C 级 · 待观察" [ref=e82] [cursor=pointer]
+      - generic [ref=e83]:
+        - generic [ref=e134] [cursor=pointer]:
+          - generic [ref=e135]:
+            - generic [ref=e136]: ⭐B
+            - text: AXTI
+          - generic [ref=e137]: 砷晶
+          - generic [ref=e138]: AXT 化合物衬底
+        - generic [ref=e139] [cursor=pointer]:
+          - generic [ref=e140]:
+            - generic [ref=e141]: ⭐B
+            - text: ALB
+          - generic [ref=e142]: 锂霸
+          - generic [ref=e143]: 雅宝
+        - generic [ref=e144] [cursor=pointer]:
+          - generic [ref=e145]:
+            - generic [ref=e146]: ⭐B
+            - text: UAMY
+          - generic [ref=e147]: 锑络
+          - generic [ref=e148]: 美国锑业
+        - generic [ref=e149] [cursor=pointer]:
+          - generic [ref=e150]:
+            - generic [ref=e151]: ⭐B
+            - text: MRAM
+          - generic [ref=e152]: 非散
+          - generic [ref=e153]: Everspin MRAM
+        - generic [ref=e154] [cursor=pointer]:
+          - generic [ref=e155]:
+            - generic [ref=e156]: ⭐B
+            - text: OSS
+          - generic [ref=e157]: 边算
+          - generic [ref=e158]: OSS 边缘算力
+        - generic [ref=e159] [cursor=pointer]:
+          - generic [ref=e160]:
+            - generic [ref=e161]: ⭐B
+            - text: QBTS
+          - generic [ref=e162]: 退火
+          - generic [ref=e163]: D-Wave 量子退火
+        - generic [ref=e164] [cursor=pointer]:
+          - generic [ref=e165]:
+            - generic [ref=e166]: ⭐B
+            - text: RGTI
+          - generic [ref=e167]: 超导
+          - generic [ref=e168]: Rigetti 超导量子
+        - generic [ref=e169] [cursor=pointer]:
+          - generic [ref=e170]:
+            - generic [ref=e171]: ⭐B
+            - text: PL
+          - generic [ref=e172]: 瞳观
+          - generic [ref=e173]: Planet Labs
+        - generic [ref=e174] [cursor=pointer]:
+          - generic [ref=e175]:
+            - generic [ref=e176]: ⭐B
+            - text: AMPX
+          - generic [ref=e177]: 硅锂
+          - generic [ref=e178]: Amprius 高能电池
+        - generic [ref=e179] [cursor=pointer]:
+          - generic [ref=e180]:
+            - generic [ref=e181]: ⭐B
+            - text: TE
+          - generic [ref=e182]: 日泽
+          - generic [ref=e183]: T1 Energy
+        - generic [ref=e184] [cursor=pointer]:
+          - generic [ref=e185]:
+            - generic [ref=e186]: ⭐B
+            - text: BE
+          - generic [ref=e187]: 氢芯
+          - generic [ref=e188]: Bloom Energy
+        - generic [ref=e189] [cursor=pointer]:
+          - generic [ref=e190]:
+            - generic [ref=e191]: ⭐B
+            - text: SERV
+          - generic [ref=e192]: 地配
+          - generic [ref=e193]: Serve 配送机器人
+        - generic [ref=e194] [cursor=pointer]:
+          - generic [ref=e195]:
+            - generic [ref=e196]: ⭐B
+            - text: NVTS
+          - generic [ref=e197]: 氮镓
+          - generic [ref=e198]: Navitas 氮化镓
+        - generic [ref=e199] [cursor=pointer]:
+          - generic [ref=e200]:
+            - generic [ref=e201]: ⭐B
+            - text: AMBQ
+          - generic [ref=e202]: 低耗
+          - generic [ref=e203]: Ambiq 低功耗芯片
+  - text: 「
+  - contentinfo [ref=e69]:
+    - generic [ref=e70]: 守护神殿 · FUTURE GUARDIAN SHRINE
+    - generic [ref=e71]: // 图鉴
+    - generic [ref=e72]: Esc 关闭弹窗

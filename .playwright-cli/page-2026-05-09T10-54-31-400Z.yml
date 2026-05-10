@@ -1,0 +1,36 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]: WORLD · 2030 — 守护神殿
+    - generic [ref=e4]: 44 位守护神 · S/A/B/C 4 级
+    - generic [ref=e5]: 数据 2026.05 · 学习台
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: 殿
+        - heading "未 来 · 守 护 神 殿" [level=1] [ref=e13]
+        - paragraph [ref=e14]: FUTURE GUARDIAN SHRINE · 44 位守护神 · 4 个等级
+      - generic [ref=e15]:
+        - button "召 抽 一 张 RANDOM PULL" [ref=e16] [cursor=pointer]:
+          - generic [ref=e17]: 召
+          - generic [ref=e18]: 抽 一 张
+          - generic [ref=e19]: RANDOM PULL
+        - generic [ref=e20] [cursor=pointer]:
+          - generic [ref=e21]: 册
+          - generic [ref=e22]: 守 护 神 图 鉴
+          - generic [ref=e23]: VIEW ALL · S/A/B/C
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - generic [ref=e26]: 我 的 队 伍
+          - generic [ref=e27]: 0 / 6
+        - generic [ref=e29]: 空。点抽卡或进图鉴, 选守护神加入队伍。
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]: 我 的 收 藏
+          - generic [ref=e33]: "0"
+        - generic [ref=e35]: 空。卡片点 ★ 收藏后出现这里。
+    - text: OKLO RKLB COHR MU NBIS PLTR ALAB MRVL BWXT AMZN
+  - text: 「
+  - contentinfo [ref=e36]:
+    - generic [ref=e37]: 守护神殿 · FUTURE GUARDIAN SHRINE
+    - generic [ref=e38]: // 神殿
+    - generic [ref=e39]: Esc 关闭弹窗

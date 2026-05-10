@@ -1,0 +1,59 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]: WORLD · 2030 — 守护神殿
+    - generic [ref=e4]: 44 位守护神 · S/A/B/C 4 级
+    - generic [ref=e5]: 数据 2026.05 · 学习台
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e13]: ✦ ✦
+        - generic: 殿
+        - generic [ref=e17]:
+          - heading "未 来 · 守 护 神 殿" [level=1] [ref=e18]
+          - paragraph [ref=e19]: FUTURE GUARDIAN SHRINE · 44 位守护神 · 4 个等级
+      - generic [ref=e20]:
+        - button "召 抽 一 张 RANDOM PULL" [ref=e21] [cursor=pointer]:
+          - generic [ref=e22]: 召
+          - generic [ref=e23]: 抽 一 张
+          - generic [ref=e24]: RANDOM PULL
+        - generic [ref=e25] [cursor=pointer]:
+          - generic [ref=e26]: 册
+          - generic [ref=e27]: 守 护 神 图 鉴
+          - generic [ref=e28]: VIEW ALL · S/A/B/C
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - generic [ref=e31]: 核能 / 电力
+          - generic [ref=e32]: OKLO · BWXT · UEC
+          - generic [ref=e33]: 数据中心电力、安全燃料与下一代供给约束。
+          - text: 核
+        - generic [ref=e34]:
+          - generic [ref=e35]: AI 基建
+          - generic [ref=e36]: ALAB · NBIS · IREN
+          - generic [ref=e37]: 互联芯片、GPU 云、低成本电力机房。
+          - text: 算
+        - generic [ref=e38]:
+          - generic [ref=e39]: 光学 / 存储
+          - generic [ref=e40]: COHR · MU · LITE
+          - generic [ref=e41]: 光模块、HBM、NAND 与集群内部数据流。
+          - text: 光
+        - generic [ref=e42]:
+          - generic [ref=e43]: 太空 / 国防
+          - generic [ref=e44]: RKLB · PLTR · ONDS
+          - generic [ref=e45]: 发射、情报 OS、无人系统与边缘决策。
+          - text: 防
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - generic [ref=e48]: 我 的 队 伍
+          - generic [ref=e49]: 0 / 6
+        - generic [ref=e51]: 空。点抽卡或进图鉴, 选守护神加入队伍。
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]: 我 的 收 藏
+          - generic [ref=e55]: "0"
+        - generic [ref=e57]: 空。卡片点 ★ 收藏后出现这里。
+    - text: OKLO RKLB COHR MU NBIS PLTR ALAB MRVL BWXT AMZN
+  - text: 「
+  - contentinfo [ref=e58]:
+    - generic [ref=e59]: 守护神殿 · FUTURE GUARDIAN SHRINE
+    - generic [ref=e60]: // 神殿
+    - generic [ref=e61]: Esc 关闭弹窗
