@@ -2398,7 +2398,8 @@ body::before {
       </div>
       <div class="npc-modal-meta" id="npcModalMeta"></div>
       <div class="npc-meta-foot">
-        <a class="npc-source" id="npcModalSource" target="_blank" rel="noopener">↗ stockanalysis.com 查最新评级</a>
+        <a class="npc-source" id="npcModalSourceCN" target="_blank" rel="noopener">↗ 雪球 中文评级</a>
+        <a class="npc-source" id="npcModalSource" target="_blank" rel="noopener">↗ stockanalysis 英文</a>
         <span class="npc-data-stamp">数据 2026.05 · 学习台</span>
       </div>
       <div class="npc-modal-actions">
@@ -2966,6 +2967,7 @@ function openNpcModal(n) {
   document.getElementById('npcModalThesis').textContent = ex.thesis;
   document.getElementById('npcModalRisk').textContent = ex.risk;
   document.getElementById('npcModalSource').href = `https://stockanalysis.com/stocks/${n.tk.toLowerCase()}/ratings/`;
+  document.getElementById('npcModalSourceCN').href = `https://xueqiu.com/S/${n.tk}`;
   const upClass = n.upside.startsWith('+') ? 'pos' : n.upside.startsWith('-') ? 'neg' : '';
   document.getElementById('npcModalMeta').innerHTML = `
     <div class="npc-modal-meta-row"><span class="npc-modal-meta-l">代码</span><b class="npc-modal-meta-v">${n.tk}</b></div>
