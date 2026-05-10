@@ -2178,6 +2178,41 @@ body::before {
   text-align: right;
   margin-top: 6px;
 }
+/* 人物志 */
+.npc-lore {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line-2);
+}
+.npc-lore-title {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.32em;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 10px;
+}
+.npc-lore-row {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 10px;
+  align-items: start;
+  padding: 8px 0;
+  border-bottom: 1px dotted rgba(0,0,0,0.08);
+}
+.npc-lore-row:last-child { border-bottom: 0; }
+.npc-lore-l {
+  font-family: "STSong", serif;
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.2em;
+  color: var(--bronze);
+  padding-top: 2px;
+}
+.npc-lore-v {
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 12px; line-height: 1.7;
+  color: var(--ink);
+  margin: 0;
+}
 @media (max-width: 760px) {
   .npc-detail-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
 }
@@ -2524,6 +2559,7 @@ body::before {
       </div>
       <div class="npc-detail-panel" id="npcDetailPanel">
         <div class="npc-detail-grid" id="npcDetailGrid"></div>
+        <div class="npc-lore" id="npcLore"></div>
         <div class="npc-detail-stamp" id="npcDetailStamp"></div>
       </div>
     </div>
@@ -3172,7 +3208,9 @@ document.getElementById('npcModalFav').addEventListener('click', () => {
 
 // ═══ 详情抽屉 ═══
 let STOCKS = { stocks: {}, updated: null };
+let LORE = { lore: {}, updated: null };
 fetch('stocks.json').then(r => r.json()).then(d => { STOCKS = d; }).catch(() => {});
+fetch('lore.json').then(r => r.json()).then(d => { LORE = d; }).catch(() => {});
 
 function fmtNum(v, prefix = '', suffix = '') {
   if (v == null || v === undefined) return '—';
@@ -3209,6 +3247,16 @@ function renderDetail(n) {
     `<div class="npc-d-cell"><span class="npc-d-l">${l}</span><b class="npc-d-v ${cls}">${v}</b></div>`
   ).join('');
   stamp.textContent = `数据 ${STOCKS.updated || '?'} · yfinance`;
+  // 人物志
+  const loreEl = document.getElementById('npcLore');
+  const lr = LORE.lore[n.tk];
+  if (lr) {
+    const sections = ['出身', '征战', '宿敌', '宿命', '关键节点'];
+    loreEl.innerHTML = `<div class="npc-lore-title">— 人 物 志 —</div>` +
+      sections.map(k => `<div class="npc-lore-row"><span class="npc-lore-l">${k}</span><p class="npc-lore-v">${lr[k] || '—'}</p></div>`).join('');
+  } else {
+    loreEl.innerHTML = '';
+  }
 }
 document.getElementById('npcModalDetailBtn').addEventListener('click', () => {
   const panel = document.getElementById('npcDetailPanel');
