@@ -2137,6 +2137,50 @@ body::before {
   border: 1.5px solid var(--gold-leaf);
   color: var(--gold-leaf);
 }
+.npc-btn.detail {
+  background: transparent;
+  border: 1.5px dashed var(--bronze);
+  color: var(--bronze);
+}
+.npc-btn.detail:hover { background: var(--bronze); color: var(--paper); border-style: solid; }
+.npc-detail-panel {
+  display: none;
+  margin-top: 12px;
+  padding: 14px 16px;
+  background: var(--paper-warm);
+  border: 1px solid var(--line-2);
+  border-radius: 10px;
+  border-left: 3px solid var(--bronze);
+}
+.npc-detail-panel.open { display: block; animation: fadeIn 0.18s ease; }
+.npc-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px 14px;
+  margin-bottom: 8px;
+}
+.npc-d-cell {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.npc-d-l { font-family: "Iowan Old Style","STSong",serif; font-size: 9px; letter-spacing: 0.18em; color: var(--ink-mute); text-transform: uppercase; }
+.npc-d-v { font-family: "IBM Plex Mono", monospace; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: 0.02em; }
+.npc-d-v.pos { color: var(--jade); }
+.npc-d-v.neg { color: var(--accent); }
+.npc-d-v.muted { color: var(--ink-mute); }
+.npc-detail-stamp {
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 9px; letter-spacing: 0.16em;
+  color: var(--ink-mute);
+  text-align: right;
+  margin-top: 6px;
+}
+@media (max-width: 760px) {
+  .npc-detail-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+}
 .npc-btn.fav:hover {
   background: var(--gold-leaf); color: var(--paper);
 }
@@ -2476,6 +2520,11 @@ body::before {
         <button class="npc-btn" id="npcModalClose">退下</button>
         <button class="npc-btn primary" id="npcModalAlly">加入队伍</button>
         <button class="npc-btn fav" id="npcModalFav">★ 收藏</button>
+        <button class="npc-btn detail" id="npcModalDetailBtn">▼ 详情</button>
+      </div>
+      <div class="npc-detail-panel" id="npcDetailPanel">
+        <div class="npc-detail-grid" id="npcDetailGrid"></div>
+        <div class="npc-detail-stamp" id="npcDetailStamp"></div>
       </div>
     </div>
   </article>
@@ -3099,6 +3148,10 @@ function openNpcModal(n) {
   document.getElementById('npcModalAlly').textContent = team.has(n.tk) ? '✓ 移出队伍' : (team.size >= TEAM_MAX ? '队伍已满' : '加入队伍');
   document.getElementById('npcModalAlly').disabled = !team.has(n.tk) && team.size >= TEAM_MAX;
   document.getElementById('npcModalFav').textContent = fav.has(n.tk) ? '★ 已收藏' : '★ 收藏';
+  // 重置详情抽屉
+  const panel = document.getElementById('npcDetailPanel');
+  const detailBtn = document.getElementById('npcModalDetailBtn');
+  if (panel) { panel.classList.remove('open'); detailBtn.textContent = '▼ 详情'; }
   modal.classList.add('open');
 }
 function closeNpcModal() { modal.classList.remove('open'); }
@@ -3116,6 +3169,55 @@ document.getElementById('npcModalFav').addEventListener('click', () => {
   if (fav.has(tk)) fav.delete(tk); else fav.add(tk);
   saveSet(FAV_KEY, fav); renderFav(); openNpcModal(currentNpc);
 });
+
+// ═══ 详情抽屉 ═══
+let STOCKS = { stocks: {}, updated: null };
+fetch('stocks.json').then(r => r.json()).then(d => { STOCKS = d; }).catch(() => {});
+
+function fmtNum(v, prefix = '', suffix = '') {
+  if (v == null || v === undefined) return '—';
+  return `${prefix}${v}${suffix}`;
+}
+function cellClass(v, posIfPos = true) {
+  if (v == null) return 'muted';
+  return v > 0 ? (posIfPos ? 'pos' : 'neg') : v < 0 ? (posIfPos ? 'neg' : 'pos') : '';
+}
+function renderDetail(n) {
+  const grid = document.getElementById('npcDetailGrid');
+  const stamp = document.getElementById('npcDetailStamp');
+  const d = STOCKS.stocks[n.tk];
+  if (!d) {
+    grid.innerHTML = '<div class="npc-d-cell"><span class="npc-d-l">数据</span><b class="npc-d-v muted">未拉取</b></div>';
+    stamp.textContent = '';
+    return;
+  }
+  const fields = [
+    ['现价',   `$${d.price}`,                                                    ''],
+    ['日变',   `${d.change_1d_pct >= 0 ? '+' : ''}${d.change_1d_pct}%`,           cellClass(d.change_1d_pct)],
+    ['3 月变', `${d.change_3m_pct >= 0 ? '+' : ''}${d.change_3m_pct}%`,           cellClass(d.change_3m_pct)],
+    ['距 ATH', d.from_high_pct == null ? '—' : `${d.from_high_pct}%`,             cellClass(d.from_high_pct, false)],
+    ['距 52L', d.from_low_pct == null ? '—' : `+${d.from_low_pct}%`,              ''],
+    ['市值',   d.market_cap_b == null ? '—' : `$${d.market_cap_b}B`,              ''],
+    ['PE TTM', d.pe_ttm == null ? '—' : d.pe_ttm,                                 d.pe_ttm > 50 ? 'neg' : ''],
+    ['PE Fwd', d.pe_fwd == null ? '—' : d.pe_fwd,                                 d.pe_fwd > 30 ? 'neg' : ''],
+    ['P/S',    d.ps == null ? '—' : d.ps,                                         d.ps > 10 ? 'neg' : ''],
+    ['股息率', d.div_yield_pct == null ? '—' : `${d.div_yield_pct}%`,             ''],
+    ['Beta',   d.beta == null ? '—' : d.beta,                                     ''],
+    ['共识',   d.rec || '—',                                                       ''],
+  ];
+  grid.innerHTML = fields.map(([l, v, cls]) =>
+    `<div class="npc-d-cell"><span class="npc-d-l">${l}</span><b class="npc-d-v ${cls}">${v}</b></div>`
+  ).join('');
+  stamp.textContent = `数据 ${STOCKS.updated || '?'} · yfinance`;
+}
+document.getElementById('npcModalDetailBtn').addEventListener('click', () => {
+  const panel = document.getElementById('npcDetailPanel');
+  const btn = document.getElementById('npcModalDetailBtn');
+  const open = panel.classList.toggle('open');
+  if (open) { renderDetail(currentNpc); btn.textContent = '▲ 收起'; }
+  else { btn.textContent = '▼ 详情'; }
+});
+
 modal.addEventListener('click', e => { if (e.target === modal) closeNpcModal(); });
 
 // ═══ Lightbox 大图 ═══
