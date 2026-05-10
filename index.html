@@ -2264,6 +2264,7 @@ body::before {
   <span><b>8</b> 位主神 · <b>44</b> 位守护神 · <b>P</b>/<b>S</b>/<b>A</b>/<b>B</b>/<b>C</b></span>
   <span id="now">数据 <b>2026.05</b> · 学习台</span>
   <button class="music-toggle" id="musicBtn" type="button">♪ 月光旧王城</button>
+  <button class="music-next" id="musicNext" type="button" title="下一首">⏭</button>
 </header>
 
 <div class="app">
@@ -2418,7 +2419,7 @@ body::before {
   <button class="lightbox-close" id="lightboxClose">×</button>
 </div>
 
-<audio id="bgm" src="audio/moonlit-old-kingdom.mp3" loop preload="auto"></audio>
+<audio id="bgm" preload="auto"></audio>
 
 <footer class="bar bot">
   <span>守护神殿 · FUTURE GUARDIAN SHRINE</span>
@@ -2427,14 +2428,32 @@ body::before {
 </footer>
 
 <script>
-// ───── 背景音乐: 浏览器会拦截无交互播放, 首次点击页面后启动 ─────
+// ───── 背景音乐 playlist ─────
+const TRACKS = [
+  { file: 'moonlit-old-kingdom.mp3',       name: '月光旧王城' },
+  { file: 'crystal-clocktower-mantra.mp3', name: '水晶钟塔诀 (英)' },
+  { file: 'crystal-clocktower-cn.mp3',     name: '水晶钟塔诀' },
+  { file: 'moon-slowly-falls.mp3',         name: '月呀慢落' },
+  { file: 'still-you.mp3',                 name: '아직도 너를' },
+  { file: 'slowly-i-love-you.mp3',         name: '천천히 좋아해' },
+];
 const bgm = document.getElementById('bgm');
 const musicBtn = document.getElementById('musicBtn');
+const musicNext = document.getElementById('musicNext');
 bgm.volume = 0.42;
+let currentIdx = 0;
 let musicManuallyPaused = false;
 
+function loadTrack(i, autoplay = true) {
+  currentIdx = (i + TRACKS.length) % TRACKS.length;
+  bgm.src = `audio/${TRACKS[currentIdx].file}`;
+  if (autoplay) playBgm();
+  else updateMusicButton();
+}
+
 function updateMusicButton() {
-  musicBtn.textContent = bgm.paused ? '♪ 月光旧王城' : '♪ 播放中';
+  const cur = TRACKS[currentIdx].name;
+  musicBtn.textContent = bgm.paused ? `♪ ${cur}` : `♪ ${cur} · 播放中`;
   musicBtn.classList.toggle('playing', !bgm.paused);
 }
 
@@ -2443,7 +2462,7 @@ async function playBgm() {
     await bgm.play();
     musicManuallyPaused = false;
   } catch {
-    musicBtn.textContent = '♪ 点击播放';
+    musicBtn.textContent = `♪ ${TRACKS[currentIdx].name} · 点击播放`;
   }
   updateMusicButton();
 }
@@ -2454,18 +2473,25 @@ function pauseBgm() {
   updateMusicButton();
 }
 
+function nextTrack() {
+  loadTrack(currentIdx + 1, !musicManuallyPaused);
+}
+
 musicBtn.addEventListener('pointerdown', e => e.stopPropagation());
 musicBtn.addEventListener('click', e => {
   e.stopPropagation();
   if (bgm.paused) playBgm();
   else pauseBgm();
 });
+musicNext.addEventListener('pointerdown', e => e.stopPropagation());
+musicNext.addEventListener('click', e => { e.stopPropagation(); nextTrack(); });
 window.addEventListener('pointerdown', () => {
   if (bgm.paused && !musicManuallyPaused) playBgm();
 }, { once: true });
+bgm.addEventListener('ended', nextTrack);
 bgm.addEventListener('play', updateMusicButton);
 bgm.addEventListener('pause', updateMusicButton);
-updateMusicButton();
+loadTrack(0, false);
 
 const NPCS = [
   // ───────── P 级 / Pantheon 主神级 (8) ─────────
