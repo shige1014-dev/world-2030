@@ -2120,10 +2120,21 @@ body::before {
   .shrine-stamp { width: 44px; height: 44px; font-size: 22px; }
   .shrine-h { font-size: 22px; letter-spacing: 0.12em; }
   .shrine-sub { font-size: 9px; letter-spacing: 0.2em; }
-  .shrine-actions { gap: 12px; }
-  .shrine-btn { padding: 10px 20px; }
-  .shrine-btn span:nth-child(2) { font-size: 13px; letter-spacing: 0.1em; }
-  .shrine-btn small { font-size: 8px; letter-spacing: 0.22em; }
+  .shrine-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: -34px 8px 18px;
+  }
+  .shrine-btn {
+    padding: 10px 6px;
+    border-radius: 10px;
+    flex: none;
+    width: 100%;
+  }
+  .shrine-btn-glyph { font-size: 18px; margin-bottom: 0; }
+  .shrine-btn span:nth-child(2) { font-size: 11px; letter-spacing: 0.05em; }
+  .shrine-btn small { font-size: 7px; letter-spacing: 0.16em; }
   .team-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .team-row.fav-row { grid-template-columns: repeat(4, 1fr); }
   .home-orbit { grid-template-columns: 1fr; gap: 8px; }
@@ -2158,8 +2169,8 @@ body::before {
   .lineage-label { grid-column: 1 / -1; margin-top: 4px; text-align: left; }
   .tier-tab { padding: 6px 12px; font-size: 10px; letter-spacing: 0.08em; }
   .tier-tabs { gap: 6px; padding: 8px 10px; }
-  .guardians-row { grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 14px 12px; }
-  .guardian-name { font-size: 13px; }
+  .guardians-row { grid-template-columns: repeat(2, 1fr); gap: 14px; padding: 16px 14px; }
+  .guardian-name { font-size: 15px; }
   .guardian-cn { font-size: 9px; }
   .gallery-h { font-size: 22px; letter-spacing: 0.1em; }
   .npc-modal-card { grid-template-columns: 1fr; max-height: none; }
