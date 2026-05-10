@@ -1364,18 +1364,17 @@ body::before {
   z-index: 4;
 }
 .shrine-btn {
-  display: inline-flex; flex-direction: column;
-  align-items: center; gap: 2px;
+  display: inline-flex; align-items: center; gap: 12px;
   padding: 14px 32px;
   background: var(--paper-warm);
   border: 1.5px solid var(--line);
-  border-radius: 12px;
+  border-radius: 99px;
   cursor: pointer;
   text-decoration: none;
   color: var(--ink);
   font-family: inherit;
   transition: all 0.18s ease;
-  box-shadow: 0 3px 0 var(--paper-shadow);
+  box-shadow: 0 2px 0 var(--paper-shadow);
 }
 .shrine-btn:hover {
   transform: translateY(-2px);
@@ -1389,23 +1388,19 @@ body::before {
 }
 .shrine-btn-glyph {
   font-family: "STSong", serif;
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 700;
   color: var(--accent);
-  margin-bottom: 2px;
 }
 .shrine-btn span:nth-child(2) {
   font-family: "Iowan Old Style", "STSong", serif;
   font-size: 16px;
   font-weight: 700;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   color: var(--ink);
 }
 .shrine-btn small {
-  font-family: "IBM Plex Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 0.32em;
-  color: var(--accent);
+  display: none;
   text-transform: uppercase;
   margin-top: 3px;
 }
@@ -2127,14 +2122,16 @@ body::before {
     margin: -34px 8px 18px;
   }
   .shrine-btn {
-    padding: 10px 6px;
-    border-radius: 10px;
+    padding: 6px 4px;
+    border-radius: 99px;
     flex: none;
     width: 100%;
+    gap: 4px;
+    justify-content: center;
   }
-  .shrine-btn-glyph { font-size: 18px; margin-bottom: 0; }
-  .shrine-btn span:nth-child(2) { font-size: 11px; letter-spacing: 0.05em; }
-  .shrine-btn small { font-size: 7px; letter-spacing: 0.16em; }
+  .shrine-btn-glyph { font-size: 12px; }
+  .shrine-btn span:nth-child(2) { font-size: 10px; letter-spacing: 0.04em; }
+  .shrine-btn small { display: none; }
   .team-row { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .team-row.fav-row { grid-template-columns: repeat(4, 1fr); }
   .home-orbit { grid-template-columns: 1fr; gap: 8px; }
@@ -2195,6 +2192,69 @@ body::before {
   .npc-modal-actions { flex-wrap: wrap; }
   .npc-btn { flex: 1 1 calc(50% - 6px); }
 }
+
+/* ═══ Lightbox 大图 ═══ */
+.npc-modal-portrait { cursor: zoom-in; }
+.portrait-zoom-hint {
+  position: absolute;
+  bottom: 8px; right: 8px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 10px; letter-spacing: 0.1em;
+  background: rgba(58, 40, 24, 0.85);
+  color: var(--paper-warm);
+  padding: 4px 8px;
+  border-radius: 6px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.lightbox {
+  position: fixed; inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center; justify-content: center;
+  background: rgba(20, 12, 8, 0.94);
+  backdrop-filter: blur(8px);
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; animation: fadeIn 0.18s ease; }
+.lightbox img {
+  max-width: 92vw;
+  max-height: 88vh;
+  object-fit: contain;
+  border: 2px solid var(--gold-leaf);
+  border-radius: 12px;
+  box-shadow: 0 12px 60px rgba(0,0,0,0.6), 0 0 80px rgba(255, 216, 107, 0.2);
+}
+.lightbox-caption {
+  position: absolute;
+  bottom: 32px;
+  left: 50%; transform: translateX(-50%);
+  font-family: "Iowan Old Style", "STSong", serif;
+  font-size: 16px; letter-spacing: 0.2em;
+  color: var(--gold-leaf);
+  background: rgba(58, 40, 24, 0.85);
+  padding: 8px 18px;
+  border-radius: 99px;
+  border: 1px solid var(--gold-leaf);
+  pointer-events: none;
+}
+.lightbox-close {
+  position: absolute;
+  top: 18px; right: 18px;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  background: rgba(58, 40, 24, 0.85);
+  border: 1.5px solid var(--gold-leaf);
+  border-radius: 50%;
+  color: var(--gold-leaf);
+  font-size: 24px;
+  cursor: pointer;
+  font-family: serif;
+  line-height: 1;
+  transition: all 0.18s ease;
+}
+.lightbox-close:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
 </style>
 </head>
 <body>
@@ -2324,8 +2384,9 @@ body::before {
 <div class="npc-modal" id="npcModal">
   <article class="npc-modal-card" id="npcModalCard">
     <div class="tier-badge" id="npcModalTier">⭐ S</div>
-    <div class="npc-modal-portrait" id="npcModalPortrait" data-name="">
+    <div class="npc-modal-portrait" id="npcModalPortrait" data-name="" title="点击看大图">
       <img id="npcModalImg" alt="">
+      <div class="portrait-zoom-hint">🔍 点击放大</div>
     </div>
     <div class="npc-modal-body">
       <div class="npc-modal-tag" id="npcModalTag">— 守护神 · 自我介绍 —</div>
@@ -2347,6 +2408,13 @@ body::before {
       </div>
     </div>
   </article>
+</div>
+
+<!-- 大图 lightbox -->
+<div class="lightbox" id="lightbox">
+  <img id="lightboxImg" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+  <button class="lightbox-close" id="lightboxClose">×</button>
 </div>
 
 <audio id="bgm" src="audio/moonlit-old-kingdom.mp3" loop preload="auto"></audio>
@@ -2932,7 +3000,29 @@ document.getElementById('npcModalFav').addEventListener('click', () => {
   saveSet(FAV_KEY, fav); renderFav(); openNpcModal(currentNpc);
 });
 modal.addEventListener('click', e => { if (e.target === modal) closeNpcModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNpcModal(); });
+
+// ═══ Lightbox 大图 ═══
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxCap = document.getElementById('lightboxCaption');
+function openLightbox() {
+  if (!currentNpc) return;
+  const img = document.getElementById('npcModalImg');
+  if (!img.src) return;
+  lightboxImg.src = img.src;
+  lightboxCap.textContent = `${currentNpc.name} · ${currentNpc.tk} · ${currentNpc.cn}`;
+  lightbox.classList.add('open');
+}
+function closeLightbox() { lightbox.classList.remove('open'); lightboxImg.src = ''; }
+document.getElementById('npcModalPortrait').addEventListener('click', openLightbox);
+document.getElementById('lightboxClose').addEventListener('click', e => { e.stopPropagation(); closeLightbox(); });
+lightbox.addEventListener('click', closeLightbox);
+
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (lightbox.classList.contains('open')) closeLightbox();
+  else closeNpcModal();
+});
 </script>
 </body>
 </html>
